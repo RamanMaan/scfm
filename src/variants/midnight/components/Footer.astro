@@ -1,0 +1,131 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { orderedSocials } from "../../../lib/socials";
+
+interface Props {
+  artist: CollectionEntry<"artist">;
+  press: CollectionEntry<"press">[];
+}
+
+const { artist, press } = Astro.props;
+const socials = orderedSocials(artist.data.socials);
+---
+
+<footer class="mn-section mn-shell" id="footer">
+  {
+    press.length > 0 && (
+      <div class="mn-press">
+        <p class="mn-eyebrow">Press</p>
+        <ul class="mn-press__list">
+          {press.map((quote) => (
+            <li class="mn-press__item">
+              <blockquote class="mn-press__quote">
+                &ldquo;{quote.data.quote}&rdquo;
+              </blockquote>
+              <a class="mn-press__source" href={quote.data.sourceUrl}>
+                &mdash; {quote.data.source}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+
+  <div class="mn-footer__inner">
+    <div>
+      <p class="mn-eyebrow">Connect</p>
+      <ul class="mn-socials">
+        {
+          socials.map(({ url, label }) => (
+            <li>
+              <a href={url} target="_blank" rel="noopener">
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <p class="mn-colophon">
+      &copy; {new Date().getFullYear()}
+      {artist.data.name}. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .mn-press {
+    margin-bottom: 96px;
+    padding-bottom: 96px;
+    border-bottom: 1px solid var(--mn-rule);
+  }
+
+  .mn-press__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 48px;
+  }
+
+  @media (min-width: 800px) {
+    .mn-press__list {
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+    }
+  }
+
+  .mn-press__quote {
+    font-family: var(--mn-serif);
+    font-style: italic;
+    font-size: clamp(22px, 2.4vw, 32px);
+    line-height: 1.3;
+    margin: 0 0 16px;
+    color: var(--mn-text);
+  }
+
+  .mn-press__source {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mn-text-faint);
+  }
+
+  .mn-footer__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    align-items: flex-start;
+  }
+
+  @media (min-width: 800px) {
+    .mn-footer__inner {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+
+  .mn-socials {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .mn-socials a {
+    font-family: var(--mn-serif);
+    font-style: italic;
+    font-size: 24px;
+  }
+
+  .mn-colophon {
+    font-size: 12px;
+    color: var(--mn-text-faint);
+    letter-spacing: 0.08em;
+    margin: 0;
+  }
+</style>

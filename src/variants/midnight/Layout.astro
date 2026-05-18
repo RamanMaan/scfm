@@ -1,0 +1,118 @@
+---
+import BaseHtml from "../../layouts/BaseHtml.astro";
+import meta from "./meta";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<BaseHtml
+  title={title}
+  description={description}
+  ogImage={meta.ogImage}
+  bodyClass="midnight"
+>
+  <link slot="head" rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    slot="head"
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  />
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap"
+  />
+  <slot />
+</BaseHtml>
+
+<style is:global>
+  .midnight {
+    --mn-bg: #0a0a0a;
+    --mn-surface: #141414;
+    --mn-text: #f5f1e8;
+    --mn-text-dim: rgba(245, 241, 232, 0.6);
+    --mn-text-faint: rgba(245, 241, 232, 0.35);
+    --mn-rule: rgba(245, 241, 232, 0.1);
+    --mn-accent: #d4af37;
+    --mn-serif: "Cormorant Garamond", "Cormorant", Georgia, serif;
+    --mn-sans: "Inter", system-ui, sans-serif;
+
+    background: var(--mn-bg);
+    color: var(--mn-text);
+    font-family: var(--mn-sans);
+    font-weight: 300;
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .midnight ::selection {
+    background: var(--mn-accent);
+    color: var(--mn-bg);
+  }
+
+  .midnight a {
+    color: inherit;
+    text-decoration: none;
+    transition:
+      color 0.3s ease,
+      opacity 0.3s ease;
+  }
+
+  .midnight a:hover {
+    color: var(--mn-accent);
+  }
+
+  .midnight h1,
+  .midnight h2,
+  .midnight h3 {
+    font-family: var(--mn-serif);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  .midnight :focus-visible {
+    outline: 1px solid var(--mn-accent);
+    outline-offset: 4px;
+  }
+
+  .midnight .mn-shell {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 56px);
+  }
+
+  .midnight .mn-section {
+    padding-block: clamp(64px, 10vw, 128px);
+    border-top: 1px solid var(--mn-rule);
+  }
+
+  .midnight .mn-eyebrow {
+    font-family: var(--mn-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--mn-text-faint);
+    margin-bottom: 24px;
+  }
+
+  .midnight .mn-section-title {
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1.05;
+    margin-bottom: 48px;
+  }
+
+  .midnight iframe {
+    border: 0;
+    border-radius: 12px;
+    background: var(--mn-surface);
+  }
+</style>

@@ -1,0 +1,125 @@
+---
+interface Props {
+  name: string;
+  tagline: string;
+  basedIn: string;
+  origin: string;
+  bio: string;
+}
+
+const { name, tagline, basedIn, origin, bio } = Astro.props;
+
+const today = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+}).format(new Date());
+
+const segments = name.toUpperCase().split(" ");
+---
+
+<header class="br-hero">
+  <nav class="br-bar">
+    <span
+      >FILE: ARTIST/{segments[0]}.{(segments[1] ?? "PROFILE").slice(0, 3)}</span
+    >
+    <span>EDITION 01 / {today}</span>
+  </nav>
+
+  <div class="br-hero__top br-grid">
+    <p class="br-hero__loc">
+      <span class="br-eyebrow">Origin</span>
+      {origin}
+    </p>
+    <p class="br-hero__loc br-hero__loc--right">
+      <span class="br-eyebrow">Based</span>
+      {basedIn}
+    </p>
+  </div>
+
+  <h1 class="br-hero__title">
+    {segments.map((segment) => <span class="br-hero__word">{segment}</span>)}
+  </h1>
+
+  <div class="br-hero__bottom br-grid">
+    <p class="br-hero__tagline">
+      <span class="br-eyebrow">Discipline</span>
+      {tagline}
+    </p>
+    <p class="br-hero__bio">
+      <span class="br-eyebrow">Field Note</span>
+      {bio}
+    </p>
+  </div>
+</header>
+
+<style>
+  .br-hero {
+    border-bottom: var(--br-rule) solid var(--br-ink);
+  }
+
+  .br-hero__top,
+  .br-hero__bottom {
+    padding: 24px 16px;
+    border-bottom: 1px solid var(--br-ink);
+  }
+
+  .br-hero__loc {
+    grid-column: span 6;
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .br-hero__loc--right {
+    text-align: right;
+  }
+
+  .br-hero__title {
+    display: block;
+    padding: 16px;
+    font-size: clamp(56px, 16vw, 220px);
+    line-height: 0.85;
+    margin: 0;
+    word-break: break-word;
+  }
+
+  .br-hero__word {
+    display: block;
+  }
+
+  .br-hero__word:nth-child(even) {
+    text-align: right;
+    color: var(--br-accent);
+  }
+
+  .br-hero__tagline {
+    grid-column: span 5;
+    margin: 0;
+  }
+
+  .br-hero__bio {
+    grid-column: span 7;
+    margin: 0;
+    border-left: 1px solid var(--br-ink);
+    padding-left: 16px;
+  }
+
+  @media (max-width: 720px) {
+    .br-hero__loc,
+    .br-hero__tagline,
+    .br-hero__bio {
+      grid-column: span 12;
+    }
+
+    .br-hero__loc--right {
+      text-align: left;
+    }
+
+    .br-hero__bio {
+      border-left: 0;
+      border-top: 1px solid var(--br-ink);
+      padding-left: 0;
+      padding-top: 16px;
+    }
+  }
+</style>

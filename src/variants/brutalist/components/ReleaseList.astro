@@ -1,0 +1,195 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { formatShortDate } from "../../../lib/formatDate";
+import { SPOTIFY_EMBED_HEIGHT, getSpotifyEmbedUrl } from "../../../lib/spotify";
+
+interface Props {
+  featured?: CollectionEntry<"releases">;
+  rest: CollectionEntry<"releases">[];
+}
+
+const { featured, rest } = Astro.props;
+const all = featured ? [featured, ...rest] : rest;
+const pad = (n: number) => String(n).padStart(2, "0");
+---
+
+<section class="br-section" id="music">
+  <p class="br-eyebrow">[02] Catalogue / Audio</p>
+  <h2 class="br-rel__title">RELEASES &mdash; SELECTED WORKS</h2>
+
+  {
+    featured && (
+      <article class="br-feat">
+        <header class="br-feat__head">
+          <span class="br-eyebrow">Featured Single</span>
+          <span class="br-eyebrow">
+            {formatShortDate(featured.data.releaseDate)}
+          </span>
+        </header>
+        <h3 class="br-feat__name">
+          {featured.data.title}
+          {featured.data.featuring.length > 0 && (
+            <small> w/ {featured.data.featuring.join(", ")}</small>
+          )}
+        </h3>
+        {featured.data.spotifyId ? (
+          <iframe
+            src={getSpotifyEmbedUrl({
+              type: featured.data.spotifyType,
+              id: featured.data.spotifyId,
+              theme: 1,
+            })}
+            width="100%"
+            height={SPOTIFY_EMBED_HEIGHT.full}
+            loading="lazy"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            title={`Spotify player: ${featured.data.title}`}
+          />
+        ) : (
+          <div class="br-feat__placeholder">
+            <p>[ SPOTIFY EMBED PENDING -- AWAITING TRACK ID ]</p>
+            {featured.data.appleMusicUrl && (
+              <p>
+                <a href={featured.data.appleMusicUrl}>
+                  &gt; LISTEN ON APPLE MUSIC
+                </a>
+              </p>
+            )}
+          </div>
+        )}
+        {featured.data.description && (
+          <p class="br-feat__desc">{featured.data.description}</p>
+        )}
+      </article>
+    )
+  }
+
+  <table class="br-table">
+    <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Title</th>
+        <th scope="col">Type</th>
+        <th scope="col">Released</th>
+        <th scope="col">Link</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        all.map((release, index) => (
+          <tr>
+            <td class="br-table__num">{pad(index + 1)}</td>
+            <td class="br-table__title">
+              {release.data.title.toUpperCase()}
+              {release.data.featuring.length > 0 && (
+                <span class="br-table__feat">
+                  {" "}
+                  / {release.data.featuring.join(" / ")}
+                </span>
+              )}
+            </td>
+            <td>{release.data.type.toUpperCase()}</td>
+            <td>{formatShortDate(release.data.releaseDate)}</td>
+            <td>
+              {release.data.appleMusicUrl ? (
+                <a href={release.data.appleMusicUrl}>APPLE</a>
+              ) : (
+                "--"
+              )}
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</section>
+
+<style>
+  .br-rel__title {
+    font-size: clamp(28px, 4vw, 48px);
+    margin-bottom: 24px;
+  }
+
+  .br-feat {
+    border: var(--br-rule) solid var(--br-ink);
+    padding: 16px;
+    margin-bottom: 32px;
+  }
+
+  .br-feat__head {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--br-ink);
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+
+  .br-feat__name {
+    font-size: clamp(28px, 4vw, 56px);
+    margin-bottom: 16px;
+  }
+
+  .br-feat__name small {
+    font-size: 14px;
+    font-weight: 400;
+    display: block;
+    margin-top: 4px;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .br-feat__placeholder {
+    border: 1px dashed var(--br-ink);
+    padding: 32px;
+    text-align: center;
+  }
+
+  .br-feat__placeholder p {
+    margin: 4px 0;
+  }
+
+  .br-feat__desc {
+    margin: 16px 0 0;
+    border-top: 1px solid var(--br-ink);
+    padding-top: 16px;
+    font-size: 14px;
+  }
+
+  .br-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .br-table th,
+  .br-table td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--br-ink);
+    vertical-align: top;
+  }
+
+  .br-table th {
+    border-top: var(--br-rule) solid var(--br-ink);
+    border-bottom: var(--br-rule) solid var(--br-ink);
+    background: var(--br-ink);
+    color: var(--br-bg);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 11px;
+  }
+
+  .br-table__num {
+    width: 48px;
+    color: var(--br-muted);
+  }
+
+  .br-table__title {
+    font-weight: 700;
+  }
+
+  .br-table__feat {
+    font-weight: 400;
+    color: var(--br-muted);
+  }
+</style>

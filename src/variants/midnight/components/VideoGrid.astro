@@ -1,0 +1,109 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { youtubeEmbedUrl } from "../../../lib/socials";
+
+interface Props {
+  videos: CollectionEntry<"videos">[];
+  channelUrl: string;
+}
+
+const { videos, channelUrl } = Astro.props;
+---
+
+<section class="mn-section mn-shell" id="videos">
+  <p class="mn-eyebrow">Visuals</p>
+  <h2 class="mn-section-title">
+    Music <em>videos</em>
+  </h2>
+
+  {
+    videos.length > 0 ? (
+      <ul class="mn-videos">
+        {videos.map((video) => (
+          <li class="mn-video">
+            {video.data.youtubeId ? (
+              <div class="mn-video__frame">
+                <iframe
+                  src={youtubeEmbedUrl(video.data.youtubeId)}
+                  title={video.data.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  loading="lazy"
+                  allowfullscreen
+                />
+              </div>
+            ) : (
+              <a
+                class="mn-video__placeholder"
+                href={video.data.youtubeUrl ?? channelUrl}
+                target="_blank"
+                rel="noopener"
+              >
+                <span>Watch on YouTube &rarr;</span>
+              </a>
+            )}
+            <p class="mn-video__title">{video.data.title}</p>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="mn-video__empty">
+        <a href={channelUrl}>Visit the YouTube channel &rarr;</a>
+      </p>
+    )
+  }
+</section>
+
+<style>
+  .mn-videos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+    gap: 48px;
+  }
+
+  .mn-video__frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--mn-surface);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .mn-video__frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .mn-video__placeholder {
+    display: flex;
+    aspect-ratio: 16 / 9;
+    background: var(--mn-surface);
+    border-radius: 12px;
+    align-items: center;
+    justify-content: center;
+    color: var(--mn-text-dim);
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    transition: color 0.3s;
+  }
+
+  .mn-video__placeholder:hover {
+    color: var(--mn-accent);
+  }
+
+  .mn-video__title {
+    font-family: var(--mn-serif);
+    font-style: italic;
+    font-size: 22px;
+    margin: 16px 0 0;
+    color: var(--mn-text);
+  }
+
+  .mn-video__empty {
+    color: var(--mn-text-dim);
+  }
+</style>

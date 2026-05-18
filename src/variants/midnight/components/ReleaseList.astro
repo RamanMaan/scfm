@@ -1,0 +1,208 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { formatYear } from "../../../lib/formatDate";
+import { SPOTIFY_EMBED_HEIGHT, getSpotifyEmbedUrl } from "../../../lib/spotify";
+
+interface Props {
+  featured?: CollectionEntry<"releases">;
+  rest: CollectionEntry<"releases">[];
+}
+
+const { featured, rest } = Astro.props;
+---
+
+<section class="mn-section mn-shell" id="music">
+  <p class="mn-eyebrow">Music</p>
+  <h2 class="mn-section-title">
+    Latest <em>releases</em>
+  </h2>
+
+  {
+    featured && (
+      <article class="mn-featured">
+        <div class="mn-featured__meta">
+          <p class="mn-eyebrow">
+            Featured &mdash; {formatYear(featured.data.releaseDate)}
+          </p>
+          <h3 class="mn-featured__title">{featured.data.title}</h3>
+          {featured.data.featuring.length > 0 && (
+            <p class="mn-featured__feat">
+              with {featured.data.featuring.join(", ")}
+            </p>
+          )}
+          {featured.data.description && (
+            <p class="mn-featured__desc">{featured.data.description}</p>
+          )}
+        </div>
+        <div class="mn-featured__player">
+          {featured.data.spotifyId ? (
+            <iframe
+              src={getSpotifyEmbedUrl({
+                type: featured.data.spotifyType,
+                id: featured.data.spotifyId,
+              })}
+              width="100%"
+              height={SPOTIFY_EMBED_HEIGHT.full}
+              loading="lazy"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              title={`Spotify player: ${featured.data.title}`}
+            />
+          ) : (
+            <div class="mn-featured__placeholder">
+              <p>Spotify ID pending</p>
+              {featured.data.appleMusicUrl && (
+                <a href={featured.data.appleMusicUrl}>
+                  Listen on Apple Music &rarr;
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+      </article>
+    )
+  }
+
+  {
+    rest.length > 0 && (
+      <ol class="mn-discog">
+        {rest.map((release) => (
+          <li class="mn-discog__item">
+            <span class="mn-discog__year">
+              {formatYear(release.data.releaseDate)}
+            </span>
+            <span class="mn-discog__title">
+              {release.data.title}
+              {release.data.featuring.length > 0 && (
+                <span class="mn-discog__feat">
+                  {" "}
+                  with {release.data.featuring.join(", ")}
+                </span>
+              )}
+            </span>
+            <span class="mn-discog__type">{release.data.type}</span>
+            <span class="mn-discog__links">
+              {release.data.appleMusicUrl && (
+                <a href={release.data.appleMusicUrl}>Apple Music</a>
+              )}
+            </span>
+          </li>
+        ))}
+      </ol>
+    )
+  }
+</section>
+
+<style>
+  .mn-featured {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 48px;
+    margin-bottom: 96px;
+    padding-bottom: 96px;
+    border-bottom: 1px solid var(--mn-rule);
+  }
+
+  @media (min-width: 900px) {
+    .mn-featured {
+      grid-template-columns: 1fr 1.2fr;
+      gap: 80px;
+      align-items: center;
+    }
+  }
+
+  .mn-featured__title {
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1;
+    font-style: italic;
+    margin-block: 16px 16px;
+  }
+
+  .mn-featured__feat {
+    font-family: var(--mn-serif);
+    font-style: italic;
+    color: var(--mn-text-dim);
+    font-size: 18px;
+    margin: 0 0 24px;
+  }
+
+  .mn-featured__desc {
+    max-width: 44ch;
+    color: var(--mn-text-dim);
+    margin: 0;
+  }
+
+  .mn-featured__placeholder {
+    background: var(--mn-surface);
+    border-radius: 12px;
+    padding: 64px 32px;
+    text-align: center;
+    color: var(--mn-text-faint);
+  }
+
+  .mn-featured__placeholder a {
+    display: inline-block;
+    margin-top: 16px;
+    color: var(--mn-accent);
+  }
+
+  .mn-discog {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .mn-discog__item {
+    display: grid;
+    grid-template-columns: 64px 1fr auto auto;
+    gap: 16px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--mn-rule);
+    align-items: baseline;
+    font-size: 16px;
+  }
+
+  .mn-discog__year {
+    color: var(--mn-text-faint);
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
+
+  .mn-discog__title {
+    font-family: var(--mn-serif);
+    font-size: clamp(22px, 2.4vw, 32px);
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .mn-discog__feat {
+    font-size: 14px;
+    color: var(--mn-text-dim);
+    font-style: normal;
+    margin-left: 8px;
+  }
+
+  .mn-discog__type {
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--mn-text-faint);
+  }
+
+  .mn-discog__links {
+    font-size: 13px;
+    color: var(--mn-text-dim);
+  }
+
+  @media (max-width: 640px) {
+    .mn-discog__item {
+      grid-template-columns: 56px 1fr;
+      gap: 8px 12px;
+    }
+
+    .mn-discog__type,
+    .mn-discog__links {
+      grid-column: 2;
+    }
+  }
+</style>

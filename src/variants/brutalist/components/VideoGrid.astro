@@ -1,0 +1,112 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { youtubeEmbedUrl } from "../../../lib/socials";
+
+interface Props {
+  videos: CollectionEntry<"videos">[];
+  channelUrl: string;
+}
+
+const { videos, channelUrl } = Astro.props;
+const pad = (n: number) => String(n).padStart(2, "0");
+---
+
+<section class="br-section" id="videos">
+  <p class="br-eyebrow">[03] Catalogue / Visual</p>
+  <h2 class="br-vid__title">VIDEOS &mdash; MOVING IMAGE</h2>
+
+  {
+    videos.length > 0 ? (
+      <ul class="br-vid__list">
+        {videos.map((video, index) => (
+          <li class="br-vid">
+            <header class="br-vid__head">
+              <span>VID-{pad(index + 1)}</span>
+              <span>{video.data.title.toUpperCase()}</span>
+            </header>
+            {video.data.youtubeId ? (
+              <div class="br-vid__frame">
+                <iframe
+                  src={youtubeEmbedUrl(video.data.youtubeId)}
+                  title={video.data.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  loading="lazy"
+                  allowfullscreen
+                />
+              </div>
+            ) : (
+              <a
+                class="br-vid__placeholder"
+                href={video.data.youtubeUrl ?? channelUrl}
+                target="_blank"
+                rel="noopener"
+              >
+                [ EMBED PENDING -- VIEW ON YOUTUBE &rarr; ]
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p>
+        <a href={channelUrl}>
+          &gt; FULL CHANNEL: YOUTUBE.COM/C/STEVENCHRISTOPHER
+        </a>
+      </p>
+    )
+  }
+</section>
+
+<style>
+  .br-vid__title {
+    font-size: clamp(28px, 4vw, 48px);
+    margin-bottom: 24px;
+  }
+
+  .br-vid__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+    gap: 24px;
+  }
+
+  .br-vid {
+    border: var(--br-rule) solid var(--br-ink);
+  }
+
+  .br-vid__head {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--br-ink);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    background: var(--br-ink);
+    color: var(--br-bg);
+  }
+
+  .br-vid__frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+  }
+
+  .br-vid__frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0 !important;
+  }
+
+  .br-vid__placeholder {
+    display: flex;
+    aspect-ratio: 16 / 9;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    text-align: center;
+    text-decoration: none;
+  }
+</style>

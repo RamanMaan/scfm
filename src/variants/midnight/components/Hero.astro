@@ -1,0 +1,104 @@
+---
+interface Props {
+  name: string;
+  tagline: string;
+  basedIn: string;
+  origin: string;
+}
+
+const { name, tagline, basedIn, origin } = Astro.props;
+---
+
+<header class="mn-hero">
+  <div class="mn-hero__photo" aria-hidden="true"></div>
+  <div class="mn-hero__inner mn-shell">
+    <p class="mn-eyebrow">{origin} &mdash; {basedIn}</p>
+    <h1 class="mn-hero__title">{name}</h1>
+    <p class="mn-hero__tagline">{tagline}</p>
+  </div>
+  <div class="mn-hero__scroll" aria-hidden="true">scroll</div>
+</header>
+
+<style>
+  .mn-hero {
+    position: relative;
+    min-height: 100dvh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .mn-hero__photo {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(
+        ellipse 80% 60% at 70% 30%,
+        rgba(212, 175, 55, 0.18),
+        transparent 60%
+      ),
+      radial-gradient(
+        ellipse 60% 50% at 20% 80%,
+        rgba(120, 70, 40, 0.22),
+        transparent 65%
+      ),
+      linear-gradient(180deg, #050505 0%, #0a0a0a 60%, #161310 100%);
+  }
+
+  .mn-hero__photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        180deg,
+        transparent 0%,
+        transparent 50%,
+        rgba(10, 10, 10, 0.9) 100%
+      ),
+      repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.012) 0px,
+        rgba(255, 255, 255, 0.012) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+  }
+
+  .mn-hero__inner {
+    width: 100%;
+    padding-bottom: clamp(64px, 12vh, 128px);
+    padding-top: clamp(120px, 18vh, 200px);
+  }
+
+  .mn-hero__title {
+    font-size: clamp(64px, 14vw, 200px);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    margin-bottom: 32px;
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .mn-hero__tagline {
+    font-family: var(--mn-sans);
+    font-size: clamp(15px, 1.4vw, 18px);
+    font-weight: 300;
+    color: var(--mn-text-dim);
+    max-width: 38ch;
+    margin: 0;
+  }
+
+  .mn-hero__scroll {
+    position: absolute;
+    bottom: 32px;
+    right: clamp(20px, 5vw, 56px);
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--mn-text-faint);
+    writing-mode: vertical-rl;
+  }
+</style>

@@ -1,0 +1,75 @@
+# Agent Guide
+
+This repo is a prototyping ground for Steven Christopher's website. Multiple
+design variants share one content layer; pick a variant at `/`, view it at
+`/<variant-id>`.
+
+## Source of truth
+
+- **Artist info, releases, videos, press:** [`src/content/`](src/content/)
+  (typed by [`src/content.config.ts`](src/content.config.ts)).
+  Never duplicate this data in markdown or component code - query it via
+  `getEntry`/`getCollection`.
+- **Streaming/social URLs and IDs:** all in
+  [`src/content/artist/profile.json`](src/content/artist/profile.json).
+
+## Architecture
+
+```
+src/
+  content.config.ts        Zod schemas
+  content/                 Shared by every variant
+  lib/                     Tiny utilities (spotify, dates, socials) - no UI
+  layouts/BaseHtml.astro   Minimal HTML shell; takes title/description/ogImage
+  variants/
+    _types.ts              VariantMeta contract
+    _registry.ts           VARIANTS array consumed by the showcase
+    <id>/                  Self-contained: Layout.astro, meta.ts, components/
+  pages/
+    index.astro            Showcase grid
+    <id>.astro             Thin wrapper per variant
+public/og/                 OG images (referenced by absolute path)
+```
+
+## Guardrails
+
+1. **No shared UI across variants.** The whole point is design exploration.
+   Each variant rolls its own Hero, ReleaseList, etc. Only the content layer
+   and `src/lib/` utilities are shared.
+2. **Spotify is the canonical embed.** Apple Music gets a text link, never an
+   iframe.
+3. **Variant slugs are descriptive vibes**, not numbers (`/midnight`, not
+   `/variant-1`).
+4. **Schema changes affect every variant** - add new fields as `optional()`
+   whenever possible.
+5. **Images** belong in `src/assets/` (so Astro optimizes them), referenced via
+   `image()` in the schema. The only exception is OG images which live in
+   `public/og/` because they need stable absolute URLs.
+
+## Adding a new variant
+
+1. Create `src/variants/<id>/` with `Layout.astro`, `meta.ts`, and
+   `components/`.
+2. Create `src/pages/<id>.astro` - a thin wrapper that queries the shared
+   collections and composes the variant's components.
+3. Register the meta in
+   [`src/variants/_registry.ts`](src/variants/_registry.ts) so it appears on
+   the showcase.
+4. Drop an OG image at `public/og/<id>.svg` (or `.png`) and reference from
+   `meta.ts`.
+
+## Pending content (TODOs for the user, not for agents)
+
+- Real Spotify track/album IDs for most releases - see `spotifyId:` fields
+  across [`src/content/releases/*.md`](src/content/releases/).
+- YouTube IDs in [`src/content/videos/`](src/content/videos/).
+- Press photos at `src/assets/artist/` + the `photo` field in
+  `profile.json`.
+- Cover art at `src/assets/releases/` + `coverArt` field per release.
+- Real PNG OG images at `public/og/<id>.png`; SVG placeholders are committed
+  for development.
+
+## Deploy
+
+Vercel, already configured. PR branches get preview URLs - share those with
+Steven instead of the production link.

@@ -1,0 +1,146 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { orderedSocials } from "../../../lib/socials";
+
+interface Props {
+  artist: CollectionEntry<"artist">;
+  press: CollectionEntry<"press">[];
+}
+
+const { artist, press } = Astro.props;
+const socials = orderedSocials(artist.data.socials);
+const pad = (n: number) => String(n).padStart(2, "0");
+---
+
+<footer class="br-section" id="footer">
+  {
+    press.length > 0 && (
+      <div class="br-press">
+        <p class="br-eyebrow">[04] Press / Cited</p>
+        <ol class="br-press__list">
+          {press.map((quote, index) => (
+            <li class="br-press__item">
+              <sup>{pad(index + 1)}</sup>
+              <p class="br-press__quote">&ldquo;{quote.data.quote}&rdquo;</p>
+              <p class="br-press__source">
+                &mdash;{" "}
+                <a href={quote.data.sourceUrl}>
+                  {quote.data.source.toUpperCase()}
+                </a>
+              </p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    )
+  }
+
+  <div class="br-end">
+    <div>
+      <p class="br-eyebrow">[05] Connect</p>
+      <ul class="br-socials">
+        {
+          socials.map(({ url, label }, index) => (
+            <li>
+              <span class="br-socials__num">{pad(index + 1)}</span>
+              <a href={url} target="_blank" rel="noopener">
+                {label.toUpperCase()}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div class="br-end__colophon">
+      <p>&copy; {new Date().getFullYear()} {artist.data.name.toUpperCase()}.</p>
+      <p>SET IN MONOSPACE. PRINTED FROM THE WEB.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .br-press {
+    border-bottom: var(--br-rule) solid var(--br-ink);
+    padding-bottom: 32px;
+    margin-bottom: 32px;
+  }
+
+  .br-press__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 16px;
+  }
+
+  .br-press__item {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 4px 12px;
+    border-top: 1px solid var(--br-ink);
+    padding-top: 12px;
+  }
+
+  .br-press__item sup {
+    font-weight: 700;
+    grid-row: span 2;
+  }
+
+  .br-press__quote {
+    font-size: 16px;
+    margin: 0;
+  }
+
+  .br-press__source {
+    margin: 0;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--br-muted);
+  }
+
+  .br-end {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    border-top: var(--br-rule) solid var(--br-ink);
+    padding-top: 24px;
+  }
+
+  @media (min-width: 720px) {
+    .br-end {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .br-socials {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+
+  .br-socials li {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    border-bottom: 1px dashed var(--br-ink);
+    padding-bottom: 4px;
+  }
+
+  .br-socials__num {
+    font-weight: 700;
+    color: var(--br-muted);
+  }
+
+  .br-end__colophon {
+    text-align: right;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .br-end__colophon p {
+    margin: 4px 0;
+  }
+</style>
