@@ -11,16 +11,16 @@ const { videos, channelUrl } = Astro.props;
 ---
 
 <section class="mn-section mn-shell" id="videos">
-  <p class="mn-eyebrow">Visuals</p>
-  <h2 class="mn-section-title">
+  <p class="mn-eyebrow mn-reveal">Visuals</p>
+  <h2 class="mn-section-title mn-reveal" style="--mn-i: 1">
     Music <em>videos</em>
   </h2>
 
   {
     videos.length > 0 ? (
       <ul class="mn-videos">
-        {videos.map((video) => (
-          <li class="mn-video">
+        {videos.map((video, idx) => (
+          <li class="mn-video mn-reveal" style={`--mn-i: ${idx + 1}`}>
             {video.data.youtubeId ? (
               <div class="mn-video__frame">
                 <iframe
@@ -38,7 +38,12 @@ const { videos, channelUrl } = Astro.props;
                 target="_blank"
                 rel="noopener"
               >
-                <span>Watch on YouTube &rarr;</span>
+                <span class="mn-video__play" aria-hidden="true">
+                  &#9658;
+                </span>
+                <span class="mn-video__placeholder-label">
+                  Watch on YouTube
+                </span>
               </a>
             )}
             <p class="mn-video__title">{video.data.title}</p>
@@ -46,7 +51,7 @@ const { videos, channelUrl } = Astro.props;
         ))}
       </ul>
     ) : (
-      <p class="mn-video__empty">
+      <p class="mn-video__empty mn-reveal" style="--mn-i: 1">
         <a href={channelUrl}>Visit the YouTube channel &rarr;</a>
       </p>
     )
@@ -59,8 +64,15 @@ const { videos, channelUrl } = Astro.props;
     padding: 0;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
-    gap: 48px;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  @media (min-width: 720px) {
+    .mn-videos {
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+      gap: 48px;
+    }
   }
 
   .mn-video__frame {
@@ -69,6 +81,9 @@ const { videos, channelUrl } = Astro.props;
     background: var(--mn-surface);
     border-radius: 12px;
     overflow: hidden;
+    transition:
+      transform var(--mn-dur-med) var(--mn-ease-out),
+      box-shadow var(--mn-dur-med) var(--mn-ease-out);
   }
 
   .mn-video__frame iframe {
@@ -78,28 +93,83 @@ const { videos, channelUrl } = Astro.props;
     height: 100%;
   }
 
+  @media (hover: hover) {
+    .mn-video:hover .mn-video__frame {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px -16px rgba(0, 0, 0, 0.65);
+    }
+  }
+
   .mn-video__placeholder {
     display: flex;
-    aspect-ratio: 16 / 9;
-    background: var(--mn-surface);
-    border-radius: 12px;
+    flex-direction: column;
+    gap: 16px;
     align-items: center;
     justify-content: center;
+    aspect-ratio: 16 / 9;
+    background: var(--mn-surface);
+    border: 1px solid var(--mn-rule);
+    border-radius: 12px;
     color: var(--mn-text-dim);
     font-size: 14px;
     letter-spacing: 0.04em;
-    transition: color 0.3s;
+    transition:
+      color var(--mn-dur-fast) var(--mn-ease),
+      border-color var(--mn-dur-fast) var(--mn-ease),
+      transform var(--mn-dur-med) var(--mn-ease-out);
+    min-height: 56px;
   }
 
-  .mn-video__placeholder:hover {
+  .mn-video__play {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 999px;
+    border: 1px solid var(--mn-text-faint);
+    font-size: 14px;
+    color: var(--mn-text);
+    transition:
+      border-color var(--mn-dur-fast) var(--mn-ease),
+      background-color var(--mn-dur-fast) var(--mn-ease);
+  }
+
+  .mn-video__placeholder-label {
+    font-family: var(--mn-sans);
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  .mn-video__placeholder:focus-visible,
+  .mn-video__placeholder:active {
     color: var(--mn-accent);
+    border-color: var(--mn-accent);
+  }
+
+  .mn-video__placeholder:focus-visible .mn-video__play,
+  .mn-video__placeholder:active .mn-video__play {
+    border-color: var(--mn-accent);
+    background-color: rgba(122, 139, 156, 0.08);
+  }
+
+  @media (hover: hover) {
+    .mn-video__placeholder:hover {
+      color: var(--mn-accent);
+      border-color: var(--mn-accent);
+      transform: translateY(-3px);
+    }
+    .mn-video__placeholder:hover .mn-video__play {
+      border-color: var(--mn-accent);
+      background-color: rgba(122, 139, 156, 0.08);
+    }
   }
 
   .mn-video__title {
     font-family: var(--mn-serif);
     font-style: italic;
     font-size: 22px;
-    margin: 16px 0 0;
+    margin: 20px 0 0;
     color: var(--mn-text);
   }
 

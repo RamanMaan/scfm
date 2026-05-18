@@ -1,9 +1,10 @@
 ---
 interface Props {
   name: string;
+  status?: string;
 }
 
-const { name } = Astro.props;
+const { name, status } = Astro.props;
 
 const links = [
   { label: "Music", href: "#music" },
@@ -13,19 +14,21 @@ const links = [
 ---
 
 <nav class="ed-nav ed-shell">
-  <a class="ed-nav__mark" href="#top">{name.toLowerCase()}</a>
+  <a class="ed-nav__mark" href="#top">
+    <span class="ed-nav__mark-name">{name.toLowerCase()}</span>
+    {status && <span class="ed-nav__mark-status ed-meta">{status}</span>}
+  </a>
   <ul class="ed-nav__list">
     {
-      links.map((link) => (
-        <li>
+      links.map((link, idx) => (
+        <li class="ed-nav__item">
+          {idx > 0 && (
+            <span class="ed-nav__sep" aria-hidden="true">
+              &middot;
+            </span>
+          )}
           <a class="ed-nav__link" href={link.href}>
-            <span class="ed-nav__bracket" aria-hidden="true">
-              [
-            </span>
-            <span class="ed-nav__label">{link.label}</span>
-            <span class="ed-nav__bracket" aria-hidden="true">
-              ]
-            </span>
+            {link.label}
           </a>
         </li>
       ))
@@ -37,18 +40,49 @@ const links = [
   .ed-nav {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    padding-block: 24px;
-    border-bottom: 1px solid var(--ed-rule);
+    align-items: center;
+    padding-block: 22px;
     gap: 32px;
   }
 
   .ed-nav__mark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+
+  .ed-nav__mark-name {
     font-family: var(--ed-display);
-    font-size: clamp(20px, 2vw, 26px);
+    font-size: clamp(20px, 1.8vw, 24px);
+    font-weight: 400;
+    font-variation-settings:
+      "opsz" 12,
+      "SOFT" 60;
     line-height: 1;
-    letter-spacing: -0.005em;
+    letter-spacing: -0.01em;
     color: var(--ed-ink);
+  }
+
+  .ed-nav__mark-status {
+    display: none;
+  }
+
+  @media (min-width: 720px) {
+    .ed-nav__mark-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ed-nav__mark-status::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--ed-muted);
+      opacity: 0.7;
+    }
   }
 
   .ed-nav__list {
@@ -56,39 +90,38 @@ const links = [
     margin: 0;
     padding: 0;
     display: flex;
-    gap: clamp(12px, 2vw, 28px);
+    align-items: baseline;
+    gap: clamp(10px, 1.4vw, 18px);
+  }
+
+  .ed-nav__item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: clamp(10px, 1.4vw, 18px);
+  }
+
+  .ed-nav__sep {
+    color: var(--ed-faint);
+    font-size: 14px;
+    line-height: 1;
   }
 
   .ed-nav__link {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 6px;
     font-family: var(--ed-sans);
     font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 0.04em;
+    font-weight: 500;
+    letter-spacing: 0.02em;
   }
 
-  .ed-nav__bracket {
-    color: var(--ed-faint);
-    transition: color 0.35s ease;
-  }
-
-  .ed-nav__link:hover .ed-nav__bracket,
-  .ed-nav__link:hover .ed-nav__label {
-    color: var(--ed-accent);
-  }
-
-  @media (max-width: 640px) {
+  @media (max-width: 560px) {
     .ed-nav {
       flex-direction: column;
       align-items: flex-start;
-      gap: 16px;
+      gap: 14px;
     }
 
     .ed-nav__list {
       width: 100%;
-      justify-content: space-between;
     }
   }
 </style>

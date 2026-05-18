@@ -20,7 +20,11 @@ type Node = {
 
 type NodeChild = Node | string | number;
 
-const el = (type: string, style: Style, children?: NodeChild | NodeChild[]): Node => ({
+const el = (
+  type: string,
+  style: Style,
+  children?: NodeChild | NodeChild[],
+): Node => ({
   type,
   key: null,
   props: { style, children },
@@ -274,11 +278,7 @@ export const renderEditorial = (): Node =>
         },
         [
           el("div", { display: "flex" }, "steven"),
-          el(
-            "div",
-            { display: "flex", paddingLeft: "96px" },
-            "christopher",
-          ),
+          el("div", { display: "flex", paddingLeft: "96px" }, "christopher"),
         ],
       ),
       el(

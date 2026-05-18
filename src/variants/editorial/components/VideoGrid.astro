@@ -18,6 +18,10 @@ const watchUrl = (video: CollectionEntry<"videos">): string => {
 ---
 
 <section class="ed-section ed-section--ruled ed-shell" id="video">
+  <header class="ed-index__head">
+    <span class="ed-meta">Index — Video</span>
+    <span class="ed-meta">{String(videos.length).padStart(2, "0")}</span>
+  </header>
   {
     videos.length > 0 ? (
       <ol class="ed-list">
@@ -32,10 +36,9 @@ const watchUrl = (video: CollectionEntry<"videos">): string => {
                 target="_blank"
                 rel="noopener"
               >
-                <span class="ed-list__num">{num}</span>
-                <span class="ed-list__title">
-                  <em>{video.data.title}</em>
-                </span>
+                <span class="ed-list__num ed-meta">{num}</span>
+                <span class="ed-list__title">{video.data.title}</span>
+                <span class="ed-list__meta ed-meta">Video</span>
                 <span class="ed-list__arrow" aria-hidden="true">
                   &rarr;
                 </span>
@@ -45,9 +48,17 @@ const watchUrl = (video: CollectionEntry<"videos">): string => {
         })}
       </ol>
     ) : (
-      <p class="ed-list__empty">
-        <a href={channelUrl} target="_blank" rel="noopener">
-          <em>Visit the channel</em> &rarr;
+      <p class="ed-empty">
+        <a
+          class="ed-empty__link"
+          href={channelUrl}
+          target="_blank"
+          rel="noopener"
+        >
+          <span class="ed-empty__title">Visit the channel</span>
+          <span class="ed-empty__arrow" aria-hidden="true">
+            &rarr;
+          </span>
         </a>
       </p>
     )
@@ -55,15 +66,135 @@ const watchUrl = (video: CollectionEntry<"videos">): string => {
 </section>
 
 <style>
-  .ed-list__empty {
-    font-family: var(--ed-display);
-    font-size: clamp(24px, 2.4vw, 32px);
-    text-transform: lowercase;
+  .ed-index__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: clamp(28px, 3vw, 44px);
+  }
+
+  .ed-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ed-list__item {
+    border-top: 1px solid var(--ed-rule);
+  }
+
+  .ed-list__item:last-child {
+    border-bottom: 1px solid var(--ed-rule);
+  }
+
+  .ed-list__row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto 16px;
+    gap: clamp(16px, 3vw, 48px);
+    align-items: baseline;
+    padding-block: clamp(20px, 2.4vw, 30px);
     color: var(--ed-ink);
+  }
+
+  .ed-list__title {
+    font-family: var(--ed-display);
+    font-size: clamp(28px, 3.6vw, 52px);
+    font-weight: 400;
+    font-variation-settings:
+      "opsz" 144,
+      "SOFT" 50;
+    line-height: 1;
+    letter-spacing: -0.012em;
+    text-transform: lowercase;
+    transition: color 0.4s ease;
+  }
+
+  .ed-list__row:hover .ed-list__title {
+    font-style: italic;
+    font-variation-settings:
+      "opsz" 144,
+      "SOFT" 80;
+  }
+
+  .ed-list__meta {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .ed-list__arrow {
+    font-family: var(--ed-sans);
+    font-size: 14px;
+    color: var(--ed-faint);
+    transition:
+      color 0.4s ease,
+      transform 0.4s ease;
+    text-align: right;
+  }
+
+  .ed-list__row:hover .ed-list__title,
+  .ed-list__row:hover .ed-list__arrow {
+    color: var(--ed-accent);
+  }
+
+  .ed-list__row:hover .ed-list__arrow {
+    transform: translateX(4px);
+  }
+
+  .ed-empty {
     margin: 0;
   }
 
-  .ed-list__empty em {
-    font-style: normal;
+  .ed-empty__link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .ed-empty__title {
+    font-family: var(--ed-display);
+    font-size: clamp(28px, 3.2vw, 44px);
+    font-style: italic;
+    font-variation-settings:
+      "opsz" 144,
+      "SOFT" 80;
+    line-height: 1;
+    text-transform: lowercase;
+    letter-spacing: -0.012em;
+  }
+
+  .ed-empty__arrow {
+    font-family: var(--ed-sans);
+    font-size: 16px;
+    color: var(--ed-faint);
+    transition:
+      color 0.4s ease,
+      transform 0.4s ease;
+  }
+
+  .ed-empty__link:hover .ed-empty__title,
+  .ed-empty__link:hover .ed-empty__arrow {
+    color: var(--ed-accent);
+  }
+
+  .ed-empty__link:hover .ed-empty__arrow {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 720px) {
+    .ed-list__row {
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+    }
+
+    .ed-list__meta {
+      grid-column: 2;
+      padding-top: 6px;
+    }
+
+    .ed-list__arrow {
+      display: none;
+    }
   }
 </style>

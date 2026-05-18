@@ -5,6 +5,8 @@ import tailwindcss from "@tailwindcss/vite";
 
 import ogImages from "./src/integrations/og-images";
 
+import vercel from "@astrojs/vercel";
+
 const PROD_FALLBACK = "https://stevenchristopher.fm";
 
 /**
@@ -23,18 +25,24 @@ const resolveSite = () => {
   if (process.env.VERCEL_ENV === "production") {
     return fromEnv("VERCEL_PROJECT_PRODUCTION_URL") ?? PROD_FALLBACK;
   }
-  return (
-    fromEnv("VERCEL_BRANCH_URL") ??
-    fromEnv("VERCEL_URL") ??
-    PROD_FALLBACK
-  );
+  return fromEnv("VERCEL_BRANCH_URL") ?? fromEnv("VERCEL_URL") ?? PROD_FALLBACK;
 };
 
 // https://astro.build/config
 export default defineConfig({
   site: resolveSite(),
   integrations: [ogImages()],
+
   vite: {
     plugins: [tailwindcss()],
   },
+
+  adapter: vercel({
+    imagesConfig: {
+      sizes: [320, 640, 1280],
+    },
+    webAnalytics: {
+      enabled: true,
+    },
+  }),
 });

@@ -26,11 +26,12 @@ const videos = (await getCollection("videos")).sort(
   title={`${artist.data.name} - ${artist.data.tagline}`}
   description={artist.data.bio}
 >
-  <Nav name={artist.data.name} />
+  <Nav name={artist.data.name} status={artist.data.tagline} />
   <Hero
     name={artist.data.name}
     basedIn={artist.data.basedIn}
     origin={artist.data.origin}
+    tagline={artist.data.tagline}
   />
   <ReleaseList releases={releases} />
   <VideoGrid videos={videos} channelUrl={artist.data.socials.youtube} />

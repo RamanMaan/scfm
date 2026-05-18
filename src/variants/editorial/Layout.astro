@@ -27,21 +27,21 @@ const { title, description } = Astro.props;
   <link
     slot="head"
     rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Italiana&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..600,0..100;1,9..144,300..600,0..100&family=Inter:wght@400;500&display=swap"
   />
   <slot />
 </BaseHtml>
 
 <style is:global>
   .ed {
-    --ed-bg: #ece8df;
-    --ed-ink: #141311;
-    --ed-muted: #7b7770;
-    --ed-faint: #b9b3a8;
-    --ed-rule: rgba(20, 19, 17, 0.18);
+    --ed-bg: #f3efe7;
+    --ed-ink: #161513;
+    --ed-muted: #6f6b62;
+    --ed-faint: #b8b2a6;
+    --ed-rule: rgba(22, 21, 19, 0.14);
     --ed-accent: #6a3030;
 
-    --ed-display: "Italiana", "Cormorant Garamond", Georgia, serif;
+    --ed-display: "Fraunces", Georgia, serif;
     --ed-sans:
       "Inter", system-ui, -apple-system, "Segoe UI", "Helvetica Neue",
       sans-serif;
@@ -49,11 +49,12 @@ const { title, description } = Astro.props;
     background: var(--ed-bg);
     color: var(--ed-ink);
     font-family: var(--ed-sans);
-    font-weight: 300;
+    font-weight: 400;
     font-size: 15px;
     line-height: 1.55;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.005em;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
   .ed ::selection {
@@ -65,8 +66,8 @@ const { title, description } = Astro.props;
     color: inherit;
     text-decoration: none;
     transition:
-      color 0.35s ease,
-      opacity 0.35s ease;
+      color 0.4s ease,
+      opacity 0.4s ease;
   }
 
   .ed a:hover {
@@ -87,15 +88,26 @@ const { title, description } = Astro.props;
 
   .ed .ed-shell {
     width: 100%;
+    max-width: 1480px;
     margin: 0 auto;
-    padding: 0 clamp(20px, 4vw, 48px);
+    padding: 0 clamp(20px, 4vw, 56px);
   }
 
   .ed .ed-section {
-    padding-block: clamp(72px, 10vw, 144px);
+    padding-block: clamp(96px, 12vw, 176px);
   }
 
   .ed .ed-section--ruled {
     border-top: 1px solid var(--ed-rule);
+  }
+
+  .ed .ed-meta {
+    font-family: var(--ed-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ed-muted);
+    font-variant-numeric: tabular-nums;
   }
 </style>

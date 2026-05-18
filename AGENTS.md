@@ -47,6 +47,14 @@ public/og/                 OG images (referenced by absolute path)
    generated at build time as 1200x630 PNGs into `dist/og/<id>.png` by the
    [`ogImages`](src/integrations/og-images/) integration. To change a card,
    edit [`src/integrations/og-images/templates.ts`](src/integrations/og-images/templates.ts).
+6. **Mobile-first, always.** ~99% of traffic is mobile. Design every layout at
+   ~375px first; desktop is the upscale. Touch is the primary input — tap
+   targets ≥ 44×44px, and never put critical info, state, or actions behind
+   `:hover` only. Hover is enhancement, not the interaction.
+
+See [`.cursor/rules/brand.mdc`](.cursor/rules/brand.mdc) for the full UI vibe
+rules (color, type, motion, mobile, content) — read it before touching any
+variant.
 
 ## Adding a new variant
 

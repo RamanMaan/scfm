@@ -3,51 +3,113 @@ interface Props {
   name: string;
   basedIn: string;
   origin: string;
+  tagline?: string;
 }
 
-const { name, basedIn, origin } = Astro.props;
+const { name, basedIn, origin, tagline } = Astro.props;
 const [first, ...rest] = name.toLowerCase().split(" ");
 const last = rest.join(" ");
 ---
 
 <header class="ed-hero ed-shell" id="top">
-  <h1 class="ed-hero__title">
-    <span class="ed-hero__line">{first}</span>
-    {last && <span class="ed-hero__line ed-hero__line--inset">{last}</span>}
-  </h1>
-  <p class="ed-hero__loc">{origin} &mdash; {basedIn}</p>
+  <div class="ed-hero__type">
+    <h1 class="ed-hero__title">
+      <span class="ed-hero__line">{first}</span>
+      {last && <span class="ed-hero__line ed-hero__line--italic">{last}</span>}
+    </h1>
+  </div>
+  <aside class="ed-hero__meta" aria-label="Artist details">
+    <dl class="ed-hero__dl">
+      <div class="ed-hero__pair">
+        <dt class="ed-meta">Origin</dt>
+        <dd class="ed-hero__val">{origin}</dd>
+      </div>
+      <div class="ed-hero__pair">
+        <dt class="ed-meta">Based</dt>
+        <dd class="ed-hero__val">{basedIn}</dd>
+      </div>
+      {
+        tagline && (
+          <div class="ed-hero__pair">
+            <dt class="ed-meta">Practice</dt>
+            <dd class="ed-hero__val">{tagline}</dd>
+          </div>
+        )
+      }
+    </dl>
+  </aside>
 </header>
 
 <style>
   .ed-hero {
-    padding-block: clamp(72px, 10vw, 144px);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(40px, 6vw, 80px);
+    padding-block: clamp(80px, 12vw, 168px) clamp(72px, 10vw, 128px);
+  }
+
+  @media (min-width: 960px) {
+    .ed-hero {
+      grid-template-columns: 1fr 240px;
+      align-items: end;
+    }
   }
 
   .ed-hero__title {
     font-family: var(--ed-display);
-    font-size: clamp(72px, 17vw, 240px);
-    line-height: 0.86;
-    letter-spacing: -0.012em;
+    font-size: clamp(72px, 16vw, 232px);
+    font-weight: 400;
+    font-variation-settings:
+      "opsz" 144,
+      "SOFT" 50;
+    line-height: 0.88;
+    letter-spacing: -0.022em;
     text-transform: lowercase;
     color: var(--ed-ink);
-    margin-bottom: clamp(48px, 6vw, 80px);
   }
 
   .ed-hero__line {
     display: block;
   }
 
-  .ed-hero__line--inset {
-    padding-left: clamp(24px, 6vw, 96px);
+  .ed-hero__line--italic {
+    font-style: italic;
+    font-variation-settings:
+      "opsz" 144,
+      "SOFT" 80;
+    padding-left: clamp(20px, 5vw, 80px);
+    letter-spacing: -0.018em;
   }
 
-  .ed-hero__loc {
-    font-family: var(--ed-sans);
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--ed-muted);
+  .ed-hero__meta {
     margin: 0;
+  }
+
+  .ed-hero__dl {
+    margin: 0;
+    display: grid;
+    gap: clamp(14px, 1.6vw, 20px);
+  }
+
+  .ed-hero__pair {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 16px;
+    align-items: baseline;
+    padding-bottom: clamp(10px, 1vw, 14px);
+    border-bottom: 1px solid var(--ed-rule);
+  }
+
+  .ed-hero__pair:last-child {
+    border-bottom: 0;
+  }
+
+  .ed-hero__val {
+    margin: 0;
+    font-family: var(--ed-sans);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ed-ink);
+    letter-spacing: 0.005em;
   }
 </style>

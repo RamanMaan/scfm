@@ -14,36 +14,39 @@ const primaryLink = (release: CollectionEntry<"releases">): string | null => {
   }
   return release.data.appleMusicUrl ?? null;
 };
+
+const formatLabel = (release: CollectionEntry<"releases">): string =>
+  release.data.type === "single" ? "Single" : release.data.type.toUpperCase();
 ---
 
 <section class="ed-section ed-section--ruled ed-shell" id="music">
+  <header class="ed-index__head">
+    <span class="ed-meta">Index — Music</span>
+    <span class="ed-meta">{String(releases.length).padStart(2, "0")}</span>
+  </header>
   <ol class="ed-list">
     {
       releases.map((release, idx) => {
         const href = primaryLink(release);
         const num = String(idx + 1).padStart(2, "0");
+        const format = formatLabel(release);
+        const RowTag = href ? "a" : "div";
 
         return (
           <li class="ed-list__item">
-            {href ? (
-              <a class="ed-list__row" href={href} target="_blank" rel="noopener">
-                <span class="ed-list__num">{num}</span>
-                <span class="ed-list__title">
-                  <em>{release.data.title}</em>
-                </span>
+            <RowTag
+              class:list={["ed-list__row", !href && "ed-list__row--static"]}
+              {...(href ? { href, target: "_blank", rel: "noopener" } : {})}
+            >
+              <span class="ed-list__num ed-meta">{num}</span>
+              <span class="ed-list__title">{release.data.title}</span>
+              <span class="ed-list__meta ed-meta">{format}</span>
+              {href && (
                 <span class="ed-list__arrow" aria-hidden="true">
                   &rarr;
                 </span>
-              </a>
-            ) : (
-              <div class="ed-list__row ed-list__row--static">
-                <span class="ed-list__num">{num}</span>
-                <span class="ed-list__title">
-                  <em>{release.data.title}</em>
-                </span>
-                <span class="ed-list__arrow" aria-hidden="true" />
-              </div>
-            )}
+              )}
+            </RowTag>
           </li>
         );
       })
@@ -52,6 +55,13 @@ const primaryLink = (release: CollectionEntry<"releases">): string | null => {
 </section>
 
 <style>
+  .ed-index__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: clamp(28px, 3vw, 44px);
+  }
+
   .ed-list {
     list-style: none;
     margin: 0;
@@ -59,43 +69,51 @@ const primaryLink = (release: CollectionEntry<"releases">): string | null => {
   }
 
   .ed-list__item {
-    border-bottom: 1px solid var(--ed-rule);
+    border-top: 1px solid var(--ed-rule);
   }
 
-  .ed-list__item:first-child {
-    border-top: 1px solid var(--ed-rule);
+  .ed-list__item:last-child {
+    border-bottom: 1px solid var(--ed-rule);
   }
 
   .ed-list__row {
     display: grid;
-    grid-template-columns: 56px 1fr 24px;
-    gap: clamp(16px, 3vw, 40px);
+    grid-template-columns: 44px 1fr auto 16px;
+    gap: clamp(16px, 3vw, 48px);
     align-items: baseline;
-    padding-block: clamp(20px, 2.4vw, 32px);
+    padding-block: clamp(20px, 2.4vw, 30px);
     color: var(--ed-ink);
   }
 
   .ed-list__num {
-    font-family: var(--ed-sans);
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--ed-muted);
-    font-variant-numeric: tabular-nums;
+    align-self: baseline;
   }
 
   .ed-list__title {
     font-family: var(--ed-display);
-    font-size: clamp(28px, 4vw, 56px);
+    font-size: clamp(28px, 3.6vw, 52px);
+    font-weight: 400;
+    font-variation-settings:
+      "opsz" 144,
+      "SOFT" 50;
     line-height: 1;
-    letter-spacing: -0.005em;
+    letter-spacing: -0.012em;
     text-transform: lowercase;
-    transition: color 0.35s ease;
+    transition: color 0.4s ease;
   }
 
-  .ed-list__title em {
-    font-style: normal;
+  .ed-list__row:hover .ed-list__title {
+    font-style: italic;
+    font-variation-settings:
+      "opsz" 144,
+      "SOFT" 80;
+  }
+
+  .ed-list__meta {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    white-space: nowrap;
   }
 
   .ed-list__arrow {
@@ -103,8 +121,8 @@ const primaryLink = (release: CollectionEntry<"releases">): string | null => {
     font-size: 14px;
     color: var(--ed-faint);
     transition:
-      color 0.35s ease,
-      transform 0.35s ease;
+      color 0.4s ease,
+      transform 0.4s ease;
     text-align: right;
   }
 
@@ -121,10 +139,15 @@ const primaryLink = (release: CollectionEntry<"releases">): string | null => {
     cursor: default;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 720px) {
     .ed-list__row {
       grid-template-columns: 36px 1fr;
-      gap: 14px;
+      gap: 12px;
+    }
+
+    .ed-list__meta {
+      grid-column: 2;
+      padding-top: 6px;
     }
 
     .ed-list__arrow {

@@ -32,6 +32,28 @@ SaaS landing page, or an influencer site — it is wrong.
 - Hero areas: full-bleed image or video, sparse text.
 - Navigation: `Music`, `Video`, `Contact`. Keep it minimal.
 
+## Device priority — mobile-first, always
+
+- ~99% of traffic is mobile. Design, build, and review every layout at ~375px
+  width first. Desktop is the upscale, not the source of truth.
+- `:hover` is a progressive enhancement only. Never gate critical information,
+  state changes, navigation, or affordances behind hover-only reveals — every
+  hover effect must have an equivalent always-visible or tap-driven state that
+  works on touch.
+- No hover-triggered tooltips, captions, or labels as the sole way to convey
+  meaning. If a desktop interaction wouldn't survive on an iPhone, redesign it.
+
+## Forever-new catalog — no release dates on music or video
+
+- Never render release dates, drop dates, "year" labels, "released" pills, or
+  any month/year metadata on music releases or music videos. The catalog must
+  feel timeless and current; visible gaps between releases break the spell.
+- Sorting collections by `releaseDate` internally is fine; rendering the value
+  in the UI is not. The same rule applies to videos (`data.date`).
+- Allowed date usage: footer copyright year,
+  press article publication dates. Music + video items show format/type and
+  title only — nothing time-stamped.
+
 ## Copy
 
 - Minimal, selective, emotionally restrained.

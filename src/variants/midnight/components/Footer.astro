@@ -15,10 +15,10 @@ const socials = orderedSocials(artist.data.socials);
   {
     press.length > 0 && (
       <div class="mn-press">
-        <p class="mn-eyebrow">Press</p>
+        <p class="mn-eyebrow mn-reveal">Press</p>
         <ul class="mn-press__list">
-          {press.map((quote) => (
-            <li class="mn-press__item">
+          {press.map((quote, idx) => (
+            <li class="mn-press__item mn-reveal" style={`--mn-i: ${idx + 1}`}>
               <blockquote class="mn-press__quote">
                 &ldquo;{quote.data.quote}&rdquo;
               </blockquote>
@@ -32,15 +32,15 @@ const socials = orderedSocials(artist.data.socials);
     )
   }
 
-  <div class="mn-footer__inner">
+  <div class="mn-footer__inner mn-reveal">
     <div>
       <p class="mn-eyebrow">Connect</p>
       <ul class="mn-socials">
         {
           socials.map(({ url, label }) => (
             <li>
-              <a href={url} target="_blank" rel="noopener">
-                {label}
+              <a class="mn-social" href={url} target="_blank" rel="noopener">
+                <span class="mn-social__label">{label}</span>
               </a>
             </li>
           ))
@@ -56,9 +56,16 @@ const socials = orderedSocials(artist.data.socials);
 
 <style>
   .mn-press {
-    margin-bottom: 96px;
-    padding-bottom: 96px;
+    margin-bottom: 80px;
+    padding-bottom: 80px;
     border-bottom: 1px solid var(--mn-rule);
+  }
+
+  @media (min-width: 800px) {
+    .mn-press {
+      margin-bottom: 96px;
+      padding-bottom: 96px;
+    }
   }
 
   .mn-press__list {
@@ -86,10 +93,25 @@ const socials = orderedSocials(artist.data.socials);
   }
 
   .mn-press__source {
+    display: inline-block;
+    padding: 8px 0;
+    min-height: 44px;
     font-size: 12px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--mn-text-faint);
+    transition: color var(--mn-dur-fast) var(--mn-ease);
+  }
+
+  .mn-press__source:focus-visible,
+  .mn-press__source:active {
+    color: var(--mn-accent);
+  }
+
+  @media (hover: hover) {
+    .mn-press__source:hover {
+      color: var(--mn-accent);
+    }
   }
 
   .mn-footer__inner {
@@ -113,13 +135,49 @@ const socials = orderedSocials(artist.data.socials);
     margin: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 24px;
+    gap: 8px 28px;
   }
 
-  .mn-socials a {
+  /* Social link: animated underline that grows from the left on tap/hover/focus. */
+  .mn-social {
+    position: relative;
+    display: inline-block;
+    padding: 8px 0;
+    min-height: 44px;
     font-family: var(--mn-serif);
     font-style: italic;
     font-size: 24px;
+    line-height: 1.4;
+    color: var(--mn-text);
+  }
+
+  .mn-social__label {
+    position: relative;
+    display: inline-block;
+  }
+
+  .mn-social__label::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1px;
+    background: var(--mn-accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform var(--mn-dur-med) var(--mn-ease-out);
+  }
+
+  .mn-social:focus-visible .mn-social__label::after,
+  .mn-social:active .mn-social__label::after {
+    transform: scaleX(1);
+  }
+
+  @media (hover: hover) {
+    .mn-social:hover .mn-social__label::after {
+      transform: scaleX(1);
+    }
   }
 
   .mn-colophon {
