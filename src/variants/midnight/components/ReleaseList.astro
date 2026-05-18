@@ -1,6 +1,5 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { formatYear } from "../../../lib/formatDate";
 import { SPOTIFY_EMBED_HEIGHT, getSpotifyEmbedUrl } from "../../../lib/spotify";
 
 interface Props {
@@ -21,9 +20,7 @@ const { featured, rest } = Astro.props;
     featured && (
       <article class="mn-featured">
         <div class="mn-featured__meta">
-          <p class="mn-eyebrow">
-            Featured &mdash; {formatYear(featured.data.releaseDate)}
-          </p>
+          <p class="mn-eyebrow">Featured</p>
           <h3 class="mn-featured__title">{featured.data.title}</h3>
           {featured.data.featuring.length > 0 && (
             <p class="mn-featured__feat">
@@ -67,9 +64,6 @@ const { featured, rest } = Astro.props;
       <ol class="mn-discog">
         {rest.map((release) => (
           <li class="mn-discog__item">
-            <span class="mn-discog__year">
-              {formatYear(release.data.releaseDate)}
-            </span>
             <span class="mn-discog__title">
               {release.data.title}
               {release.data.featuring.length > 0 && (
@@ -153,19 +147,12 @@ const { featured, rest } = Astro.props;
 
   .mn-discog__item {
     display: grid;
-    grid-template-columns: 64px 1fr auto auto;
+    grid-template-columns: 1fr auto auto;
     gap: 16px;
     padding: 24px 0;
     border-bottom: 1px solid var(--mn-rule);
     align-items: baseline;
     font-size: 16px;
-  }
-
-  .mn-discog__year {
-    color: var(--mn-text-faint);
-    font-variant-numeric: tabular-nums;
-    font-size: 13px;
-    letter-spacing: 0.05em;
   }
 
   .mn-discog__title {
@@ -196,13 +183,8 @@ const { featured, rest } = Astro.props;
 
   @media (max-width: 640px) {
     .mn-discog__item {
-      grid-template-columns: 56px 1fr;
+      grid-template-columns: 1fr;
       gap: 8px 12px;
-    }
-
-    .mn-discog__type,
-    .mn-discog__links {
-      grid-column: 2;
     }
   }
 </style>

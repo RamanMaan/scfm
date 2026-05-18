@@ -1,6 +1,5 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { formatShortDate } from "../../../lib/formatDate";
 import { SPOTIFY_EMBED_HEIGHT, getSpotifyEmbedUrl } from "../../../lib/spotify";
 
 interface Props {
@@ -22,9 +21,6 @@ const pad = (n: number) => String(n).padStart(2, "0");
       <article class="br-feat">
         <header class="br-feat__head">
           <span class="br-eyebrow">Featured Single</span>
-          <span class="br-eyebrow">
-            {formatShortDate(featured.data.releaseDate)}
-          </span>
         </header>
         <h3 class="br-feat__name">
           {featured.data.title}
@@ -70,7 +66,6 @@ const pad = (n: number) => String(n).padStart(2, "0");
         <th scope="col">No.</th>
         <th scope="col">Title</th>
         <th scope="col">Type</th>
-        <th scope="col">Released</th>
         <th scope="col">Link</th>
       </tr>
     </thead>
@@ -89,7 +84,6 @@ const pad = (n: number) => String(n).padStart(2, "0");
               )}
             </td>
             <td>{release.data.type.toUpperCase()}</td>
-            <td>{formatShortDate(release.data.releaseDate)}</td>
             <td>
               {release.data.appleMusicUrl ? (
                 <a href={release.data.appleMusicUrl}>APPLE</a>

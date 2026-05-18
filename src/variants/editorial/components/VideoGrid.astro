@@ -1,6 +1,5 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { formatYear } from "../../../lib/formatDate";
 
 interface Props {
   videos: CollectionEntry<"videos">[];
@@ -24,9 +23,6 @@ const watchUrl = (video: CollectionEntry<"videos">): string => {
       <ol class="ed-list">
         {videos.map((video, idx) => {
           const num = String(idx + 1).padStart(2, "0");
-          const year = video.data.releaseDate
-            ? formatYear(video.data.releaseDate)
-            : "—";
 
           return (
             <li class="ed-list__item">
@@ -40,7 +36,6 @@ const watchUrl = (video: CollectionEntry<"videos">): string => {
                 <span class="ed-list__title">
                   <em>{video.data.title}</em>
                 </span>
-                <span class="ed-list__year">{year}</span>
                 <span class="ed-list__arrow" aria-hidden="true">
                   &rarr;
                 </span>

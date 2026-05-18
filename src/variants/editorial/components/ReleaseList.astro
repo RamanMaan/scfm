@@ -1,6 +1,5 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { formatYear } from "../../../lib/formatDate";
 import { spotifyOpenUrl } from "../../../lib/spotify";
 
 interface Props {
@@ -23,7 +22,6 @@ const primaryLink = (release: CollectionEntry<"releases">): string | null => {
       releases.map((release, idx) => {
         const href = primaryLink(release);
         const num = String(idx + 1).padStart(2, "0");
-        const year = formatYear(release.data.releaseDate);
 
         return (
           <li class="ed-list__item">
@@ -33,7 +31,6 @@ const primaryLink = (release: CollectionEntry<"releases">): string | null => {
                 <span class="ed-list__title">
                   <em>{release.data.title}</em>
                 </span>
-                <span class="ed-list__year">{year}</span>
                 <span class="ed-list__arrow" aria-hidden="true">
                   &rarr;
                 </span>
@@ -44,7 +41,6 @@ const primaryLink = (release: CollectionEntry<"releases">): string | null => {
                 <span class="ed-list__title">
                   <em>{release.data.title}</em>
                 </span>
-                <span class="ed-list__year">{year}</span>
                 <span class="ed-list__arrow" aria-hidden="true" />
               </div>
             )}
@@ -72,7 +68,7 @@ const primaryLink = (release: CollectionEntry<"releases">): string | null => {
 
   .ed-list__row {
     display: grid;
-    grid-template-columns: 56px 1fr auto 24px;
+    grid-template-columns: 56px 1fr 24px;
     gap: clamp(16px, 3vw, 40px);
     align-items: baseline;
     padding-block: clamp(20px, 2.4vw, 32px);
@@ -102,16 +98,6 @@ const primaryLink = (release: CollectionEntry<"releases">): string | null => {
     font-style: normal;
   }
 
-  .ed-list__year {
-    font-family: var(--ed-sans);
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--ed-muted);
-    font-variant-numeric: tabular-nums;
-  }
-
   .ed-list__arrow {
     font-family: var(--ed-sans);
     font-size: 14px;
@@ -137,7 +123,7 @@ const primaryLink = (release: CollectionEntry<"releases">): string | null => {
 
   @media (max-width: 600px) {
     .ed-list__row {
-      grid-template-columns: 36px 1fr auto;
+      grid-template-columns: 36px 1fr;
       gap: 14px;
     }
 
