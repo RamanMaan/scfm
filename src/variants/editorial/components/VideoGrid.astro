@@ -1,0 +1,74 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { formatYear } from "../../../lib/formatDate";
+
+interface Props {
+  videos: CollectionEntry<"videos">[];
+  channelUrl: string;
+}
+
+const { videos, channelUrl } = Astro.props;
+
+const watchUrl = (video: CollectionEntry<"videos">): string => {
+  if (video.data.youtubeUrl) return video.data.youtubeUrl;
+  if (video.data.youtubeId) {
+    return `https://www.youtube.com/watch?v=${video.data.youtubeId}`;
+  }
+  return channelUrl;
+};
+---
+
+<section class="ed-section ed-section--ruled ed-shell" id="video">
+  {
+    videos.length > 0 ? (
+      <ol class="ed-list">
+        {videos.map((video, idx) => {
+          const num = String(idx + 1).padStart(2, "0");
+          const year = video.data.releaseDate
+            ? formatYear(video.data.releaseDate)
+            : "—";
+
+          return (
+            <li class="ed-list__item">
+              <a
+                class="ed-list__row"
+                href={watchUrl(video)}
+                target="_blank"
+                rel="noopener"
+              >
+                <span class="ed-list__num">{num}</span>
+                <span class="ed-list__title">
+                  <em>{video.data.title}</em>
+                </span>
+                <span class="ed-list__year">{year}</span>
+                <span class="ed-list__arrow" aria-hidden="true">
+                  &rarr;
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+    ) : (
+      <p class="ed-list__empty">
+        <a href={channelUrl} target="_blank" rel="noopener">
+          <em>Visit the channel</em> &rarr;
+        </a>
+      </p>
+    )
+  }
+</section>
+
+<style>
+  .ed-list__empty {
+    font-family: var(--ed-display);
+    font-size: clamp(24px, 2.4vw, 32px);
+    text-transform: lowercase;
+    color: var(--ed-ink);
+    margin: 0;
+  }
+
+  .ed-list__empty em {
+    font-style: normal;
+  }
+</style>

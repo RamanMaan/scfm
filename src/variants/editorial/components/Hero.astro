@@ -1,0 +1,53 @@
+---
+interface Props {
+  name: string;
+  basedIn: string;
+  origin: string;
+}
+
+const { name, basedIn, origin } = Astro.props;
+const [first, ...rest] = name.toLowerCase().split(" ");
+const last = rest.join(" ");
+---
+
+<header class="ed-hero ed-shell" id="top">
+  <h1 class="ed-hero__title">
+    <span class="ed-hero__line">{first}</span>
+    {last && <span class="ed-hero__line ed-hero__line--inset">{last}</span>}
+  </h1>
+  <p class="ed-hero__loc">{origin} &mdash; {basedIn}</p>
+</header>
+
+<style>
+  .ed-hero {
+    padding-block: clamp(72px, 10vw, 144px);
+  }
+
+  .ed-hero__title {
+    font-family: var(--ed-display);
+    font-size: clamp(72px, 17vw, 240px);
+    line-height: 0.86;
+    letter-spacing: -0.012em;
+    text-transform: lowercase;
+    color: var(--ed-ink);
+    margin-bottom: clamp(48px, 6vw, 80px);
+  }
+
+  .ed-hero__line {
+    display: block;
+  }
+
+  .ed-hero__line--inset {
+    padding-left: clamp(24px, 6vw, 96px);
+  }
+
+  .ed-hero__loc {
+    font-family: var(--ed-sans);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ed-muted);
+    margin: 0;
+  }
+</style>

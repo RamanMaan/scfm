@@ -1,0 +1,94 @@
+---
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+
+const links = [
+  { label: "Music", href: "#music" },
+  { label: "Video", href: "#video" },
+  { label: "Contact", href: "#contact" },
+];
+---
+
+<nav class="ed-nav ed-shell">
+  <a class="ed-nav__mark" href="#top">{name.toLowerCase()}</a>
+  <ul class="ed-nav__list">
+    {
+      links.map((link) => (
+        <li>
+          <a class="ed-nav__link" href={link.href}>
+            <span class="ed-nav__bracket" aria-hidden="true">
+              [
+            </span>
+            <span class="ed-nav__label">{link.label}</span>
+            <span class="ed-nav__bracket" aria-hidden="true">
+              ]
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .ed-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-block: 24px;
+    border-bottom: 1px solid var(--ed-rule);
+    gap: 32px;
+  }
+
+  .ed-nav__mark {
+    font-family: var(--ed-display);
+    font-size: clamp(20px, 2vw, 26px);
+    line-height: 1;
+    letter-spacing: -0.005em;
+    color: var(--ed-ink);
+  }
+
+  .ed-nav__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: clamp(12px, 2vw, 28px);
+  }
+
+  .ed-nav__link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    font-family: var(--ed-sans);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+  }
+
+  .ed-nav__bracket {
+    color: var(--ed-faint);
+    transition: color 0.35s ease;
+  }
+
+  .ed-nav__link:hover .ed-nav__bracket,
+  .ed-nav__link:hover .ed-nav__label {
+    color: var(--ed-accent);
+  }
+
+  @media (max-width: 640px) {
+    .ed-nav {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .ed-nav__list {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+</style>

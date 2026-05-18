@@ -184,6 +184,142 @@ export const renderBrutalist = (): Node =>
     ),
   );
 
+export const renderEditorial = (): Node =>
+  el(
+    "div",
+    {
+      ...FRAME,
+      backgroundColor: "#ece8df",
+      fontFamily: "Inter",
+      color: "#141311",
+      padding: "64px 80px",
+      flexDirection: "column",
+      justifyContent: "space-between",
+    },
+    [
+      el(
+        "div",
+        {
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingBottom: "20px",
+          borderBottom: "1px solid rgba(20,19,17,0.25)",
+        },
+        [
+          el(
+            "div",
+            {
+              display: "flex",
+              flexDirection: "column",
+              gap: "4px",
+            },
+            [
+              el(
+                "div",
+                {
+                  display: "flex",
+                  fontFamily: "Cormorant",
+                  fontStyle: "italic",
+                  fontSize: "26px",
+                  color: "#141311",
+                },
+                "steven christopher",
+              ),
+              el(
+                "div",
+                {
+                  display: "flex",
+                  fontSize: "11px",
+                  fontWeight: 500,
+                  letterSpacing: "5px",
+                  color: "#7b7770",
+                  textTransform: "uppercase",
+                },
+                "Selected \u2014 2026",
+              ),
+            ],
+          ),
+          el(
+            "div",
+            {
+              display: "flex",
+              gap: "20px",
+              fontSize: "14px",
+              fontWeight: 400,
+              letterSpacing: "1px",
+              color: "#141311",
+            },
+            [
+              el("div", { display: "flex" }, "[ Music ]"),
+              el("div", { display: "flex" }, "[ Video ]"),
+              el("div", { display: "flex" }, "[ Contact ]"),
+            ],
+          ),
+        ],
+      ),
+      el(
+        "div",
+        {
+          display: "flex",
+          flexDirection: "column",
+          fontFamily: "Cormorant",
+          fontStyle: "italic",
+          fontWeight: 400,
+          fontSize: "180px",
+          lineHeight: 0.86,
+          letterSpacing: "-2px",
+          color: "#141311",
+        },
+        [
+          el("div", { display: "flex" }, "steven"),
+          el(
+            "div",
+            { display: "flex", paddingLeft: "96px" },
+            "christopher",
+          ),
+        ],
+      ),
+      el(
+        "div",
+        {
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-between",
+          alignItems: "baseline",
+          paddingTop: "20px",
+          borderTop: "1px solid rgba(20,19,17,0.25)",
+        },
+        [
+          el(
+            "div",
+            {
+              display: "flex",
+              fontFamily: "Cormorant",
+              fontStyle: "italic",
+              fontSize: "22px",
+              color: "#141311",
+            },
+            "fashion-editorial portfolio. image-led, masthead nav.",
+          ),
+          el(
+            "div",
+            {
+              display: "flex",
+              fontSize: "12px",
+              fontWeight: 500,
+              letterSpacing: "5px",
+              color: "#7b7770",
+              textTransform: "uppercase",
+            },
+            "Folio 01 / 04",
+          ),
+        ],
+      ),
+    ],
+  );
+
 export const renderDefault = (): Node =>
   el(
     "div",
@@ -264,4 +400,5 @@ export const TEMPLATES: Record<string, () => Node> = {
   default: renderDefault,
   midnight: renderMidnight,
   brutalist: renderBrutalist,
+  editorial: renderEditorial,
 };

@@ -1,0 +1,62 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { orderedSocials } from "../../../lib/socials";
+
+interface Props {
+  artist: CollectionEntry<"artist">;
+}
+
+const { artist } = Astro.props;
+const socials = orderedSocials(artist.data.socials);
+---
+
+<footer class="ed-section ed-section--ruled ed-shell" id="contact">
+  <ul class="ed-foot__socials">
+    {
+      socials.map(({ url, label }) => (
+        <li>
+          <a class="ed-foot__social" href={url} target="_blank" rel="noopener">
+            <em>{label.toLowerCase()}</em>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="ed-foot__copyright">
+    &copy; {new Date().getFullYear()}
+    {artist.data.name}
+  </p>
+</footer>
+
+<style>
+  .ed-foot__socials {
+    list-style: none;
+    margin: 0 0 clamp(48px, 6vw, 72px);
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(20px, 3vw, 40px);
+  }
+
+  .ed-foot__social {
+    font-family: var(--ed-display);
+    font-size: clamp(20px, 2vw, 28px);
+    line-height: 1;
+    text-transform: lowercase;
+    color: var(--ed-ink);
+  }
+
+  .ed-foot__social em {
+    font-style: normal;
+  }
+
+  .ed-foot__copyright {
+    font-family: var(--ed-sans);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ed-muted);
+    margin: 0;
+  }
+</style>
