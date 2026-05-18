@@ -1,0 +1,55 @@
+---
+description: Steven Christopher brand vibe — concrete UI constraints. Loads when editing site source files.
+globs: src/**/*.{astro,tsx,ts,jsx,js,css,md,mdx}
+alwaysApply: false
+---
+
+# Steven Christopher — UI Vibe Rules
+
+Mood anchor: cinematic, nocturnal, minimal, emotionally unresolved. A 2am indie
+film scene, not a pop campaign. If a change makes the site feel like an app, a
+SaaS landing page, or an influencer site — it is wrong.
+
+## Color
+
+- Primary: black, charcoal, off-white, washed gray
+- Accents (sparingly): deep muted red, desaturated navy, faded steel blue
+- Low saturation. No neon. No high-contrast brights.
+- Texture and lighting matter more than color.
+
+## Typography
+
+- Headings: elegant serif (editorial, restrained)
+- Body / nav: neutral sans-serif
+- Never mix more than two families. No trendy, distorted, or futuristic faces.
+- Type supports the mood; it never dominates.
+
+## Layout & motion
+
+- Negative space is the layout.
+- Slow, intentional transitions. No springy, bouncy, or attention-grabbing motion.
+- No scroll-jacking. No aggressive parallax.
+- Hero areas: full-bleed image or video, sparse text.
+- Navigation: `Music`, `Video`, `Contact`. Keep it minimal.
+
+## Copy
+
+- Minimal, selective, emotionally restrained.
+- One line beats a paragraph. Never desperate, performatively edgy, sentimental,
+  or over-explanatory.
+- No marketing-speak, no exclamation marks, no emoji.
+
+## Reject these patterns
+
+- Glossy pop aesthetics, influencer styling, heavy retouching
+- Bright commercial lighting in imagery
+- Dashboard / startup / SaaS visual language
+- Dense UI, busy layouts, CTA-stacked sections
+- Decorative gradients, drop shadows for "depth", glassmorphism
+- Generic stock photography
+
+## When deeper brand context is needed
+
+For narrative tone, photography direction, voice, copywriting, image
+generation, campaign concepts, or artist references, read the canonical brief
+at `.cursor/skills/steven-christopher-brand/SKILL.md`.
