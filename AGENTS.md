@@ -43,8 +43,10 @@ public/og/                 OG images (referenced by absolute path)
 4. **Schema changes affect every variant** - add new fields as `optional()`
    whenever possible.
 5. **Images** belong in `src/assets/` (so Astro optimizes them), referenced via
-   `image()` in the schema. The only exception is OG images which live in
-   `public/og/` because they need stable absolute URLs.
+   `image()` in the schema. The only exception is OG images: those are
+   generated at build time as 1200x630 PNGs into `dist/og/<id>.png` by the
+   [`ogImages`](src/integrations/og-images/) integration. To change a card,
+   edit [`src/integrations/og-images/templates.ts`](src/integrations/og-images/templates.ts).
 
 ## Adding a new variant
 
@@ -55,8 +57,10 @@ public/og/                 OG images (referenced by absolute path)
 3. Register the meta in
    [`src/variants/_registry.ts`](src/variants/_registry.ts) so it appears on
    the showcase.
-4. Drop an OG image at `public/og/<id>.svg` (or `.png`) and reference from
-   `meta.ts`.
+4. Add a card template for the new id in
+   [`src/integrations/og-images/templates.ts`](src/integrations/og-images/templates.ts)
+   and set `ogImage: "/og/<id>.png"` + `ogImageAlt` in `meta.ts`. The PNG is
+   generated automatically on `pnpm build`.
 
 ## Pending content (TODOs for the user, not for agents)
 
@@ -66,10 +70,34 @@ public/og/                 OG images (referenced by absolute path)
 - Press photos at `src/assets/artist/` + the `photo` field in
   `profile.json`.
 - Cover art at `src/assets/releases/` + `coverArt` field per release.
-- Real PNG OG images at `public/og/<id>.png`; SVG placeholders are committed
-  for development.
 
 ## Deploy
 
 Vercel, already configured. PR branches get preview URLs - share those with
 Steven instead of the production link.
+
+# Notes
+
+You are helping build an experimental musician website. The hard part is curation, not generation.
+
+Priorities:
+1. Emotional impact
+2. Distinctiveness
+3. Motion quality
+4. Audio-visual cohesion
+5. Performance
+
+Avoid:
+- startup aesthetics
+- generic SaaS layouts
+- overused gradients
+- template-like sections
+- excessive text
+- obvious AI-generated visuals
+
+All code should:
+- maintain high performance
+- support reduced motion
+- avoid layout thrashing
+- preserve accessibility
+- separate animation orchestration cleanly

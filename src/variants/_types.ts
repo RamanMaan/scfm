@@ -9,6 +9,8 @@ export interface VariantMeta {
   vibeTags: string[];
   /** Public path to a 1200x630 OG image; defaults to /og/default.png if omitted */
   ogImage?: string;
+  /** Accessible alt text for the OG image, surfaced in og:image:alt + twitter:image:alt */
+  ogImageAlt?: string;
   /** Optional path to a small preview image for the showcase card */
   thumbnail?: string;
 }

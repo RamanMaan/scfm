@@ -5,6 +5,7 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  ogImageAlt?: string;
   lang?: string;
   bodyClass?: string;
 }
@@ -12,7 +13,8 @@ interface Props {
 const {
   title,
   description = "Steven Christopher - R&B singer-songwriter, producer, and actor.",
-  ogImage = "/og/default.svg",
+  ogImage = "/og/default.png",
+  ogImageAlt = "Steven Christopher - R&B singer-songwriter from Memphis, based in Los Angeles.",
   lang = "en",
   bodyClass,
 } = Astro.props;
@@ -41,12 +43,17 @@ const absoluteOgImage = new URL(ogImage, Astro.site ?? Astro.url).toString();
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={absoluteOgImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:url" content={canonicalUrl} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={absoluteOgImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
 
     <slot name="head" />
   </head>
