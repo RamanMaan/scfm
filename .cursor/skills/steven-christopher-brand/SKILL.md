@@ -32,6 +32,52 @@ Leave space for the audience to lean in.
 
 ---
 
+## Latest direction — from Steven, 2026-05-20
+
+These are Steven's own words from the most recent design review. They override
+older guidance where they conflict.
+
+> "I want it to feel curated and designed, not like a template. Special and
+> minimal."
+
+> "Futuristic and retro at the same time."
+
+> "Minimal, masculine, stronger."
+
+> First frame of the next single: "Me playing the drums, on an all-white
+> background and stage, looking at the drums, monochrome."
+
+What he rejected, in his words:
+
+- "Stock template." "Basic." "Doesn't jump out."
+- Rounded / soft / "squirly squiggly" serifs — both decorative serifs we tried.
+- About / origin / bio sections — *"people know what they're coming for."*
+- Dark backgrounds *in the variant we showed* — not dark in general, but dark
+  paired with soft type read as generic.
+
+What he validated:
+
+- Designed-feeling type and layout over atmospheric photography.
+- Light / off-white backgrounds. Monochrome. Stark composition.
+- One strong hero image, minimal navigation, links out (refs:
+  [whatszep.com](https://www.whatszep.com/), [beyonce.com](https://beyonce.com/)).
+
+### Three principles this surfaced
+
+1. **Designed, not templated.** Every screen must look like someone made a
+   specific decision. If it could be a Squarespace theme, it is wrong.
+2. **Futuristic and retro at the same time.** The brand sits on a temporal
+   tension — the future remembered through the past. Mono type, archival
+   labels, modernist composition; never nostalgic kitsch, never sci-fi cliché.
+3. **Strong before soft.** Visual identity leads with clarity, restraint, and
+   confidence. Vulnerability comes through isolation and exposure (a single
+   subject on a stark stage), not through softness or ornament.
+
+The deeper, slower brief continues below — read it through the lens of these
+three principles.
+
+---
+
 # Brand Brief
 
 ## Core Brand Identity
@@ -102,9 +148,11 @@ manufactured and more organically cinematic.
 
 ## Visual Identity
 
-### Visual World
+The visual world has two registers. Both are valid; both share *control,
+restraint, and stark composition.* What unites them is not lighting — it is
+deliberateness.
 
-The visual environment is:
+### Register 1 — Nocturnal / observed
 
 - evening/nighttime
 - solitary
@@ -113,10 +161,26 @@ The visual environment is:
 - monochromatic or heavily desaturated
 - realistic rather than fantastical
 
-Primary inspiration references:
+References: A24 film aesthetics; Euphoria cinematography stripped down and less
+neon.
 
-- A24 film aesthetics
-- Euphoria cinematography and mood, but stripped down and less neon
+### Register 2 — Studio / monochrome stage
+
+- high-key or fully white environments
+- single subject, isolated in space
+- one instrument, one body, one object — exposed
+- no theatrical lighting; even, controlled illumination
+- monochrome or near-monochrome
+- composed like a still life or a gallery piece
+
+References: Steven's own first-frame instinct ("drums on a white stage,
+monochrome, looking at the drums"); gallery-catalog and editorial-fashion
+photography stripped of styling; Frank Ocean's *Blonde*-era restraint.
+
+In both registers the subject is exposed and the world is minimal. The mood
+across the brand is still nocturnal — but a song can be late-night while its
+visual presentation is bright and stark. Do not collapse the music's mood into
+the site's literal background color.
 
 ### Photography Direction
 
@@ -157,14 +221,17 @@ The imagery should feel like film stills rather than promotional photos.
 
 ### Core Palette
 
+The brand is monochromatic. Both *light-on-dark* and *dark-on-light* are valid
+treatments — pick one and commit, never split the difference with mid-grays.
+
 Primary tones:
 
-- black
+- off-white / bone / paper-stock
+- black / near-black ink
 - charcoal
-- off-white
 - washed gray
 
-Optional restrained accent tones:
+Optional restrained accent tones (use one, sparingly, per surface):
 
 - deep muted red
 - desaturated navy
@@ -176,35 +243,58 @@ Rules:
 - no bright colors
 - no high-contrast neon palettes
 - minimal color usage overall
+- if a surface is light, commit to *paper-bright*, not warm-cream that reads
+  as a blog template
+- if a surface is dark, commit to *ink-black*, not dim-gray that reads as a
+  generic dark-mode toggle
 
-Texture and lighting matter more than color.
+Texture, composition, and type weight matter more than color.
 
 ---
 
 ## Typography Direction
 
-Typography should feel editorial, refined, and understated.
+Typography is the single biggest signal that the site is *designed* and not
+*templated.* Steven rejected both decorative-serif treatments we tried; the
+direction below is the corrected position.
 
 ### Recommended System
 
-- Elegant serif for headlines/titles
-- Neutral sans-serif for navigation/body text
+The system has two voices. Pick one as primary and use the other sparingly.
+
+- **Monospace, primary.** A high-quality monospace (e.g. *JetBrains Mono*,
+  *IBM Plex Mono*, *GT America Mono*, *Söhne Mono*) sets the futuristic-and-
+  retro tone. Use for nav, labels, micro-typography, and — at scale and
+  weight — for display headlines.
+- **Stark geometric sans, supporting.** A neutral, structural sans (e.g.
+  *Söhne*, *Suisse Int'l*, *GT America*, *Inter Tight*) for body, captions,
+  and any place mono feels too rigid.
+
+If a serif is used, it must be *stark and structural* (e.g. *IBM Plex Serif*,
+*Söhne Schmal*, a modernist slab). Never a romantic, scripty, italic, or
+optically rounded serif.
 
 Typography should communicate:
 
 - restraint
 - confidence
-- emotional sophistication
-- luxury without flashiness
+- precision
+- futuristic-and-retro temporal tension
+- design intent — every weight, size, and tracking choice deliberate
 
-Avoid:
+### Hard avoid
 
-- trendy distorted fonts
-- overly futuristic fonts
-- loud typography
-- excessive font mixing
+- decorative italics, scripts, or "elegant" serifs (Cormorant, Playfair Italic,
+  Big Caslon Italic, Didone display italics, etc.)
+- rounded / soft / humanist faces — Steven specifically rejected these as
+  *"too rounded, too soft"* and *"squirly squiggly round"*
+- trendy distorted, glitchy, or sci-fi-pastiche faces
+- loud typography that competes with the subject
+- mixing more than two families on a single surface
+- system-font fallbacks shipping to production
 
-The typography should support the mood rather than dominate it.
+The typography should make the page feel *authored.* If it reads as
+default-Webflow or default-Squarespace, ship something else.
 
 ---
 
@@ -237,16 +327,40 @@ Minimal navigation:
 - Video
 - Contact
 
-Potential homepage structure:
+Reference patterns Steven validated:
 
-- full-screen cinematic hero image/video
-- sparse text
+- [whatszep.com](https://www.whatszep.com/) — one-page landing, single strong
+  hero image, links out for everything else
+- [beyonce.com](https://beyonce.com/) — minimal nav, one focal asset at a time
+
+Homepage structure:
+
+- one strong hero image or video — the *single moment* the site is built around
+- sparse text — name, one line, nothing more
 - understated transitions
-- embedded music/video content
-- minimal copywriting
+- embedded music/video content lower on the page
+- everything else lives behind a link, not on the homepage
 
 Interaction should feel slow and intentional rather than flashy or
 hyper-animated.
+
+### No about / origin / bio sections
+
+Steven, twice, unprompted: *"Don't need the origin/brand stuff — cut out.
+People know what they're coming for."*
+
+This is a hard rule. The site does not explain Steven. No "about", no "based
+in", no "origin", no "discipline", no "field note". The music, the video, and
+the imagery do that work. Press blurbs live on a press page if at all.
+
+### Anti-template rules
+
+- Never a hero with a headline + subhead + CTA stack — that is SaaS, not artist.
+- Never a three-column "Music / About / Contact" feature row.
+- Never an "as featured in" logo strip.
+- Never auto-playing background gradients or particle effects.
+- Never decorative section dividers, "scroll to explore" prompts, or numbered
+  section indicators that exist only to fill space.
 
 Avoid:
 
@@ -286,15 +400,29 @@ The brand should never feel:
 
 ## Strategic Brand Principle
 
-The central tension of the brand is:
+The brand operates on two tensions, one emotional and one visual. Both must
+hold simultaneously.
+
+### Emotional tension
 
 > reckless intimacy vs emotional distance
 
-The visuals should carry the vulnerability and atmosphere.
+- The music and lyrical content carry the recklessness.
+- The visuals carry the vulnerability and atmosphere — through *exposure and
+  isolation*, not through softness or sentiment.
 
-The music and lyrical content should carry the recklessness.
+### Visual tension
 
-Maintaining this balance is critical to avoiding cliché aesthetics.
+> futuristic and retro at the same time —
+> designed and curated, never templated
+
+- Type, layout, and composition lean modernist, structural, almost archival.
+- The mood and subject matter remain timeless and human.
+- The site reads as *authored.* If a section could appear on any artist's
+  Squarespace, replace it.
+
+Maintaining both tensions is critical. Collapsing the emotional one produces
+cliché; collapsing the visual one produces template.
 
 ---
 

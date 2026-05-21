@@ -6,31 +6,71 @@ alwaysApply: false
 
 # Steven Christopher — UI Vibe Rules
 
-Mood anchor: cinematic, nocturnal, minimal, emotionally unresolved. A 2am indie
-film scene, not a pop campaign. If a change makes the site feel like an app, a
-SaaS landing page, or an influencer site — it is wrong.
+Mood anchor: cinematic, nocturnal, minimal, emotionally unresolved. *Designed,
+not templated.* *Futuristic and retro at the same time.* If a change makes the
+site feel like an app, a SaaS landing page, an influencer site, or a
+Squarespace / Webflow theme — it is wrong.
+
+> Steven, 2026-05-20: *"I want it to feel curated and designed, not like a
+> template. Special and minimal."*
+
+## North-star checks before shipping any change
+
+1. Could this appear unedited on someone else's artist site? If yes, redesign.
+2. Does every element on the page look like a deliberate choice? If anything
+   feels default, replace it.
+3. Does the page hold the *futuristic + retro* tension, or does it lean fully
+   into one and become kitsch?
 
 ## Color
 
-- Primary: black, charcoal, off-white, washed gray
-- Accents (sparingly): deep muted red, desaturated navy, faded steel blue
+- Monochromatic. Commit fully to *light* or *dark*; never split the difference.
+- Light surfaces: paper-bright off-white, not warm cream.
+- Dark surfaces: ink-black, not dim "dark-mode" gray.
+- Charcoal and washed gray are supporting tones only.
+- Accents (sparingly, one per surface): deep muted red, desaturated navy,
+  faded steel blue.
 - Low saturation. No neon. No high-contrast brights.
-- Texture and lighting matter more than color.
+- Texture, composition, and type weight matter more than color.
 
 ## Typography
 
-- Headings: elegant serif (editorial, restrained)
-- Body / nav: neutral sans-serif
-- Never mix more than two families. No trendy, distorted, or futuristic faces.
-- Type supports the mood; it never dominates.
+- Primary voice: a real **monospace** (e.g. JetBrains Mono, IBM Plex Mono,
+  GT America Mono, Söhne Mono). Mono carries the futuristic-and-retro tone.
+- Supporting voice: a **stark geometric sans** (e.g. Söhne, Suisse Int'l,
+  GT America, Inter Tight). Use for body and captions.
+- Serifs are allowed only if **stark and structural** (IBM Plex Serif,
+  Söhne Schmal, modernist slabs). Never decorative, romantic, or italic-display.
+- Hard ban: rounded / soft / humanist serifs, italic display serifs, scripty
+  faces, glitch/sci-fi pastiche, default system stacks in production.
+- Never mix more than two families on a single surface.
+- Type supports the mood; it never dominates — but it must always look
+  *authored.*
+
+> Steven rejected both decorative serifs we tried as *"too rounded, too soft"*
+> and *"squirly squiggly round."* Do not reintroduce them.
 
 ## Layout & motion
 
 - Negative space is the layout.
-- Slow, intentional transitions. No springy, bouncy, or attention-grabbing motion.
+- Slow, intentional transitions. No springy, bouncy, or attention-grabbing
+  motion.
 - No scroll-jacking. No aggressive parallax.
-- Hero areas: full-bleed image or video, sparse text.
+- Hero areas: full-bleed image or video, sparse text. *One* focal subject.
+- Reference patterns:
+  [whatszep.com](https://www.whatszep.com/) (one-page, strong hero, links out),
+  [beyonce.com](https://beyonce.com/) (minimal nav, single focal asset).
 - Navigation: `Music`, `Video`, `Contact`. Keep it minimal.
+
+## No about / origin / bio sections
+
+Hard rule. Steven, twice unprompted: *"Don't need the origin/brand stuff —
+cut out. People know what they're coming for."*
+
+- No "About" / "Origin" / "Based in" / "Discipline" / "Field Note" / "Bio"
+  blocks anywhere on the homepage.
+- The music, video, and imagery do the explaining.
+- If press copy must exist, it lives on a dedicated press page, not the home.
 
 ## Device priority — mobile-first, always
 
@@ -50,9 +90,8 @@ SaaS landing page, or an influencer site — it is wrong.
   feel timeless and current; visible gaps between releases break the spell.
 - Sorting collections by `releaseDate` internally is fine; rendering the value
   in the UI is not. The same rule applies to videos (`data.date`).
-- Allowed date usage: footer copyright year,
-  press article publication dates. Music + video items show format/type and
-  title only — nothing time-stamped.
+- Allowed date usage: footer copyright year, press article publication dates.
+  Music + video items show format/type and title only — nothing time-stamped.
 
 ## Copy
 
@@ -63,15 +102,29 @@ SaaS landing page, or an influencer site — it is wrong.
 
 ## Reject these patterns
 
+- Hero with headline + subhead + CTA stack (SaaS pattern, never artist)
+- Three-column "Music / About / Contact" feature rows
+- "As featured in" logo strips
+- Decorative section dividers, "scroll to explore" prompts, numbered step
+  indicators that only fill space
 - Glossy pop aesthetics, influencer styling, heavy retouching
 - Bright commercial lighting in imagery
 - Dashboard / startup / SaaS visual language
 - Dense UI, busy layouts, CTA-stacked sections
 - Decorative gradients, drop shadows for "depth", glassmorphism
 - Generic stock photography
+- Anything that reads as a Squarespace, Webflow, or Wix theme
 
 ## When deeper brand context is needed
 
 For narrative tone, photography direction, voice, copywriting, image
 generation, campaign concepts, or artist references, read the canonical brief
 at `.cursor/skills/steven-christopher-brand/SKILL.md`.
+
+A running log of what Steven has actually said in design reviews — and the
+decisions that came out of it — lives at
+`.cursor/skills/steven-christopher-brand/decisions.md`. Consult it before
+making large directional changes.
+
+The validated reference moodboard lives at
+`.cursor/skills/steven-christopher-brand/references.md`.
