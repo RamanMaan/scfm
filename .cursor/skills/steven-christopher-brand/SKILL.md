@@ -164,56 +164,130 @@ deliberateness.
 References: A24 film aesthetics; Euphoria cinematography stripped down and less
 neon.
 
-### Register 2 — Studio / monochrome stage
+### Register 2 — Studio / high-key white seamless *(dominant register)*
 
-- high-key or fully white environments
-- single subject, isolated in space
-- one instrument, one body, one object — exposed
+This is now the default register for hero, portrait, and campaign imagery.
+Steven validated it directly with two references on 2026-05-20: a Marc
+Jacobs group portrait and a black-and-white group on tubular cantilever
+chairs (the visualized opening frame of his next music video). See
+[`references.md`](references.md) for both images and full notes.
+
+Properties:
+
+- high-key, fully white seamless environments — paper-bright, world
+  dissolves to nothing
+- composed like a campaign still or album cover, not a candid frame
+- single subject *or* group portrait, both valid
+- subjects directly engage the camera; emotional posture is restrained,
+  unsmiling, present
+- modernist tubular furniture (Breuer-style cantilever chairs) and similar
+  mid-century forms are part of the world — props are deliberate, not
+  decorative
+- costume and styling carry character: black leather, berets, layered knits,
+  vintage denim, uniform-across-subjects
+- monochrome by default; controlled dusty color (green velvet, faded denim,
+  oxblood) when color appears
 - no theatrical lighting; even, controlled illumination
-- monochrome or near-monochrome
-- composed like a still life or a gallery piece
+- floor shadows are subtle; the rest of the world is empty
 
-References: Steven's own first-frame instinct ("drums on a white stage,
-monochrome, looking at the drums"); gallery-catalog and editorial-fashion
-photography stripped of styling; Frank Ocean's *Blonde*-era restraint.
+Steven's own visual touchstones for this register:
 
-In both registers the subject is exposed and the world is minimal. The mood
-across the brand is still nocturnal — but a song can be late-night while its
-visual presentation is bright and stark. Do not collapse the music's mood into
-the site's literal background color.
+- "Me playing the drums, on an all-white background and stage, looking at the
+  drums, monochrome." (first frame, next single)
+- The five-figure black-and-white tubular-chair group portrait (visualized
+  opening of his next music video).
+
+### Register 1 — Nocturnal / observed *(secondary, atmosphere)*
+
+Reserved for music-video B-roll, atmosphere imagery, and secondary surfaces.
+Not the default for hero or portrait shots.
+
+- evening / nighttime
+- solitary
+- urban or emotionally isolated
+- grainy
+- monochromatic or heavily desaturated
+- realistic rather than fantastical
+
+References: A24 film aesthetics; Euphoria cinematography stripped down and
+less neon.
+
+### How the two registers relate
+
+In both registers the subject is exposed and the world is minimal. What
+unites them is *control, restraint, and stark composition* — not lighting.
+
+The mood of the music is still nocturnal — but a song can be late-night
+while its visual presentation is bright, white, and stark. Do not collapse
+the music's mood into the site's literal background color.
 
 ### Photography Direction
 
-Photography should feel:
+Photography is **staged, composed, and art-directed.** Intimacy comes from
+*emotional restraint* — unsmiling subjects, direct gaze, controlled distance —
+not from candid moment-capture. The references Steven validated on 2026-05-20
+([`references.md`](references.md)) are fashion-campaign editorial, not film
+stills.
 
-- candid
-- unposed
-- emotionally observed
-- intimate without trying too hard
+#### Visual lineage
 
-Avoid:
+Study and pull from:
 
-- studio glamour
-- heavy retouching
-- overly sharp imagery
-- excessive styling
-- bright commercial lighting
+- Marc Jacobs / Heaven campaign editorial
+- Wales Bonner lookbooks
+- Mowalola, Telfar campaign stills
+- Saint Laurent, Calvin Klein archival campaign work
+- Beyoncé visual-album press imagery (validated via [beyonce.com](https://beyonce.com/))
 
-Preferred imagery includes:
+These share: high-key white seamless or controlled monochrome environments;
+deliberate styling as character; direct camera engagement; restrained
+emotion; the subject treated as a designed object.
 
-- low-light environments
-- motion blur
-- natural shadows
-- reflective surfaces
-- empty rooms
-- late-night streets
-- cars
-- mirrors
-- smoke/haze
-- partial facial visibility
-- moments that feel accidentally captured
+#### Subject and pose
 
-The imagery should feel like film stills rather than promotional photos.
+- Subjects look directly at camera as the default. Smiling is the exception,
+  not the rule.
+- Solo *and* group compositions are valid. Group-as-subject reads as
+  "crowd-as-isolation" — everyone present, no one warm.
+- Costume and styling carry meaning. Black leather, berets, layered knits,
+  vintage denim, deliberate uniform across multiple subjects — wardrobe is
+  part of the storytelling, not just dressing.
+- Props are deliberate, not decorative. Modernist tubular furniture
+  (Breuer-style cantilever chairs), single instruments on stage, mid-century
+  forms — these *are* the world.
+
+#### Environment
+
+Two valid environments, both controlled:
+
+- **High-key white seamless** — paper-bright studio, world dissolves to
+  nothing, subject and props float. *This is now the dominant register for
+  hero / portrait imagery.*
+- **Low-light nocturnal** — late-night streets, empty rooms, reflective
+  surfaces, smoke / haze, motion blur. Reserved for atmosphere shots, music
+  video B-roll, secondary imagery.
+
+#### Color and treatment
+
+- Monochrome or heavily desaturated is the default.
+- Where color is allowed (Marc Jacobs reference): the palette is *controlled
+  and dusty* — green velvet, faded denim, brick red, oxblood — never bright,
+  never saturated.
+- Lighting is controlled and even. No theatrical glamour, no commercial
+  beauty lighting.
+
+#### Avoid
+
+- Candid / off-moment / accidentally-captured framing
+- Studio glamour, beauty retouching, soft-glow skin
+- Influencer "personality shoot" energy
+- Bright commercial lighting
+- Bright color blocking
+- Stock photography of any kind
+- Smiling press portraits
+
+The imagery should feel like a campaign still that could run unbylined in a
+fashion magazine — *authored, deliberate, slightly remote.*
 
 ---
 

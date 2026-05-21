@@ -31,13 +31,7 @@ const press = (await getCollection("press")).sort(
   title={`${artist.data.name} - ${artist.data.tagline}`}
   description={artist.data.bio}
 >
-  <Hero
-    name={artist.data.name}
-    tagline={artist.data.tagline}
-    basedIn={artist.data.basedIn}
-    origin={artist.data.origin}
-    bio={artist.data.bio}
-  />
+  <Hero name={artist.data.name} />
   <ReleaseList featured={featured} rest={rest} />
   <VideoGrid videos={videos} channelUrl={artist.data.socials.youtube} />
   <Footer artist={artist} press={press} />

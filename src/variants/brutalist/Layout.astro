@@ -1,4 +1,7 @@
 ---
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/700.css";
+
 import BaseHtml from "../../layouts/BaseHtml.astro";
 import meta from "./meta";
 
@@ -24,12 +27,14 @@ const { title, description } = Astro.props;
   .brut {
     --br-bg: #ffffff;
     --br-ink: #000000;
-    --br-accent: #ff2400;
+    /* Deep muted red. Reserved for selection + focus only — never for
+       headline color. See docs/variant-roadmap.md (brutalist accent test). */
+    --br-accent: #6a1a14;
     --br-muted: #6b6b6b;
     --br-rule: 2px;
     --br-mono:
-      ui-monospace, "SFMono-Regular", "Menlo", "Cascadia Mono", "Consolas",
-      monospace;
+      "JetBrains Mono", ui-monospace, "SFMono-Regular", "Menlo",
+      "Cascadia Mono", "Consolas", monospace;
 
     background: var(--br-bg);
     color: var(--br-ink);
@@ -53,6 +58,9 @@ const { title, description } = Astro.props;
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 3px;
+    transition:
+      background-color 320ms ease,
+      color 320ms ease;
   }
 
   .brut a:hover {
@@ -108,5 +116,15 @@ const { title, description } = Astro.props;
 
   .brut iframe {
     border: var(--br-rule) solid var(--br-ink) !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brut,
+    .brut *,
+    .brut *::before,
+    .brut *::after {
+      transition-duration: 0.001ms !important;
+      animation-duration: 0.001ms !important;
+    }
   }
 </style>

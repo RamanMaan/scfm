@@ -3,8 +3,7 @@
  * React dep by hand-rolling `{ type, props }` nodes; satori accepts these as-is.
  *
  * Each template renders into a 1200x630 frame. Designs intentionally mirror
- * the prior hand-written SVGs in `public/og/*.svg` so previews stay on-brand
- * across variants.
+ * the variant they ship with so previews stay on-brand.
  */
 
 type Style = Record<string, string | number>;
@@ -62,19 +61,18 @@ export const renderMidnight = (): Node =>
           color: "rgba(232,233,236,0.4)",
           textTransform: "uppercase",
         },
-        "Variant / Midnight",
+        "Variant / Midnight \u2014 Archived",
       ),
       el(
         "div",
         {
           display: "flex",
           flexDirection: "column",
-          fontFamily: "Cormorant",
-          fontStyle: "italic",
-          fontWeight: 400,
-          fontSize: "180px",
+          fontFamily: "Inter",
+          fontWeight: 500,
+          fontSize: "160px",
           lineHeight: 0.95,
-          letterSpacing: "-2px",
+          letterSpacing: "-3px",
           color: "#e8e9ec",
         },
         [
@@ -92,7 +90,7 @@ export const renderMidnight = (): Node =>
           color: "#7a8b9c",
           textTransform: "uppercase",
         },
-        "Dark / Cinematic / Photographic",
+        "Sunset \u2014 see /brutalist + /studio",
       ),
     ],
   );
@@ -129,7 +127,7 @@ export const renderBrutalist = (): Node =>
             paddingBottom: "24px",
             borderBottom: "2px solid #000",
           },
-          "Variant / Brutalist \u2014 Edition 01",
+          "Variant / Brutalist \u2014 Edition 02",
         ),
         el(
           "div",
@@ -161,7 +159,7 @@ export const renderBrutalist = (): Node =>
                 fontWeight: 700,
                 lineHeight: 1,
                 letterSpacing: "-4px",
-                color: "#ff2400",
+                color: "#000",
                 justifyContent: "flex-end",
               },
               "CHRISTOPHER",
@@ -180,12 +178,119 @@ export const renderBrutalist = (): Node =>
             borderTop: "2px solid #000",
           },
           [
-            el("div", { display: "flex" }, "Raw / Monospace / Swiss / Zine"),
-            el("div", { display: "flex" }, "Memphis \u2014 Los Angeles"),
+            el("div", { display: "flex" }, "Paper / Mono / Designed"),
+            el("div", { display: "flex" }, "One frame, one focus"),
           ],
         ),
       ],
     ),
+  );
+
+export const renderStudio = (): Node =>
+  el(
+    "div",
+    {
+      ...FRAME,
+      backgroundColor: "#ffffff",
+      fontFamily: "Inter",
+      color: "#0a0a0a",
+      padding: "72px 80px",
+      flexDirection: "column",
+      justifyContent: "space-between",
+    },
+    [
+      el(
+        "div",
+        {
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-between",
+          alignItems: "baseline",
+        },
+        [
+          el(
+            "div",
+            {
+              display: "flex",
+              fontSize: "16px",
+              fontWeight: 500,
+              letterSpacing: "1px",
+              color: "#0a0a0a",
+            },
+            "Steven Christopher",
+          ),
+          el(
+            "div",
+            {
+              display: "flex",
+              fontSize: "11px",
+              fontWeight: 500,
+              letterSpacing: "5px",
+              color: "#6f6f6f",
+              textTransform: "uppercase",
+            },
+            "Plate 01",
+          ),
+        ],
+      ),
+      el(
+        "div",
+        {
+          display: "flex",
+          flexDirection: "column",
+          fontFamily: "Inter",
+          fontWeight: 500,
+          fontSize: "160px",
+          lineHeight: 0.92,
+          letterSpacing: "-4px",
+          color: "#0a0a0a",
+        },
+        [
+          el("div", { display: "flex" }, "Steven"),
+          el(
+            "div",
+            { display: "flex", paddingLeft: "120px" },
+            "Christopher",
+          ),
+        ],
+      ),
+      el(
+        "div",
+        {
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-between",
+          alignItems: "baseline",
+          paddingTop: "20px",
+          borderTop: "1px solid rgba(10,10,10,0.08)",
+        },
+        [
+          el(
+            "div",
+            {
+              display: "flex",
+              fontSize: "16px",
+              fontWeight: 500,
+              letterSpacing: "0.5px",
+              color: "#0a0a0a",
+            },
+            "Paper-bright, geometric sans, gallery-catalog.",
+          ),
+          el(
+            "div",
+            {
+              display: "flex",
+              fontSize: "11px",
+              fontWeight: 500,
+              letterSpacing: "5px",
+              color: "#6f6f6f",
+              textTransform: "uppercase",
+            },
+            "Variant / Studio",
+          ),
+        ],
+      ),
+    ],
   );
 
 export const renderEditorial = (): Node =>
@@ -224,9 +329,9 @@ export const renderEditorial = (): Node =>
                 "div",
                 {
                   display: "flex",
-                  fontFamily: "Cormorant",
-                  fontStyle: "italic",
-                  fontSize: "26px",
+                  fontFamily: "Inter",
+                  fontSize: "20px",
+                  fontWeight: 500,
                   color: "#141311",
                 },
                 "steven christopher",
@@ -241,24 +346,8 @@ export const renderEditorial = (): Node =>
                   color: "#7b7770",
                   textTransform: "uppercase",
                 },
-                "Selected \u2014 2026",
+                "Archived \u2014 see /brutalist + /studio",
               ),
-            ],
-          ),
-          el(
-            "div",
-            {
-              display: "flex",
-              gap: "20px",
-              fontSize: "14px",
-              fontWeight: 400,
-              letterSpacing: "1px",
-              color: "#141311",
-            },
-            [
-              el("div", { display: "flex" }, "[ Music ]"),
-              el("div", { display: "flex" }, "[ Video ]"),
-              el("div", { display: "flex" }, "[ Contact ]"),
             ],
           ),
         ],
@@ -268,12 +357,11 @@ export const renderEditorial = (): Node =>
         {
           display: "flex",
           flexDirection: "column",
-          fontFamily: "Cormorant",
-          fontStyle: "italic",
-          fontWeight: 400,
-          fontSize: "180px",
-          lineHeight: 0.86,
-          letterSpacing: "-2px",
+          fontFamily: "Inter",
+          fontWeight: 500,
+          fontSize: "150px",
+          lineHeight: 0.92,
+          letterSpacing: "-3px",
           color: "#141311",
         },
         [
@@ -296,12 +384,11 @@ export const renderEditorial = (): Node =>
             "div",
             {
               display: "flex",
-              fontFamily: "Cormorant",
-              fontStyle: "italic",
-              fontSize: "22px",
+              fontSize: "16px",
+              fontWeight: 500,
               color: "#141311",
             },
-            "fashion-editorial portfolio. image-led, masthead nav.",
+            "Earlier iteration. Kept for reference.",
           ),
           el(
             "div",
@@ -313,7 +400,7 @@ export const renderEditorial = (): Node =>
               color: "#7b7770",
               textTransform: "uppercase",
             },
-            "Folio 01 / 04",
+            "Legacy",
           ),
         ],
       ),
@@ -325,9 +412,9 @@ export const renderDefault = (): Node =>
     "div",
     {
       ...FRAME,
-      backgroundColor: "#f4f3ef",
+      backgroundColor: "#ffffff",
       fontFamily: "Inter",
-      color: "#111111",
+      color: "#0a0a0a",
       padding: "96px 80px",
       flexDirection: "column",
       justifyContent: "space-between",
@@ -357,13 +444,12 @@ export const renderDefault = (): Node =>
             "div",
             {
               display: "flex",
-              fontFamily: "Cormorant",
-              fontStyle: "italic",
-              fontWeight: 400,
+              fontFamily: "Inter",
+              fontWeight: 500,
               fontSize: "140px",
               lineHeight: 1,
               letterSpacing: "-3px",
-              color: "#111111",
+              color: "#0a0a0a",
             },
             "Steven Christopher",
           ),
@@ -371,13 +457,12 @@ export const renderDefault = (): Node =>
             "div",
             {
               display: "flex",
-              fontSize: "28px",
+              fontSize: "20px",
               fontWeight: 500,
-              letterSpacing: "6px",
+              letterSpacing: "0.5px",
               color: "#6b6b6b",
-              textTransform: "uppercase",
             },
-            "R&B Singer-Songwriter",
+            "Singer, songwriter, producer.",
           ),
         ],
       ),
@@ -385,10 +470,10 @@ export const renderDefault = (): Node =>
         "div",
         {
           display: "flex",
-          fontSize: "16px",
+          fontSize: "13px",
           fontWeight: 500,
-          letterSpacing: "4px",
-          color: "rgba(17,17,17,0.4)",
+          letterSpacing: "5px",
+          color: "rgba(10,10,10,0.4)",
           textTransform: "uppercase",
         },
         "Memphis / Los Angeles",
@@ -398,7 +483,8 @@ export const renderDefault = (): Node =>
 
 export const TEMPLATES: Record<string, () => Node> = {
   default: renderDefault,
-  midnight: renderMidnight,
   brutalist: renderBrutalist,
+  studio: renderStudio,
   editorial: renderEditorial,
+  midnight: renderMidnight,
 };

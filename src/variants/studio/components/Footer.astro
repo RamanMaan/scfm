@@ -1,0 +1,107 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { orderedSocials } from "../../../lib/socials";
+
+interface Props {
+  artist: CollectionEntry<"artist">;
+}
+
+const { artist } = Astro.props;
+const socials = orderedSocials(artist.data.socials);
+---
+
+<footer class="st-section st-section--ruled st-shell" id="contact">
+  <header class="st-index__head">
+    <h2 class="st-index__title">Contact</h2>
+    <span class="st-meta">{String(socials.length).padStart(2, "0")}</span>
+  </header>
+
+  <ul class="st-foot__socials">
+    {
+      socials.map(({ url, label }) => (
+        <li>
+          <a class="st-foot__social" href={url} target="_blank" rel="noopener">
+            <span>{label}</span>
+            <span class="st-foot__arrow" aria-hidden="true">
+              &nearr;
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="st-foot__base">
+    <p class="st-meta">&copy; {artist.data.name}</p>
+    <p class="st-meta">All rights reserved</p>
+  </div>
+</footer>
+
+<style>
+  .st-index__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: clamp(40px, 4vw, 64px);
+  }
+
+  .st-index__title {
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .st-foot__socials {
+    list-style: none;
+    margin: 0 0 clamp(64px, 8vw, 96px);
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    border-top: 1px solid var(--st-rule);
+  }
+
+  .st-foot__socials li {
+    border-bottom: 1px solid var(--st-rule);
+  }
+
+  .st-foot__social {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px 0;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--st-ink);
+  }
+
+  .st-foot__arrow {
+    color: var(--st-faint);
+    font-size: 14px;
+    transition:
+      color 320ms var(--st-ease),
+      transform 320ms var(--st-ease);
+  }
+
+  .st-foot__social:hover .st-foot__arrow {
+    color: var(--st-accent);
+    transform: translate(2px, -2px);
+  }
+
+  .st-foot__base {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: clamp(20px, 2vw, 28px);
+    border-top: 1px solid var(--st-rule);
+  }
+
+  @media (max-width: 480px) {
+    .st-foot__base {
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+    }
+  }
+</style>

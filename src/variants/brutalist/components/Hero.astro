@@ -1,13 +1,9 @@
 ---
 interface Props {
   name: string;
-  tagline: string;
-  basedIn: string;
-  origin: string;
-  bio: string;
 }
 
-const { name, tagline, basedIn, origin, bio } = Astro.props;
+const { name } = Astro.props;
 
 const today = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
@@ -16,41 +12,105 @@ const today = new Intl.DateTimeFormat("en-US", {
 }).format(new Date());
 
 const segments = name.toUpperCase().split(" ");
+const fileSlug = `${segments[0]}.${(segments[1] ?? "PROFILE").slice(0, 3)}`;
 ---
 
-<header class="br-hero">
-  <nav class="br-bar">
-    <span
-      >FILE: ARTIST/{segments[0]}.{(segments[1] ?? "PROFILE").slice(0, 3)}</span
-    >
-    <span>EDITION 01 / {today}</span>
+<header class="br-hero" id="top">
+  <nav class="br-bar" aria-label="Primary">
+    <span>FILE: ARTIST/{fileSlug}</span>
+    <ul class="br-bar__nav">
+      <li><a href="#music">MUSIC</a></li>
+      <li><a href="#video">VIDEO</a></li>
+      <li><a href="#contact">CONTACT</a></li>
+    </ul>
+    <span class="br-bar__edition">EDITION 01 / {today}</span>
   </nav>
 
-  <div class="br-hero__top br-grid">
-    <p class="br-hero__loc">
-      <span class="br-eyebrow">Origin</span>
-      {origin}
-    </p>
-    <p class="br-hero__loc br-hero__loc--right">
-      <span class="br-eyebrow">Based</span>
-      {basedIn}
-    </p>
-  </div>
+  <figure class="br-hero__figure" aria-label="Steven Christopher — studio still">
+    <svg
+      class="br-hero__still"
+      viewBox="0 0 1200 1500"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-hidden="true"
+      preserveAspectRatio="xMidYMid slice"
+    >
+      <defs>
+        <pattern id="brut-grain" width="3" height="3" patternUnits="userSpaceOnUse">
+          <rect width="3" height="3" fill="#ffffff" />
+          <circle cx="1" cy="1" r="0.35" fill="#000" opacity="0.06" />
+        </pattern>
+      </defs>
 
-  <h1 class="br-hero__title">
+      <rect width="1200" height="1500" fill="#ffffff" />
+      <rect width="1200" height="1500" fill="url(#brut-grain)" />
+
+      <!-- Floor line -->
+      <line x1="0" y1="1180" x2="1200" y2="1180" stroke="#000" stroke-width="1" opacity="0.18" />
+
+      <!-- Cymbal stand (back) -->
+      <line x1="320" y1="540" x2="320" y2="1180" stroke="#000" stroke-width="2" />
+      <line x1="320" y1="540" x2="240" y2="600" stroke="#000" stroke-width="2" />
+
+      <!-- Crash cymbal -->
+      <ellipse cx="240" cy="600" rx="170" ry="22" fill="none" stroke="#000" stroke-width="2" />
+      <ellipse cx="240" cy="598" rx="170" ry="6" fill="#000" opacity="0.08" />
+
+      <!-- Tom stand -->
+      <line x1="640" y1="700" x2="640" y2="1180" stroke="#000" stroke-width="2" />
+
+      <!-- Rack tom -->
+      <ellipse cx="640" cy="700" rx="150" ry="38" fill="#ffffff" stroke="#000" stroke-width="2" />
+      <rect x="490" y="700" width="300" height="120" fill="#ffffff" stroke="#000" stroke-width="2" />
+      <ellipse cx="640" cy="820" rx="150" ry="38" fill="#ffffff" stroke="#000" stroke-width="2" />
+      <line x1="500" y1="760" x2="780" y2="760" stroke="#000" stroke-width="1" opacity="0.25" />
+
+      <!-- Floor tom -->
+      <ellipse cx="980" cy="900" rx="170" ry="44" fill="#ffffff" stroke="#000" stroke-width="2" />
+      <rect x="810" y="900" width="340" height="230" fill="#ffffff" stroke="#000" stroke-width="2" />
+      <ellipse cx="980" cy="1130" rx="170" ry="44" fill="#ffffff" stroke="#000" stroke-width="2" />
+      <line x1="820" y1="980" x2="1140" y2="980" stroke="#000" stroke-width="1" opacity="0.2" />
+      <line x1="820" y1="1050" x2="1140" y2="1050" stroke="#000" stroke-width="1" opacity="0.2" />
+
+      <!-- Kick drum (front, partial) -->
+      <ellipse cx="500" cy="1080" rx="260" ry="80" fill="#ffffff" stroke="#000" stroke-width="2" />
+      <ellipse cx="500" cy="1080" rx="200" ry="58" fill="none" stroke="#000" stroke-width="1" opacity="0.35" />
+      <circle cx="500" cy="1080" r="20" fill="#000" />
+
+      <!-- Snare -->
+      <ellipse cx="260" cy="960" rx="120" ry="28" fill="#ffffff" stroke="#000" stroke-width="2" />
+      <rect x="140" y="960" width="240" height="80" fill="#ffffff" stroke="#000" stroke-width="2" />
+      <ellipse cx="260" cy="1040" rx="120" ry="28" fill="#ffffff" stroke="#000" stroke-width="2" />
+
+      <!-- Subject silhouette (seated, leaning over drums) -->
+      <path
+        d="M 700 380
+           C 730 360, 790 360, 820 390
+           C 850 420, 855 470, 840 510
+           C 870 520, 900 560, 905 610
+           C 910 660, 880 720, 830 760
+           C 800 790, 760 800, 720 800
+           C 690 800, 660 790, 640 770
+           L 625 740
+           C 615 720, 615 690, 625 670
+           C 605 650, 600 620, 615 595
+           C 600 570, 600 540, 620 520
+           C 635 505, 660 500, 680 510
+           C 670 490, 670 460, 685 440
+           C 670 425, 670 400, 700 380 Z"
+        fill="#000"
+        opacity="0.92"
+      />
+
+      <!-- Sticks -->
+      <line x1="690" y1="700" x2="540" y2="900" stroke="#000" stroke-width="6" stroke-linecap="round" />
+      <line x1="740" y1="700" x2="900" y2="880" stroke="#000" stroke-width="6" stroke-linecap="round" />
+    </svg>
+  </figure>
+
+  <h1 class="br-hero__title" aria-label={name}>
     {segments.map((segment) => <span class="br-hero__word">{segment}</span>)}
   </h1>
-
-  <div class="br-hero__bottom br-grid">
-    <p class="br-hero__tagline">
-      <span class="br-eyebrow">Discipline</span>
-      {tagline}
-    </p>
-    <p class="br-hero__bio">
-      <span class="br-eyebrow">Field Note</span>
-      {bio}
-    </p>
-  </div>
 </header>
 
 <style>
@@ -58,20 +118,38 @@ const segments = name.toUpperCase().split(" ");
     border-bottom: var(--br-rule) solid var(--br-ink);
   }
 
-  .br-hero__top,
-  .br-hero__bottom {
-    padding: 24px 16px;
-    border-bottom: 1px solid var(--br-ink);
-  }
-
-  .br-hero__loc {
-    grid-column: span 6;
+  .br-bar__nav {
+    list-style: none;
     margin: 0;
-    font-size: 14px;
+    padding: 0;
+    display: flex;
+    gap: 16px;
   }
 
-  .br-hero__loc--right {
-    text-align: right;
+  .br-bar__edition {
+    display: none;
+  }
+
+  @media (min-width: 720px) {
+    .br-bar__edition {
+      display: inline;
+    }
+  }
+
+  .br-hero__figure {
+    margin: 0;
+    border-bottom: var(--br-rule) solid var(--br-ink);
+    background: var(--br-bg);
+    overflow: hidden;
+  }
+
+  .br-hero__still {
+    display: block;
+    width: 100%;
+    height: clamp(60vh, 78vw, 88vh);
+    max-height: 880px;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.02);
   }
 
   .br-hero__title {
@@ -89,37 +167,5 @@ const segments = name.toUpperCase().split(" ");
 
   .br-hero__word:nth-child(even) {
     text-align: right;
-    color: var(--br-accent);
-  }
-
-  .br-hero__tagline {
-    grid-column: span 5;
-    margin: 0;
-  }
-
-  .br-hero__bio {
-    grid-column: span 7;
-    margin: 0;
-    border-left: 1px solid var(--br-ink);
-    padding-left: 16px;
-  }
-
-  @media (max-width: 720px) {
-    .br-hero__loc,
-    .br-hero__tagline,
-    .br-hero__bio {
-      grid-column: span 12;
-    }
-
-    .br-hero__loc--right {
-      text-align: left;
-    }
-
-    .br-hero__bio {
-      border-left: 0;
-      border-top: 1px solid var(--br-ink);
-      padding-left: 0;
-      padding-top: 16px;
-    }
   }
 </style>

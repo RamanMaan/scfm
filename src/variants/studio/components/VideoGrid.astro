@@ -1,0 +1,178 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  videos: CollectionEntry<"videos">[];
+  channelUrl: string;
+}
+
+const { videos, channelUrl } = Astro.props;
+
+const watchUrl = (video: CollectionEntry<"videos">): string => {
+  if (video.data.youtubeUrl) return video.data.youtubeUrl;
+  if (video.data.youtubeId) {
+    return `https://www.youtube.com/watch?v=${video.data.youtubeId}`;
+  }
+  return channelUrl;
+};
+---
+
+<section class="st-section st-section--ruled st-shell" id="video">
+  <header class="st-index__head">
+    <h2 class="st-index__title">Video</h2>
+    <span class="st-meta">{String(videos.length).padStart(2, "0")}</span>
+  </header>
+
+  {
+    videos.length > 0 ? (
+      <ol class="st-list">
+        {videos.map((video, idx) => {
+          const num = String(idx + 1).padStart(2, "0");
+          return (
+            <li class="st-list__item">
+              <a
+                class="st-list__row"
+                href={watchUrl(video)}
+                target="_blank"
+                rel="noopener"
+              >
+                <span class="st-list__num st-meta">{num}</span>
+                <span class="st-list__title">{video.data.title}</span>
+                <span class="st-list__meta st-meta">Video</span>
+                <span class="st-list__arrow" aria-hidden="true">
+                  &rarr;
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+    ) : (
+      <p class="st-empty">
+        <a
+          class="st-empty__link"
+          href={channelUrl}
+          target="_blank"
+          rel="noopener"
+        >
+          <span class="st-empty__title">Visit the channel</span>
+          <span class="st-empty__arrow" aria-hidden="true">
+            &rarr;
+          </span>
+        </a>
+      </p>
+    )
+  }
+</section>
+
+<style>
+  .st-index__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: clamp(40px, 4vw, 64px);
+  }
+
+  .st-index__title {
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .st-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .st-list__item {
+    border-top: 1px solid var(--st-rule);
+  }
+
+  .st-list__item:last-child {
+    border-bottom: 1px solid var(--st-rule);
+  }
+
+  .st-list__row {
+    display: grid;
+    grid-template-columns: 56px 1fr auto 20px;
+    gap: clamp(16px, 3vw, 48px);
+    align-items: baseline;
+    padding-block: clamp(22px, 2.6vw, 34px);
+    color: var(--st-ink);
+  }
+
+  .st-list__title {
+    font-size: clamp(22px, 2.6vw, 36px);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    transition: color 320ms var(--st-ease);
+  }
+
+  .st-list__arrow {
+    font-size: 16px;
+    color: var(--st-faint);
+    text-align: right;
+    transition:
+      color 320ms var(--st-ease),
+      transform 320ms var(--st-ease);
+  }
+
+  .st-list__row:hover .st-list__title,
+  .st-list__row:hover .st-list__arrow {
+    color: var(--st-accent);
+  }
+
+  .st-list__row:hover .st-list__arrow {
+    transform: translateX(4px);
+  }
+
+  .st-empty {
+    margin: 0;
+  }
+
+  .st-empty__link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .st-empty__title {
+    font-size: clamp(22px, 2.4vw, 32px);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  .st-empty__arrow {
+    font-size: 16px;
+    color: var(--st-faint);
+    transition:
+      color 320ms var(--st-ease),
+      transform 320ms var(--st-ease);
+  }
+
+  .st-empty__link:hover .st-empty__title,
+  .st-empty__link:hover .st-empty__arrow {
+    color: var(--st-accent);
+  }
+
+  .st-empty__link:hover .st-empty__arrow {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 720px) {
+    .st-list__row {
+      grid-template-columns: 40px 1fr;
+      gap: 12px;
+    }
+
+    .st-list__meta {
+      grid-column: 2;
+      padding-top: 4px;
+    }
+
+    .st-list__arrow {
+      display: none;
+    }
+  }
+</style>

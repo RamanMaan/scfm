@@ -1,0 +1,166 @@
+---
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+---
+
+<header class="st-hero" id="top">
+  <figure class="st-hero__figure" aria-label="Steven Christopher — studio still">
+    <svg
+      class="st-hero__still"
+      viewBox="0 0 1600 1200"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-hidden="true"
+      preserveAspectRatio="xMidYMid slice"
+    >
+      <defs>
+        <radialGradient id="st-vignette" cx="50%" cy="42%" r="62%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
+          <stop offset="100%" stop-color="#000000" stop-opacity="0.06" />
+        </radialGradient>
+      </defs>
+
+      <rect width="1600" height="1200" fill="#f5f5f4" />
+
+      <!-- Horizon line where wall meets floor (subtle) -->
+      <line
+        x1="0"
+        y1="780"
+        x2="1600"
+        y2="780"
+        stroke="#0a0a0a"
+        stroke-width="1"
+        opacity="0.08"
+      />
+
+      <!-- Long cast shadow along the floor -->
+      <ellipse
+        cx="780"
+        cy="980"
+        rx="520"
+        ry="42"
+        fill="#0a0a0a"
+        opacity="0.08"
+      />
+
+      <!-- Cymbal silhouette suspended -->
+      <ellipse
+        cx="1180"
+        cy="380"
+        rx="240"
+        ry="14"
+        fill="#0a0a0a"
+        opacity="0.92"
+      />
+
+      <!-- Snare body (geometric) -->
+      <ellipse
+        cx="540"
+        cy="680"
+        rx="220"
+        ry="42"
+        fill="#fafafa"
+        stroke="#0a0a0a"
+        stroke-width="1.5"
+      />
+      <rect
+        x="320"
+        y="680"
+        width="440"
+        height="170"
+        fill="#fafafa"
+        stroke="#0a0a0a"
+        stroke-width="1.5"
+      />
+      <ellipse
+        cx="540"
+        cy="850"
+        rx="220"
+        ry="42"
+        fill="#fafafa"
+        stroke="#0a0a0a"
+        stroke-width="1.5"
+      />
+
+      <!-- Subject: gestural figure leaning in -->
+      <path
+        d="M 820 320
+           C 870 290, 970 290, 1010 330
+           C 1050 370, 1050 440, 1020 480
+           C 1070 500, 1110 560, 1110 620
+           C 1110 690, 1060 760, 990 790
+           C 940 810, 880 810, 840 790
+           C 790 770, 760 720, 760 670
+           C 720 660, 700 620, 710 580
+           C 695 555, 700 520, 720 500
+           C 715 470, 730 440, 760 425
+           C 750 395, 770 360, 800 345
+           C 800 335, 805 325, 820 320 Z"
+        fill="#0a0a0a"
+        opacity="0.94"
+      />
+
+      <!-- Stick reaching for snare -->
+      <line
+        x1="940"
+        y1="640"
+        x2="640"
+        y2="780"
+        stroke="#0a0a0a"
+        stroke-width="5"
+        stroke-linecap="round"
+      />
+
+      <rect width="1600" height="1200" fill="url(#st-vignette)" />
+    </svg>
+  </figure>
+
+  <div class="st-hero__caption st-shell">
+    <p class="st-hero__name">{name}</p>
+    <p class="st-meta st-hero__plate">Plate 01</p>
+  </div>
+</header>
+
+<style>
+  .st-hero {
+    position: relative;
+  }
+
+  .st-hero__figure {
+    margin: 0;
+    background: #f5f5f4;
+    overflow: hidden;
+  }
+
+  .st-hero__still {
+    display: block;
+    width: 100%;
+    height: clamp(58vh, 80vw, 88vh);
+    max-height: 920px;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+
+  .st-hero__caption {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: clamp(20px, 2vw, 28px);
+  }
+
+  .st-hero__name {
+    margin: 0;
+    font-size: clamp(20px, 2vw, 26px);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--st-ink);
+  }
+
+  .st-hero__plate {
+    margin: 0;
+  }
+</style>
