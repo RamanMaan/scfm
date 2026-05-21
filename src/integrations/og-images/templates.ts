@@ -293,6 +293,142 @@ export const renderStudio = (): Node =>
     ],
   );
 
+export const renderAtelier = (): Node =>
+  el(
+    "div",
+    {
+      ...FRAME,
+      backgroundColor: "#ffffff",
+      fontFamily: "PlexSerif",
+      color: "#0a0a0a",
+      padding: "72px 80px",
+      flexDirection: "column",
+      justifyContent: "space-between",
+    },
+    [
+      el(
+        "div",
+        {
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-between",
+          alignItems: "baseline",
+          paddingBottom: "20px",
+          borderBottom: "1px solid rgba(10,10,10,0.12)",
+        },
+        [
+          el(
+            "div",
+            {
+              display: "flex",
+              fontFamily: "PlexSerif",
+              fontSize: "20px",
+              fontWeight: 500,
+              letterSpacing: "-0.005em",
+              color: "#0a0a0a",
+            },
+            "Steven Christopher",
+          ),
+          el(
+            "div",
+            {
+              display: "flex",
+              fontFamily: "Inter",
+              fontSize: "11px",
+              fontWeight: 500,
+              letterSpacing: "5px",
+              color: "#6f6f6f",
+              textTransform: "uppercase",
+            },
+            "Variant / Atelier",
+          ),
+        ],
+      ),
+      el(
+        "div",
+        {
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px",
+        },
+        [
+          el(
+            "div",
+            {
+              display: "flex",
+              fontFamily: "PlexSerif",
+              fontSize: "32px",
+              fontStyle: "italic",
+              fontWeight: 400,
+              color: "#6f6f6f",
+              letterSpacing: "-0.005em",
+            },
+            "Plate I \u2014 Cantilever",
+          ),
+          el(
+            "div",
+            {
+              display: "flex",
+              flexDirection: "column",
+              fontFamily: "PlexSerif",
+              fontWeight: 500,
+              fontSize: "168px",
+              lineHeight: 0.92,
+              letterSpacing: "-3px",
+              color: "#0a0a0a",
+            },
+            [
+              el("div", { display: "flex" }, "Steven"),
+              el(
+                "div",
+                { display: "flex", paddingLeft: "96px" },
+                "Christopher",
+              ),
+            ],
+          ),
+        ],
+      ),
+      el(
+        "div",
+        {
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-between",
+          alignItems: "baseline",
+          paddingTop: "20px",
+          borderTop: "1px solid rgba(10,10,10,0.12)",
+        },
+        [
+          el(
+            "div",
+            {
+              display: "flex",
+              fontFamily: "PlexSerif",
+              fontSize: "18px",
+              fontWeight: 500,
+              color: "#0a0a0a",
+              letterSpacing: "-0.005em",
+            },
+            "Paper-bright. Structural serif. Group on cantilever chairs.",
+          ),
+          el(
+            "div",
+            {
+              display: "flex",
+              fontFamily: "Inter",
+              fontSize: "11px",
+              fontWeight: 500,
+              letterSpacing: "5px",
+              color: "#6f6f6f",
+              textTransform: "uppercase",
+            },
+            "Edition I",
+          ),
+        ],
+      ),
+    ],
+  );
+
 export const renderEditorial = (): Node =>
   el(
     "div",
@@ -485,6 +621,7 @@ export const TEMPLATES: Record<string, () => Node> = {
   default: renderDefault,
   brutalist: renderBrutalist,
   studio: renderStudio,
+  atelier: renderAtelier,
   editorial: renderEditorial,
   midnight: renderMidnight,
 };

@@ -8,6 +8,69 @@ Newest entries on top.
 
 ---
 
+## 2026-05-20 — Atelier added (third light-background test)
+
+After the references in
+[`references.md`](references.md) were promoted to canonical (Marc Jacobs
+group portrait + monochrome-berets cantilever-chair music-video opener), a
+third variant was added so we present *two* light-background challengers
+against `/brutalist` rather than one.
+
+### Decision
+
+Add **`/atelier`** alongside `/studio`. Same paper-bright, light, sparse
+register; *different* hypothesis tested.
+
+| | `/studio` | `/atelier` |
+|---|---|---|
+| Hero subject | solo (drum-still SVG) | group on cantilever chairs (music-video-opener SVG) |
+| Type display | Inter Tight (geometric sans) | IBM Plex Serif (stark structural slab serif) |
+| Type body | Inter Tight | Inter Tight |
+| Layout | gallery-catalog list | editorial monograph plates (roman numerals, alternating indents) |
+| Section motif | ruled lines | cantilever-chair side-profile, in line |
+| Accent | faded steel blue (`#5f7a90`) | dusty oxblood (`#5a3a3a`) |
+
+Both variants test "designed and light without going zine / monospace,"
+but each leans into a different reference and a different typographic
+register — the test is not "studio vs atelier," it is "geometric sans
+gallery vs structural serif monograph, both pulling from the same
+validated imagery."
+
+### Files added / changed
+
+- `src/variants/atelier/{Layout.astro,meta.ts}` and components
+  `Hero.astro`, `Nav.astro`, `ReleaseList.astro`, `VideoGrid.astro`,
+  `Footer.astro`, `Divider.astro`
+- `src/pages/atelier.astro`
+- `src/variants/_registry.ts` — `atelier` inserted between `studio` and
+  `editorial`
+- `src/integrations/og-images/templates.ts` — `renderAtelier` template
+- `src/integrations/og-images/fonts.ts` — IBM Plex Serif 500 + 400-italic
+  added for OG card
+- `package.json` — `@fontsource/ibm-plex-serif` added
+
+### What it tests next round
+
+- Whether the same validated imagery (cantilever-chair group / drums-on-
+  white) reads more powerfully in a *structural-serif monograph* than in
+  a *geometric-sans gallery catalog*. Both variants ship the same
+  composition lineage in the hero so the contrast is purely typographic
+  + layout-system.
+- Whether a stark structural serif (IBM Plex Serif) holds the
+  *futuristic-and-retro* tension as well as monospace does — without
+  slipping back into the decorative-italic territory Steven killed.
+
+### What this does NOT change
+
+- `/brutalist` is still primary.
+- The "no bio / origin / hover-only critical UI / decorative serif" rules
+  all still apply globally — atelier uses IBM Plex Serif because it is
+  *stark and structural*, not decorative; this is explicitly allowed by
+  `SKILL.md` (Typography Direction).
+- Profile data, content collections, and the showcase grid are untouched.
+
+---
+
 ## 2026-05-20 — Roadmap execution (post-review)
 
 Acting on [`docs/variant-roadmap.md`](../../../docs/variant-roadmap.md).

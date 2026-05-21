@@ -1,0 +1,213 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  videos: CollectionEntry<"videos">[];
+  channelUrl: string;
+}
+
+const { videos, channelUrl } = Astro.props;
+
+const ROMAN = [
+  "",
+  "I",
+  "II",
+  "III",
+  "IV",
+  "V",
+  "VI",
+  "VII",
+  "VIII",
+  "IX",
+  "X",
+  "XI",
+  "XII",
+];
+
+const watchUrl = (video: CollectionEntry<"videos">): string => {
+  if (video.data.youtubeUrl) return video.data.youtubeUrl;
+  if (video.data.youtubeId) {
+    return `https://www.youtube.com/watch?v=${video.data.youtubeId}`;
+  }
+  return channelUrl;
+};
+
+const toRoman = (n: number): string => ROMAN[n] ?? String(n);
+---
+
+<section class="at-section at-shell" id="video">
+  <header class="at-index__head">
+    <h2 class="at-index__title">Video</h2>
+    <span class="at-meta">
+      {videos.length > 0 ? `Plates I\u2013${toRoman(videos.length)}` : "Channel"}
+    </span>
+  </header>
+
+  {
+    videos.length > 0 ? (
+      <ol class="at-plates">
+        {videos.map((video, idx) => {
+          const numeral = toRoman(idx + 1);
+          return (
+            <li class="at-plate">
+              <a
+                class="at-plate__row"
+                href={watchUrl(video)}
+                target="_blank"
+                rel="noopener"
+              >
+                <span class="at-plate-num at-plate__num">{numeral}</span>
+                <span class="at-plate__title">{video.data.title}</span>
+                <span class="at-plate__meta at-meta">Video</span>
+                <span class="at-plate__arrow" aria-hidden="true">
+                  &rarr;
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+    ) : (
+      <p class="at-empty">
+        <a
+          class="at-empty__link"
+          href={channelUrl}
+          target="_blank"
+          rel="noopener"
+        >
+          <span class="at-empty__title">Visit the channel</span>
+          <span class="at-empty__arrow" aria-hidden="true">
+            &rarr;
+          </span>
+        </a>
+      </p>
+    )
+  }
+</section>
+
+<style>
+  .at-index__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: clamp(48px, 5vw, 80px);
+    border-bottom: 1px solid var(--at-rule);
+  }
+
+  .at-index__title {
+    font-family: var(--at-display);
+    font-size: clamp(36px, 4.6vw, 64px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+  }
+
+  .at-plates {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .at-plate {
+    border-bottom: 1px solid var(--at-rule);
+  }
+
+  .at-plate__row {
+    display: grid;
+    grid-template-columns: clamp(60px, 8vw, 110px) 1fr auto 24px;
+    gap: clamp(20px, 3vw, 56px);
+    align-items: baseline;
+    padding-block: clamp(36px, 4.5vw, 64px);
+    color: var(--at-ink);
+  }
+
+  .at-plate__num {
+    font-size: clamp(22px, 2.4vw, 32px);
+    line-height: 1;
+  }
+
+  .at-plate__title {
+    font-family: var(--at-display);
+    font-size: clamp(28px, 4vw, 56px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    transition: color 360ms var(--at-ease);
+  }
+
+  .at-plate__arrow {
+    font-size: 18px;
+    color: var(--at-faint);
+    text-align: right;
+    transition:
+      color 360ms var(--at-ease),
+      transform 360ms var(--at-ease);
+  }
+
+  .at-plate__row:hover .at-plate__title,
+  .at-plate__row:hover .at-plate__arrow {
+    color: var(--at-accent);
+  }
+
+  .at-plate__row:hover .at-plate__arrow {
+    transform: translateX(6px);
+  }
+
+  @media (min-width: 960px) {
+    .at-plate:nth-child(even) .at-plate__title {
+      padding-left: clamp(16px, 2vw, 40px);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .at-plate__row {
+      grid-template-columns: 48px 1fr;
+      gap: 14px;
+      padding-block: clamp(28px, 5vw, 40px);
+    }
+
+    .at-plate__meta {
+      grid-column: 2;
+      padding-top: 6px;
+    }
+
+    .at-plate__arrow {
+      display: none;
+    }
+  }
+
+  .at-empty {
+    margin: 0;
+    padding-top: clamp(48px, 5vw, 80px);
+  }
+
+  .at-empty__link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 18px;
+  }
+
+  .at-empty__title {
+    font-family: var(--at-display);
+    font-size: clamp(28px, 3vw, 44px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .at-empty__arrow {
+    font-size: 18px;
+    color: var(--at-faint);
+    transition:
+      color 360ms var(--at-ease),
+      transform 360ms var(--at-ease);
+  }
+
+  .at-empty__link:hover .at-empty__title,
+  .at-empty__link:hover .at-empty__arrow {
+    color: var(--at-accent);
+  }
+
+  .at-empty__link:hover .at-empty__arrow {
+    transform: translateX(6px);
+  }
+</style>

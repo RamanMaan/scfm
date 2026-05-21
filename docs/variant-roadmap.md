@@ -196,3 +196,37 @@ the next review.
 4. Decide on midnight (Path A vs Path B) before showing.
 5. Present **two** directions to Steven with a single question:
    *"Which of these feels more like the record?"*
+
+---
+
+## Addendum 2026-05-20 — `/atelier` added as third light-background test
+
+After the references in
+[`.cursor/skills/steven-christopher-brand/references.md`](../.cursor/skills/steven-christopher-brand/references.md)
+were promoted to canonical (Marc Jacobs group portrait + monochrome-berets
+cantilever-chair music-video opener), the slate widened from one
+light-background challenger to two.
+
+`/studio` and `/atelier` now present *the same content layer*, *the same
+imagery lineage*, in two different typographic + layout systems:
+
+- `/studio` — geometric sans (Inter Tight), gallery-catalog list, single
+  drum-still hero, ruled-line dividers.
+- `/atelier` — stark structural serif (IBM Plex Serif), editorial-monograph
+  plates with roman numerals, group-on-cantilever-chairs hero, cantilever-
+  chair side-profile dividers.
+
+Both stay paper-bright, light, sparse, and minimal. Neither is "the right
+answer" — the question for next review becomes:
+
+> *"Of these three (brutalist, studio, atelier), which is closest to the
+> record?"*
+
+`/brutalist` remains primary. `/studio` + `/atelier` are the two
+light-background challengers. `/editorial` stays last in the registry,
+slated for deletion once Steven has chosen a single light-background
+direction.
+
+See
+[`.cursor/skills/steven-christopher-brand/decisions.md`](../.cursor/skills/steven-christopher-brand/decisions.md)
+for the full rationale and file-by-file change list.

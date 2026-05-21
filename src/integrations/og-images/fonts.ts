@@ -22,14 +22,23 @@ let cache: SatoriFont[] | null = null;
 export const loadFonts = async (): Promise<SatoriFont[]> => {
   if (cache) return cache;
 
-  const [inter400, inter500, jetbrainsMono700] = await Promise.all([
-    loadFontFile("@fontsource/inter", "inter-latin-400-normal.woff"),
-    loadFontFile("@fontsource/inter", "inter-latin-500-normal.woff"),
-    loadFontFile(
-      "@fontsource/jetbrains-mono",
-      "jetbrains-mono-latin-700-normal.woff",
-    ),
-  ]);
+  const [inter400, inter500, jetbrainsMono700, plexSerif500, plexSerif400Italic] =
+    await Promise.all([
+      loadFontFile("@fontsource/inter", "inter-latin-400-normal.woff"),
+      loadFontFile("@fontsource/inter", "inter-latin-500-normal.woff"),
+      loadFontFile(
+        "@fontsource/jetbrains-mono",
+        "jetbrains-mono-latin-700-normal.woff",
+      ),
+      loadFontFile(
+        "@fontsource/ibm-plex-serif",
+        "ibm-plex-serif-latin-500-normal.woff",
+      ),
+      loadFontFile(
+        "@fontsource/ibm-plex-serif",
+        "ibm-plex-serif-latin-400-italic.woff",
+      ),
+    ]);
 
   cache = [
     { name: "Inter", data: inter400, weight: 400, style: "normal" },
@@ -39,6 +48,18 @@ export const loadFonts = async (): Promise<SatoriFont[]> => {
       data: jetbrainsMono700,
       weight: 700,
       style: "normal",
+    },
+    {
+      name: "PlexSerif",
+      data: plexSerif500,
+      weight: 500,
+      style: "normal",
+    },
+    {
+      name: "PlexSerif",
+      data: plexSerif400Italic,
+      weight: 400,
+      style: "italic",
     },
   ];
 

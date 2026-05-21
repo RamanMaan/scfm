@@ -1,0 +1,116 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { orderedSocials } from "../../../lib/socials";
+
+interface Props {
+  artist: CollectionEntry<"artist">;
+}
+
+const { artist } = Astro.props;
+const socials = orderedSocials(artist.data.socials);
+---
+
+<footer class="at-section at-shell" id="contact">
+  <header class="at-index__head">
+    <h2 class="at-index__title">Contact</h2>
+    <span class="at-meta">{`${String(socials.length).padStart(2, "0")} channels`}</span>
+  </header>
+
+  <ul class="at-foot__socials">
+    {
+      socials.map(({ url, label }) => (
+        <li>
+          <a class="at-foot__social" href={url} target="_blank" rel="noopener">
+            <span class="at-foot__label">{label}</span>
+            <span class="at-foot__arrow" aria-hidden="true">
+              &nearr;
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="at-foot__base">
+    <p class="at-meta">&copy; {artist.data.name}</p>
+    <p class="at-meta">All rights reserved</p>
+  </div>
+</footer>
+
+<style>
+  .at-index__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: clamp(48px, 5vw, 80px);
+    border-bottom: 1px solid var(--at-rule);
+  }
+
+  .at-index__title {
+    font-family: var(--at-display);
+    font-size: clamp(36px, 4.6vw, 64px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+  }
+
+  .at-foot__socials {
+    list-style: none;
+    margin: 0 0 clamp(72px, 9vw, 112px);
+    padding: 0;
+  }
+
+  .at-foot__socials li {
+    border-bottom: 1px solid var(--at-rule);
+  }
+
+  .at-foot__social {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: clamp(20px, 2.4vw, 32px);
+    font-family: var(--at-display);
+    font-size: clamp(20px, 2.2vw, 30px);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--at-ink);
+  }
+
+  .at-foot__label {
+    transition: color 360ms var(--at-ease);
+  }
+
+  .at-foot__arrow {
+    color: var(--at-faint);
+    font-size: 16px;
+    transition:
+      color 360ms var(--at-ease),
+      transform 360ms var(--at-ease);
+  }
+
+  .at-foot__social:hover .at-foot__label,
+  .at-foot__social:hover .at-foot__arrow {
+    color: var(--at-accent);
+  }
+
+  .at-foot__social:hover .at-foot__arrow {
+    transform: translate(3px, -3px);
+  }
+
+  .at-foot__base {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: clamp(20px, 2vw, 28px);
+    border-top: 1px solid var(--at-rule);
+  }
+
+  @media (max-width: 480px) {
+    .at-foot__base {
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+    }
+  }
+</style>
