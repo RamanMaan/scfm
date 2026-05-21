@@ -51,6 +51,32 @@ const { name } = Astro.props;
     filter: grayscale(1);
   }
 
+  @supports (animation-timeline: scroll()) {
+    .st-hero__still {
+      filter: grayscale(0);
+      animation: st-hero-desaturate linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 50dvh;
+      will-change: filter;
+    }
+  }
+
+  @keyframes st-hero-desaturate {
+    from {
+      filter: grayscale(0);
+    }
+    to {
+      filter: grayscale(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .st-hero__still {
+      animation: none;
+      filter: grayscale(1);
+    }
+  }
+
   .st-hero__caption {
     display: flex;
     align-items: baseline;
