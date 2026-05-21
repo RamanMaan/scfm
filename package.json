@@ -25,6 +25,7 @@
     "@vercel/analytics": "^2.0.1",
     "astro": "^6.3.3",
     "satori": "^0.26.0",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4.3.0",
     "typescript": "^6.0.3"
   },
