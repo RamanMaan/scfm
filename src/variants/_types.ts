@@ -1,7 +1,7 @@
 export interface VariantMeta {
-  /** URL slug, e.g. "midnight" -> /midnight */
+  /** URL slug, e.g. "brutalist" -> /brutalist */
   id: string;
-  /** Display name shown on the showcase, e.g. "Midnight" */
+  /** Display name shown on the showcase, e.g. "Brutalist" */
   name: string;
   /** One-sentence vibe / pitch for this variant */
   tagline: string;

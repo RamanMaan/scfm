@@ -36,65 +36,6 @@ const FRAME: Style = {
   position: "relative",
 };
 
-export const renderMidnight = (): Node =>
-  el(
-    "div",
-    {
-      ...FRAME,
-      backgroundColor: "#07080b",
-      backgroundImage:
-        "radial-gradient(circle at 70% 30%, rgba(170,190,210,0.18) 0%, rgba(170,190,210,0) 60%)",
-      fontFamily: "Inter",
-      color: "#e8e9ec",
-      padding: "80px",
-      flexDirection: "column",
-      justifyContent: "space-between",
-    },
-    [
-      el(
-        "div",
-        {
-          display: "flex",
-          fontSize: "22px",
-          fontWeight: 500,
-          letterSpacing: "8px",
-          color: "rgba(232,233,236,0.4)",
-          textTransform: "uppercase",
-        },
-        "Variant / Midnight \u2014 Archived",
-      ),
-      el(
-        "div",
-        {
-          display: "flex",
-          flexDirection: "column",
-          fontFamily: "Inter",
-          fontWeight: 500,
-          fontSize: "160px",
-          lineHeight: 0.95,
-          letterSpacing: "-3px",
-          color: "#e8e9ec",
-        },
-        [
-          el("span", { display: "flex" }, "Steven"),
-          el("span", { display: "flex" }, "Christopher"),
-        ],
-      ),
-      el(
-        "div",
-        {
-          display: "flex",
-          fontSize: "18px",
-          fontWeight: 500,
-          letterSpacing: "6px",
-          color: "#7a8b9c",
-          textTransform: "uppercase",
-        },
-        "Sunset \u2014 see /brutalist + /studio",
-      ),
-    ],
-  );
-
 export const renderBrutalist = (): Node =>
   el(
     "div",
@@ -371,5 +312,4 @@ export const TEMPLATES: Record<string, () => Node> = {
   default: renderDefault,
   brutalist: renderBrutalist,
   studio: renderStudio,
-  midnight: renderMidnight,
 };

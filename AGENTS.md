@@ -38,7 +38,7 @@ public/og/                 OG images (referenced by absolute path)
    and `src/lib/` utilities are shared.
 2. **Spotify is the canonical embed.** Apple Music gets a text link, never an
    iframe.
-3. **Variant slugs are descriptive vibes**, not numbers (`/midnight`, not
+3. **Variant slugs are descriptive vibes**, not numbers (`/brutalist`, not
    `/variant-1`).
 4. **Schema changes affect every variant** - add new fields as `optional()`
    whenever possible.

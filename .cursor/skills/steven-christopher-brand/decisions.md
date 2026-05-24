@@ -8,6 +8,37 @@ Newest entries on top.
 
 ---
 
+## 2026-05-24 — Midnight deleted (Path A finalized)
+
+The `/midnight` variant has been removed from the repo entirely. Sunset on
+2026-05-20 left the source in place so previously-shared preview links would
+still resolve; with no such links circulating and no plans to revisit a dark
+treatment in the near term, keeping the dead code on disk is no longer
+worth the maintenance tax.
+
+### What was deleted
+
+- `src/variants/midnight/` (Layout, meta, components — Hero, ReleaseList,
+  VideoGrid, Footer)
+- `src/pages/midnight.astro`
+- `renderMidnight` template + `midnight` entry in
+  `src/integrations/og-images/templates.ts`
+- `ARCHIVED_VARIANT_IDS` plumbing in
+  `src/integrations/og-images/index.ts` (no archived variants left)
+
+### What this means
+
+- `/midnight` now 404s. Any preview links shared before 2026-05-20 will
+  break — none are believed to be in active use.
+- The two remaining variants are `/brutalist` (primary) and `/studio`
+  (light-background challenger). Same lineup as the post-sunset state, just
+  without the dead-code overhead.
+- If a dark study is ever revisited, it should be rebuilt as a *dark
+  brutalist* (Path B from the original roadmap) rather than resurrected
+  from the soft-serif midnight code.
+
+---
+
 ## 2026-05-20 — Atelier added (third light-background test)
 
 After the references in
