@@ -1,0 +1,269 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  videos: CollectionEntry<"videos">[];
+  channelUrl: string;
+}
+
+const { videos, channelUrl } = Astro.props;
+
+const watchUrl = (video: CollectionEntry<"videos">): string => {
+  if (video.data.youtubeUrl) return video.data.youtubeUrl;
+  if (video.data.youtubeId) {
+    return `https://www.youtube.com/watch?v=${video.data.youtubeId}`;
+  }
+  return channelUrl;
+};
+
+const thumbHi = (id: string) => `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
+const thumbLo = (id: string) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+---
+
+<section class="px-section px-shell" id="video">
+  <header class="px-section__head">
+    <h2 class="px-section__title">Video</h2>
+  </header>
+
+  {
+    videos.length > 0 ? (
+      <ol class="px-vid">
+        {videos.map((video) => {
+          const id = video.data.youtubeId;
+          return (
+            <li class="px-vid__item">
+              <a
+                class="px-vid__card"
+                href={watchUrl(video)}
+                target="_blank"
+                rel="noopener"
+              >
+                <span class="px-vid__media" aria-hidden="true">
+                  {id ? (
+                    <img
+                      src={thumbHi(id)}
+                      data-fallback={thumbLo(id)}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      width="1280"
+                      height="720"
+                    />
+                  ) : (
+                    <span class="px-vid__placeholder" />
+                  )}
+                  <span class="px-vid__scrim" />
+                </span>
+                <span class="px-vid__body">
+                  <span class="px-vid__title">{video.data.title}<span class="px-vid__arrow" aria-hidden="true">
+                      &rarr;
+                    </span></span>
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+    ) : (
+      <p class="px-empty">
+        <a
+          class="px-empty__link"
+          href={channelUrl}
+          target="_blank"
+          rel="noopener"
+        >
+          <span class="px-empty__title">Visit the channel</span>
+          <span class="px-empty__arrow" aria-hidden="true">
+            &rarr;
+          </span>
+        </a>
+      </p>
+    )
+  }
+</section>
+
+<script>
+  const imgs = document.querySelectorAll<HTMLImageElement>(
+    ".px-vid__media img[data-fallback]",
+  );
+  imgs.forEach((img) => {
+    const handleError = () => {
+      const fallback = img.dataset.fallback;
+      if (!fallback || img.src === fallback) return;
+      img.src = fallback;
+    };
+    img.addEventListener("error", handleError, { once: true });
+  });
+</script>
+
+<style>
+  .px-vid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+    gap: clamp(16px, 2.4vw, 28px);
+  }
+
+  .px-vid__item {
+    margin: 0;
+  }
+
+  .px-vid__card {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    color: var(--px-light);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--px-rule);
+    isolation: isolate;
+  }
+
+  .px-vid__media {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .px-vid__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.02);
+    transition:
+      transform 700ms var(--px-ease),
+      filter 700ms var(--px-ease);
+    filter: saturate(0.92) contrast(1.04);
+  }
+
+  .px-vid__placeholder {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0.02)
+    );
+  }
+
+  .px-vid__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.78) 0%,
+      rgba(0, 0, 0, 0.45) 38%,
+      rgba(0, 0, 0, 0.08) 70%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    pointer-events: none;
+  }
+
+  .px-vid__body {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+    padding: clamp(10px, 3vw, 22px);
+    gap: clamp(10px, 1.4vw, 16px);
+  }
+
+  .px-vid__title {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--px-light);
+    text-wrap: balance;
+    text-shadow: 0 1px 18px rgba(0, 0, 0, 0.45);
+    transition: transform 480ms var(--px-ease);
+  }
+
+  .px-vid__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .px-vid__meta {
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  .px-vid__arrow {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.78);
+    transition:
+      color 320ms var(--px-ease),
+      transform 320ms var(--px-ease);
+  }
+
+  .px-vid__card:hover .px-vid__media img {
+    transform: scale(1.06);
+    filter: saturate(1.05) contrast(1.04);
+  }
+
+  .px-vid__card:hover .px-vid__arrow {
+    color: var(--px-light);
+    transform: translateX(4px);
+  }
+
+  .px-vid__card:focus-visible {
+    outline: 1px solid var(--px-accent);
+    outline-offset: 4px;
+  }
+
+  .px-empty {
+    margin: 0;
+  }
+
+  .px-empty__link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+
+  .px-empty__title {
+    font-size: clamp(18px, 2vw, 24px);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  .px-empty__arrow {
+    font-size: 15px;
+    color: var(--px-faint);
+    transition:
+      color 320ms var(--px-ease),
+      transform 320ms var(--px-ease);
+  }
+
+  .px-empty__link:hover .px-empty__title,
+  .px-empty__link:hover .px-empty__arrow {
+    color: var(--px-accent);
+  }
+
+  .px-empty__link:hover .px-empty__arrow {
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .px-vid__media img,
+    .px-vid__title,
+    .px-vid__arrow {
+      transition: none;
+    }
+    .px-vid__card:hover .px-vid__media img {
+      transform: scale(1.02);
+    }
+  }
+</style>

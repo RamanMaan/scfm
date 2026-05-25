@@ -1,5 +1,5 @@
 ---
-title: "Don't Wait (Official Music Video)"
+title: "Don't Wait"
 youtubeId: "D6VkfWvnV_k"
 releaseDate: 2024-11-15
 relatedRelease: dont-wait

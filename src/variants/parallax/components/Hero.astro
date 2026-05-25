@@ -1,0 +1,174 @@
+---
+import { Picture } from "astro:assets";
+import heroImage from "../../../assets/HeroImage.jpg";
+
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+---
+
+<header class="px-hero" id="top" aria-label={`${name} \u2014 studio portrait`}>
+  <div class="px-hero__wall" aria-hidden="true"></div>
+
+  <figure class="px-hero__card">
+    <Picture
+      class="px-hero__img"
+      src={heroImage}
+      alt={`Portrait of ${name}`}
+      widths={[480, 720, 1080, 1440]}
+      sizes="(min-width: 760px) 720px, calc(100vw - 32px)"
+      formats={["avif", "webp"]}
+      quality={82}
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
+  </figure>
+
+  <p class="px-meta px-hero__scroll" aria-hidden="true">
+    <span class="px-hero__rule"></span>
+    Scroll
+  </p>
+
+  <div class="px-hero__dim" aria-hidden="true"></div>
+</header>
+
+<style>
+  .px-hero {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: #0a0a0a;
+    color: var(--px-light);
+    display: grid;
+    grid-template-rows: 1fr auto;
+    align-items: center;
+    justify-items: center;
+    padding: clamp(72px, 9vw, 96px) clamp(16px, 4vw, 40px)
+      clamp(24px, 4vw, 40px);
+    overflow: hidden;
+  }
+
+  /* Faint vignette on the gallery wall to add depth without distracting. */
+  .px-hero__wall {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      120% 80% at 50% 35%,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(0, 0, 0, 0) 60%
+    );
+    pointer-events: none;
+  }
+
+  .px-hero__card {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    /* Width is the smallest of: shell, gallery max, and a height-derived cap
+       so the 3:2 card never bleeds past the visible row in short viewports. */
+    width: min(100%, 720px, (100dvh - 240px) * 1.5);
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border-radius: 2px;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.04),
+      0 30px 80px -30px rgba(0, 0, 0, 0.8);
+    background: #1a1a1a;
+  }
+
+  .px-hero__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    will-change: filter, transform;
+  }
+
+  .px-hero__scroll {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.6);
+    justify-self: center;
+  }
+
+  .px-hero__rule {
+    display: inline-block;
+    width: clamp(28px, 5vw, 48px);
+    height: 1px;
+    background: currentColor;
+    opacity: 0.6;
+  }
+
+  /* Dim layer sits on top of the entire hero so wall + portrait + indicator
+     fade together as the sheet rises. Fallback (no scroll-driven anim) keeps
+     a constant medium dim so content stays legible. */
+  .px-hero__dim {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: #0a0a0a;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  @supports (animation-timeline: scroll()) and (animation-range: 0 100vh) {
+    .px-hero__img {
+      animation: px-hero-recede linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 90vh;
+    }
+
+    .px-hero__dim {
+      opacity: 0.18;
+      animation: px-hero-dim linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 90vh;
+    }
+
+    .px-hero__scroll {
+      animation: px-hero-fade linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 25vh;
+    }
+  }
+
+  @keyframes px-hero-recede {
+    to {
+      filter: blur(4px) saturate(0.85);
+      transform: scale(1.2);
+    }
+  }
+
+  @keyframes px-hero-dim {
+    to {
+      opacity: 0.5;
+    }
+  }
+
+  @keyframes px-hero-fade {
+    to {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  /* Reduced motion: drop animations + scale, keep a constant safe-dim. */
+  @media (prefers-reduced-motion: reduce) {
+    .px-hero__img,
+    .px-hero__dim,
+    .px-hero__scroll {
+      animation: none !important;
+    }
+
+    .px-hero__dim {
+      opacity: 0.5;
+    }
+  }
+</style>

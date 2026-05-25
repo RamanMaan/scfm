@@ -24,11 +24,6 @@ const { name } = Astro.props;
       decoding="async"
     />
   </figure>
-
-  <div class="st-hero__caption st-shell">
-    <p class="st-hero__name">{name}</p>
-    <p class="st-meta st-hero__plate">Plate 01</p>
-  </div>
 </header>
 
 <style>
@@ -80,7 +75,6 @@ const { name } = Astro.props;
   .st-hero__caption {
     display: flex;
     align-items: baseline;
-    justify-content: space-between;
     gap: 16px;
     padding-top: clamp(20px, 2vw, 28px);
   }
@@ -91,9 +85,5 @@ const { name } = Astro.props;
     font-weight: 500;
     letter-spacing: -0.015em;
     color: var(--st-ink);
-  }
-
-  .st-hero__plate {
-    margin: 0;
   }
 </style>

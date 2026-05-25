@@ -1,0 +1,38 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import Footer from "../variants/parallax/components/Footer.astro";
+import Hero from "../variants/parallax/components/Hero.astro";
+import Nav from "../variants/parallax/components/Nav.astro";
+import ReleaseList from "../variants/parallax/components/ReleaseList.astro";
+import VideoGrid from "../variants/parallax/components/VideoGrid.astro";
+import Layout from "../variants/parallax/Layout.astro";
+
+const artist = await getEntry("artist", "profile");
+if (!artist) {
+  throw new Error("Missing artist profile entry");
+}
+
+const RECENT_RELEASES_LIMIT = 5;
+
+const releases = (await getCollection("releases"))
+  .sort((a, b) => b.data.releaseDate.valueOf() - a.data.releaseDate.valueOf())
+  .slice(0, RECENT_RELEASES_LIMIT);
+
+const videos = (await getCollection("videos")).sort(
+  (a, b) =>
+    (b.data.releaseDate?.valueOf() ?? 0) - (a.data.releaseDate?.valueOf() ?? 0),
+);
+---
+
+<Layout
+  title={`${artist.data.name} - ${artist.data.tagline}`}
+  description={artist.data.bio}
+>
+  <Nav name={artist.data.name} />
+  <Hero name={artist.data.name} />
+  <main class="px-sheet">
+    <ReleaseList releases={releases} />
+    <VideoGrid videos={videos} channelUrl={artist.data.socials.youtube} />
+    <Footer artist={artist} />
+  </main>
+</Layout>

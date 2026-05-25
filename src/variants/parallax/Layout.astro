@@ -1,0 +1,143 @@
+---
+import "@fontsource-variable/inter-tight/wght.css";
+
+import BaseHtml from "../../layouts/BaseHtml.astro";
+import meta from "./meta";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<BaseHtml
+  title={title}
+  description={description}
+  ogImage={meta.ogImage}
+  ogImageAlt={meta.ogImageAlt}
+  bodyClass="px"
+>
+  <slot />
+</BaseHtml>
+
+<style is:global>
+  .px {
+    --px-bg: #0a0a0a;
+    --px-paper: #f6f5f1;
+    --px-ink: #0a0a0a;
+    --px-muted: #6f6f6f;
+    --px-faint: #c8c8c8;
+    --px-rule: rgba(10, 10, 10, 0.1);
+    --px-accent: #5f7a90;
+    --px-light: #ffffff;
+    --px-sans:
+      "Inter Tight Variable", "Inter Tight", system-ui, -apple-system,
+      "Segoe UI", "Helvetica Neue", sans-serif;
+    --px-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+    background: var(--px-bg);
+    color: var(--px-ink);
+    font-family: var(--px-sans);
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.55;
+    letter-spacing: 0.005em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .px ::selection {
+    background: var(--px-accent);
+    color: var(--px-light);
+  }
+
+  .px a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 320ms var(--px-ease);
+  }
+
+  .px a:hover {
+    color: var(--px-accent);
+  }
+
+  .px h1,
+  .px h2,
+  .px h3 {
+    font-family: var(--px-sans);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .px :focus-visible {
+    outline: 1px solid var(--px-accent);
+    outline-offset: 4px;
+  }
+
+  .px .px-shell {
+    width: 100%;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+
+  .px .px-meta {
+    font-family: var(--px-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--px-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* The sheet scrolls directly over the fixed hero; no background of its own.
+     The hero dims + blurs as the sheet rises so content stays legible. */
+  .px-sheet {
+    --px-ink: var(--px-light);
+    --px-muted: rgba(255, 255, 255, 0.55);
+    --px-faint: rgba(255, 255, 255, 0.3);
+    --px-rule: rgba(255, 255, 255, 0.12);
+
+    position: relative;
+    z-index: 1;
+    margin-top: 100vh;
+    color: var(--px-ink);
+    padding-block: clamp(40px, 6vw, 72px) clamp(24px, 4vw, 40px);
+  }
+
+  /* Section rhythm: each section is just tall enough for its content. */
+  .px .px-section {
+    padding-block: clamp(28px, 4vw, 56px);
+  }
+
+  .px .px-section + .px-section {
+    border-top: 1px solid var(--px-rule);
+  }
+
+  .px .px-section__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: clamp(20px, 2.4vw, 32px);
+  }
+
+  .px .px-section__title {
+    font-size: clamp(22px, 2.4vw, 32px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .px,
+    .px *,
+    .px *::before,
+    .px *::after {
+      transition-duration: 0.001ms !important;
+      animation-duration: 0.001ms !important;
+    }
+  }
+</style>

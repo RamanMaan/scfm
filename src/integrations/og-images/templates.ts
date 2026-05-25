@@ -144,35 +144,12 @@ export const renderStudio = (): Node =>
         "div",
         {
           display: "flex",
-          width: "100%",
-          justifyContent: "space-between",
-          alignItems: "baseline",
+          fontSize: "16px",
+          fontWeight: 500,
+          letterSpacing: "1px",
+          color: "#0a0a0a",
         },
-        [
-          el(
-            "div",
-            {
-              display: "flex",
-              fontSize: "16px",
-              fontWeight: 500,
-              letterSpacing: "1px",
-              color: "#0a0a0a",
-            },
-            "Steven Christopher",
-          ),
-          el(
-            "div",
-            {
-              display: "flex",
-              fontSize: "11px",
-              fontWeight: 500,
-              letterSpacing: "5px",
-              color: "#6f6f6f",
-              textTransform: "uppercase",
-            },
-            "Plate 01",
-          ),
-        ],
+        "Steven Christopher",
       ),
       el(
         "div",
@@ -228,6 +205,119 @@ export const renderStudio = (): Node =>
               textTransform: "uppercase",
             },
             "Variant / Studio",
+          ),
+        ],
+      ),
+    ],
+  );
+
+export const renderParallax = (): Node =>
+  el(
+    "div",
+    {
+      ...FRAME,
+      backgroundColor: "#0a0a0a",
+      fontFamily: "Inter",
+      color: "#0a0a0a",
+      flexDirection: "column",
+    },
+    [
+      el(
+        "div",
+        {
+          display: "flex",
+          width: "1200px",
+          height: "230px",
+          padding: "56px 80px 0",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          backgroundColor: "#0a0a0a",
+          color: "#ffffff",
+        },
+        el(
+          "div",
+          {
+            display: "flex",
+            fontSize: "13px",
+            fontWeight: 500,
+            letterSpacing: "5px",
+            color: "rgba(255,255,255,0.6)",
+            textTransform: "uppercase",
+            paddingBottom: "24px",
+          },
+          "Gallery wall \u2014 paper rises over",
+        ),
+      ),
+      el(
+        "div",
+        {
+          display: "flex",
+          width: "1200px",
+          height: "400px",
+          backgroundColor: "#f6f5f1",
+          borderTopLeftRadius: "28px",
+          borderTopRightRadius: "28px",
+          padding: "56px 80px",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        },
+        [
+          el(
+            "div",
+            {
+              display: "flex",
+              flexDirection: "column",
+              fontFamily: "Inter",
+              fontWeight: 500,
+              fontSize: "128px",
+              lineHeight: 0.92,
+              letterSpacing: "-4px",
+              color: "#0a0a0a",
+            },
+            [
+              el("div", { display: "flex" }, "Steven"),
+              el(
+                "div",
+                { display: "flex", paddingLeft: "96px" },
+                "Christopher",
+              ),
+            ],
+          ),
+          el(
+            "div",
+            {
+              display: "flex",
+              width: "100%",
+              justifyContent: "space-between",
+              alignItems: "baseline",
+              paddingTop: "20px",
+              borderTop: "1px solid rgba(10,10,10,0.1)",
+            },
+            [
+              el(
+                "div",
+                {
+                  display: "flex",
+                  fontSize: "15px",
+                  fontWeight: 500,
+                  letterSpacing: "0.5px",
+                  color: "#0a0a0a",
+                },
+                "Studio palette, gallery wall.",
+              ),
+              el(
+                "div",
+                {
+                  display: "flex",
+                  fontSize: "11px",
+                  fontWeight: 500,
+                  letterSpacing: "5px",
+                  color: "#6f6f6f",
+                  textTransform: "uppercase",
+                },
+                "Variant / Parallax",
+              ),
+            ],
           ),
         ],
       ),
@@ -312,4 +402,5 @@ export const TEMPLATES: Record<string, () => Node> = {
   default: renderDefault,
   brutalist: renderBrutalist,
   studio: renderStudio,
+  parallax: renderParallax,
 };
