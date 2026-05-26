@@ -33,6 +33,10 @@ export default defineConfig({
   site: resolveSite(),
   integrations: [ogImages()],
 
+  image: {
+    domains: ["i.ytimg.com"],
+  },
+
   vite: {
     plugins: [tailwindcss()],
   },
