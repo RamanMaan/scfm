@@ -1,0 +1,328 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { formatYear } from "../../../lib/formatDate";
+import {
+  getSpotifyEmbedUrl,
+  SPOTIFY_EMBED_HEIGHT,
+  spotifyOpenUrl,
+} from "../../../lib/spotify";
+
+interface Props {
+  releases: CollectionEntry<"releases">[];
+}
+
+const { releases } = Astro.props;
+
+const formatLabel = (release: CollectionEntry<"releases">): string =>
+  release.data.type === "single" ? "SINGLE" : release.data.type.toUpperCase();
+---
+
+<section class="po-section po-shell" id="music">
+  <header class="po-section__head">
+    <h2 class="po-section__title po-ink2" data-text="Music">Music</h2>
+    <span class="po-section__num">No. 02 / On Wax</span>
+  </header>
+
+  <ul class="po-rel">
+    {
+      releases.map((release, idx) => {
+        const { spotifyId, spotifyType, appleMusicUrl, coverArt } =
+          release.data;
+        const flipped = idx % 2 === 1;
+        const year = formatYear(release.data.releaseDate);
+        const fullSpotifyUrl = spotifyId
+          ? spotifyOpenUrl(spotifyType, spotifyId)
+          : null;
+        const embedUrl = spotifyId
+          ? getSpotifyEmbedUrl({
+              type: spotifyType,
+              id: spotifyId,
+              theme: 1,
+            })
+          : null;
+
+        return (
+          <li class:list={["po-rel__item", flipped && "po-rel__item--flip"]}>
+            <article class="po-rel__poster">
+              <header class="po-rel__head">
+                <span class="po-rel__num po-meta">
+                  {String(idx + 1).padStart(2, "0")}
+                </span>
+                <span class="po-tag po-rel__kind">{formatLabel(release)}</span>
+                <span class="po-rel__year">{year}</span>
+              </header>
+
+              <h3
+                class="po-rel__title po-ink2"
+                data-text={release.data.title.toUpperCase()}
+              >
+                {release.data.title.toUpperCase()}
+              </h3>
+
+              {release.data.description && (
+                <p class="po-rel__blurb">{release.data.description}</p>
+              )}
+
+              <div class="po-rel__media">
+                {coverArt ? (
+                  <Image
+                    class="po-rel__cover"
+                    src={coverArt}
+                    alt={`Cover art for ${release.data.title}`}
+                    widths={[240, 480, 640]}
+                    sizes="(min-width: 720px) 320px, 60vw"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <div class="po-rel__cover po-rel__cover--placeholder po-halftone" aria-hidden="true" />
+                )}
+
+                {embedUrl ? (
+                  <div class="po-rel__embed">
+                    <iframe
+                      src={embedUrl}
+                      width="100%"
+                      height={SPOTIFY_EMBED_HEIGHT.compact}
+                      loading="lazy"
+                      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                      title={`${release.data.title} on Spotify`}
+                    />
+                  </div>
+                ) : (
+                  <div class="po-rel__embed po-rel__embed--empty">
+                    <p class="po-rel__embed-msg">
+                      Embed coming soon. Listen below.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <footer class="po-rel__foot">
+                {fullSpotifyUrl && (
+                  <a
+                    class="po-rel__cta"
+                    href={fullSpotifyUrl}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    Play on Spotify →
+                  </a>
+                )}
+                {appleMusicUrl && (
+                  <a
+                    class="po-rel__link"
+                    href={appleMusicUrl}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    Apple Music
+                  </a>
+                )}
+              </footer>
+            </article>
+          </li>
+        );
+      })
+    }
+  </ul>
+</section>
+
+<style>
+  .po-rel {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: clamp(28px, 4vw, 56px);
+  }
+
+  .po-rel__item {
+    position: relative;
+  }
+
+  /* Each release-poster is a chunky cardboard slab. Border = two-ink trick:
+     ink border + offset pink shadow. */
+  .po-rel__poster {
+    position: relative;
+    background: var(--po-paper);
+    border: 4px solid var(--po-ink);
+    padding: clamp(18px, 2.6vw, 28px);
+    /* Pink "shadow" 6/-6 = unmistakably mis-registered. */
+    box-shadow: 8px 8px 0 var(--po-pink);
+  }
+
+  .po-rel__item--flip .po-rel__poster {
+    box-shadow: -8px 8px 0 var(--po-pink);
+    transform: rotate(-0.4deg);
+  }
+
+  .po-rel__item:not(.po-rel__item--flip) .po-rel__poster {
+    transform: rotate(0.3deg);
+  }
+
+  .po-rel__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 2px dashed var(--po-ink);
+    margin-bottom: clamp(10px, 1.6vw, 16px);
+  }
+
+  .po-rel__num {
+    font-family: var(--po-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--po-ink);
+  }
+
+  .po-rel__kind {
+    color: var(--po-pink);
+  }
+
+  .po-rel__year {
+    font-family: var(--po-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--po-ink);
+  }
+
+  .po-rel__title {
+    font-family: var(--po-display);
+    font-weight: 900;
+    line-height: 0.86;
+    font-size: clamp(40px, 7vw, 92px);
+    letter-spacing: -0.01em;
+    margin: 0 0 clamp(10px, 1.4vw, 16px);
+    color: var(--po-ink);
+    word-break: break-word;
+  }
+
+  .po-rel__blurb {
+    font-family: var(--po-mono);
+    font-size: 13px;
+    line-height: 1.45;
+    margin: 0 0 clamp(16px, 2.4vw, 22px);
+    max-width: 60ch;
+    color: var(--po-ink);
+  }
+
+  .po-rel__media {
+    display: grid;
+    grid-template-columns: clamp(140px, 22vw, 200px) 1fr;
+    gap: clamp(12px, 2vw, 20px);
+    align-items: start;
+  }
+
+  .po-rel__cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border: 3px solid var(--po-ink);
+    filter: contrast(1.12) saturate(0.4) sepia(0.25);
+    mix-blend-mode: multiply;
+  }
+
+  .po-rel__cover--placeholder {
+    --po-dot: 6px;
+    --po-dot-r: 30%;
+    --po-dot-color: var(--po-ink);
+    background-color: var(--po-paper-tint);
+  }
+
+  .po-rel__embed {
+    border: 3px solid var(--po-ink);
+    background: var(--po-paper);
+    overflow: hidden;
+  }
+
+  .po-rel__embed iframe {
+    display: block;
+    border-radius: 0;
+  }
+
+  .po-rel__embed--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 152px;
+    background: var(--po-paper-tint);
+  }
+
+  .po-rel__embed-msg {
+    margin: 0;
+    font-family: var(--po-mono);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--po-ink);
+    opacity: 0.7;
+    text-align: center;
+    padding: 0 16px;
+  }
+
+  .po-rel__foot {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 2vw, 20px);
+    margin-top: clamp(16px, 2.4vw, 22px);
+    padding-top: clamp(12px, 1.8vw, 18px);
+    border-top: 2px solid var(--po-ink);
+    flex-wrap: wrap;
+  }
+
+  .po-rel__cta {
+    display: inline-flex;
+    align-items: center;
+    background: var(--po-ink);
+    color: var(--po-paper);
+    padding: 12px 18px;
+    font-family: var(--po-display);
+    font-weight: 900;
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1;
+    min-height: 44px;
+    transition: transform 180ms ease-out, background-color 180ms ease-out;
+  }
+
+  .po-rel__cta:hover {
+    background: var(--po-pink);
+    color: var(--po-paper);
+    transform: translate(2px, -2px);
+  }
+
+  .po-rel__link {
+    font-family: var(--po-mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--po-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--po-pink);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  @media (max-width: 640px) {
+    .po-rel__media {
+      grid-template-columns: 1fr;
+    }
+    .po-rel__cover {
+      max-width: 200px;
+    }
+  }
+</style>

@@ -1,0 +1,153 @@
+---
+interface Props {
+  name: string;
+  origin: string;
+  listenUrl: string;
+}
+
+const { name, origin, listenUrl } = Astro.props;
+
+/*
+ * PLACEHOLDER LYRIC (not pulled from content — schema has no `lyrics` field).
+ * Hand-written for the "verse" variant scaffold. Replace with a real lyric
+ * snippet (with permission) when Steven hands one over. Eight lines split
+ * 4 / 1 / 1 / 1 / 1: four open the page, the next four are repurposed as
+ * section headers below (Music / Video / Contact / Closing).
+ */
+const opening = [
+  "All the lights are off",
+  "but the room still hums,",
+  "you can hear the city",
+  "remember itself.",
+];
+---
+
+<header class="vs-hero vs-shell" id="top" aria-label={`${name} — opening verse`}>
+  <p class="vs-tag vs-rise" style="--d: 0ms">Verse — i. an opening</p>
+
+  <div class="vs-hero__poem" aria-label="Opening verse">
+    {
+      opening.map((line, idx) => (
+        <p
+          class="vs-hero__line vs-rise"
+          style={`--d: ${180 + idx * 140}ms`}
+        >
+          {line}
+        </p>
+      ))
+    }
+  </div>
+
+  <p class="vs-hero__attrib vs-rise" style="--d: 900ms">
+    <span class="vs-tag">A song by</span>
+    <a class="vs-hero__listen" href={listenUrl} target="_blank" rel="noopener">
+      <span class="vs-hero__name">{name}</span>
+      <span class="vs-hero__arrow" aria-hidden="true">&rarr;</span>
+      <span class="vs-hero__sub">Listen on Spotify</span>
+    </a>
+  </p>
+
+  <p class="vs-tag vs-hero__origin vs-rise" style="--d: 1040ms">{origin}</p>
+</header>
+
+<style>
+  .vs-hero {
+    /* Full-viewport opening so the verse is the entire first impression. */
+    min-height: 100svh;
+    padding-block: clamp(48px, 12vh, 120px) clamp(40px, 8vh, 80px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: clamp(40px, 8vh, 96px);
+    position: relative;
+  }
+
+  .vs-hero__poem {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(4px, 0.6vh, 10px);
+  }
+
+  /* The headline gesture: long, hand-set italic lines, leading wide enough
+     that whitespace is part of the page. clamp 48 -> 120 per the brief. */
+  .vs-hero__line {
+    font-family: var(--vs-serif);
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(48px, 11vw, 120px);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    color: var(--vs-bone);
+    margin: 0;
+    /* Don't let a long line break mid-phrase — keep each lyric line whole
+       where possible, soft-wrap only at true word boundaries. */
+    text-wrap: balance;
+    overflow-wrap: break-word;
+    hyphens: none;
+  }
+
+  /* Lift the first character a hair — feels like setting type by hand. */
+  .vs-hero__line:first-child {
+    text-indent: -0.04em;
+  }
+
+  .vs-hero__attrib {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+  }
+
+  .vs-hero__listen {
+    display: inline-flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    column-gap: 12px;
+    row-gap: 4px;
+    min-height: 44px;
+  }
+
+  .vs-hero__name {
+    font-family: var(--vs-serif);
+    font-weight: 500;
+    font-style: normal;
+    font-size: clamp(20px, 2.4vw, 26px);
+    letter-spacing: -0.01em;
+    color: var(--vs-bone);
+  }
+
+  .vs-hero__arrow {
+    font-size: 18px;
+    color: var(--vs-accent);
+    transition: transform 380ms var(--vs-ease);
+  }
+
+  .vs-hero__sub {
+    font-family: var(--vs-serif);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--vs-bone-dim);
+  }
+
+  .vs-hero__listen:hover .vs-hero__arrow {
+    transform: translateX(4px);
+  }
+
+  .vs-hero__listen:hover .vs-hero__name {
+    color: var(--vs-accent);
+  }
+
+  .vs-hero__origin {
+    margin: 0;
+    text-align: right;
+  }
+
+  @media (max-width: 480px) {
+    .vs-hero__line {
+      letter-spacing: -0.02em;
+    }
+    .vs-hero__origin {
+      text-align: left;
+    }
+  }
+</style>

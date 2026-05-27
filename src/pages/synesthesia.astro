@@ -1,0 +1,36 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import Footer from "../variants/synesthesia/components/Footer.astro";
+import Hero from "../variants/synesthesia/components/Hero.astro";
+import ReleaseList from "../variants/synesthesia/components/ReleaseList.astro";
+import VideoGrid from "../variants/synesthesia/components/VideoGrid.astro";
+import Layout from "../variants/synesthesia/Layout.astro";
+
+const artist = await getEntry("artist", "profile");
+if (!artist) {
+  throw new Error("Missing artist profile entry");
+}
+
+const RECENT_RELEASES_LIMIT = 5;
+
+const releases = (await getCollection("releases"))
+  .sort((a, b) => b.data.releaseDate.valueOf() - a.data.releaseDate.valueOf())
+  .slice(0, RECENT_RELEASES_LIMIT);
+
+const videos = (await getCollection("videos")).sort(
+  (a, b) =>
+    (b.data.releaseDate?.valueOf() ?? 0) - (a.data.releaseDate?.valueOf() ?? 0),
+);
+---
+
+<Layout
+  title={`${artist.data.name} - ${artist.data.tagline}`}
+  description={artist.data.bio}
+>
+  <Hero name={artist.data.name} tagline={artist.data.tagline} />
+  <main>
+    <ReleaseList releases={releases} />
+    <VideoGrid videos={videos} channelUrl={artist.data.socials.youtube} />
+    <Footer artist={artist} />
+  </main>
+</Layout>

@@ -1,0 +1,555 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import { formatYear } from "../../../lib/formatDate";
+import { orderedSocials } from "../../../lib/socials";
+
+interface Props {
+  artist: CollectionEntry<"artist">;
+}
+
+const { artist } = Astro.props;
+const socials = orderedSocials(artist.data.socials);
+
+const press = (await getCollection("press")).sort(
+  (a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0),
+);
+
+// TODO(steven): Sign up at https://web3forms.com, paste your access key into
+// `.env` as `PUBLIC_WEB3FORMS_ACCESS_KEY`. Until then the form will POST but
+// Web3Forms will reject it as an invalid access key.
+const WEB3FORMS_ACCESS_KEY =
+  import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY ??
+  "REPLACE_WITH_WEB3FORMS_ACCESS_KEY";
+
+const longBio = artist.data.longBio ?? artist.data.bio;
+---
+
+<footer class="cz-foot">
+  <!-- LINER NOTES / BIO -->
+  <section class="cz-section" id="liner">
+    <div class="cz-liner cz-panel">
+      <header class="cz-runner">
+        <span class="cz-runner__title">Liner notes</span>
+        <span class="cz-runner__meta">Back panel</span>
+      </header>
+
+      <div class="cz-liner__columns">
+        <div class="cz-liner__bio">
+          <p class="cz-liner__lede">
+            <span class="cz-liner__drop" aria-hidden="true">
+              {longBio.charAt(0)}
+            </span>
+            {longBio.slice(1)}
+          </p>
+        </div>
+        <aside class="cz-liner__stamp" aria-hidden="true">
+          <span class="cz-mono">{artist.data.origin}</span>
+          <span class="cz-mono">→</span>
+          <span class="cz-mono">{artist.data.basedIn}</span>
+          <span class="cz-hand cz-liner__stamp-mark">
+            ✓ {formatYear(new Date())}
+          </span>
+        </aside>
+      </div>
+
+      {
+        press.length > 0 && (
+          <div class="cz-press">
+            <h3 class="cz-press__title">
+              <span class="cz-hand">Press &middot;</span>{" "}
+              <span class="cz-mono">selected quotes</span>
+            </h3>
+            <ul class="cz-press__list">
+              {press.map((entry) => (
+                <li class="cz-press__item">
+                  <blockquote class="cz-press__quote">
+                    <p>&ldquo;{entry.data.quote}&rdquo;</p>
+                    <footer class="cz-press__attr">
+                      <a
+                        class="cz-press__source"
+                        href={entry.data.sourceUrl}
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        — {entry.data.source}
+                      </a>
+                      {entry.data.date && (
+                        <span class="cz-mono cz-press__date">
+                          {formatYear(entry.data.date)}
+                        </span>
+                      )}
+                    </footer>
+                  </blockquote>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- MAIL / CONTACT -->
+  <section class="cz-section" id="mail">
+    <div class="cz-mail cz-panel">
+      <header class="cz-runner">
+        <span class="cz-runner__title">Mail</span>
+        <span class="cz-runner__meta">Return slip enclosed</span>
+      </header>
+
+      <form
+        class="cz-mail__form"
+        action="https://api.web3forms.com/submit"
+        method="POST"
+        data-cz-contact-form
+      >
+        <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+        <input
+          type="hidden"
+          name="subject"
+          value={`${artist.data.name} — new contact form message`}
+        />
+        <input
+          type="hidden"
+          name="from_name"
+          value="stevenchristopher.com contact form"
+        />
+        <label class="cz-mail__honey" aria-hidden="true">
+          Leave this field empty
+          <input
+            type="checkbox"
+            name="botcheck"
+            tabindex="-1"
+            autocomplete="off"
+          />
+        </label>
+
+        <div class="cz-mail__row">
+          <label class="cz-mail__field">
+            <span class="cz-mail__lbl">Name</span>
+            <input type="text" name="name" autocomplete="name" required />
+          </label>
+          <label class="cz-mail__field">
+            <span class="cz-mail__lbl">Email</span>
+            <input type="email" name="email" autocomplete="email" required />
+          </label>
+        </div>
+
+        <label class="cz-mail__field">
+          <span class="cz-mail__lbl">Message</span>
+          <textarea name="message" rows={4} required></textarea>
+        </label>
+
+        <div class="cz-mail__formfoot">
+          <p class="cz-mail__status" data-cz-contact-status aria-live="polite"></p>
+          <button class="cz-mail__submit" type="submit">
+            <span class="cz-hand">Mail it</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- SOCIALS / COLOPHON -->
+  <section class="cz-section">
+    <div class="cz-colo">
+      <p class="cz-mono cz-colo__head">Or tune in elsewhere</p>
+      <ul class="cz-colo__socials">
+        {
+          socials.map(({ platform, url, label }) => (
+            <li>
+              <a
+                class="cz-colo__chip"
+                href={url}
+                target="_blank"
+                rel="noopener"
+                data-platform={platform}
+              >
+                <span class="cz-colo__chip-dot" aria-hidden="true" />
+                <span class="cz-mono">{label}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="cz-colo__base">
+        <p class="cz-mono">
+          &copy; {formatYear(new Date())} {artist.data.name}
+        </p>
+        <p class="cz-mono cz-colo__edition">
+          Cassette ed. &middot; SC-001 &middot; Made in LA
+        </p>
+      </div>
+    </div>
+  </section>
+</footer>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>(
+    "[data-cz-contact-form]",
+  );
+  const status = form?.querySelector<HTMLElement>("[data-cz-contact-status]");
+  const submit = form?.querySelector<HTMLButtonElement>(
+    "button[type='submit']",
+  );
+
+  const setStatus = (message: string) => {
+    if (status) status.textContent = message;
+  };
+
+  form?.addEventListener("submit", async (event) => {
+    if (!submit) return;
+    event.preventDefault();
+    submit.disabled = true;
+    setStatus("Sending…");
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      });
+
+      if (!response.ok) {
+        setStatus("Something went wrong. Try again.");
+        return;
+      }
+
+      form.reset();
+      setStatus("Thanks — I'll be in touch.");
+    } catch {
+      setStatus("Network error. Try again.");
+    } finally {
+      submit.disabled = false;
+    }
+  });
+</script>
+
+<style>
+  .cz-foot {
+    display: block;
+  }
+
+  /* LINER -------------------------------------------------------------- */
+  .cz-liner__columns {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(16px, 3vw, 24px);
+    margin-bottom: clamp(20px, 3vw, 28px);
+  }
+
+  @media (min-width: 720px) {
+    .cz-liner__columns {
+      grid-template-columns: 1fr auto;
+      gap: clamp(20px, 4vw, 40px);
+    }
+  }
+
+  .cz-liner__lede {
+    margin: 0;
+    font-family: var(--cz-sans);
+    font-size: clamp(15px, 2.2vw, 17px);
+    line-height: 1.65;
+    color: var(--cz-ink);
+    max-width: 60ch;
+  }
+
+  /* Typewriter drop-cap on the first letter of the bio */
+  .cz-liner__drop {
+    float: left;
+    font-family: var(--cz-mono);
+    font-weight: 700;
+    font-size: clamp(46px, 8vw, 64px);
+    line-height: 0.85;
+    margin: 4px 10px 0 0;
+    padding: 6px 8px;
+    color: var(--cz-stock);
+    background: var(--cz-ink);
+    box-shadow: 2px 2px 0 var(--cz-marker);
+  }
+
+  /* Rubber-stamp shipping mark */
+  .cz-liner__stamp {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 12px 16px;
+    border: 2px dashed var(--cz-marker);
+    border-radius: 4px;
+    color: var(--cz-marker);
+    transform: rotate(-2deg);
+    align-self: flex-start;
+    background: rgba(196, 48, 43, 0.04);
+    max-width: 220px;
+  }
+
+  .cz-liner__stamp .cz-mono {
+    color: var(--cz-marker);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+
+  .cz-liner__stamp-mark {
+    font-size: 22px;
+    margin-top: 4px;
+    transform: rotate(2deg);
+  }
+
+  /* PRESS -------------------------------------------------------------- */
+  .cz-press {
+    padding-top: clamp(16px, 2vw, 22px);
+    border-top: 1px dashed var(--cz-rule);
+  }
+
+  .cz-press__title {
+    margin: 0 0 clamp(12px, 2vw, 18px);
+    font-size: 22px;
+    line-height: 1;
+    color: var(--cz-ink);
+  }
+
+  .cz-press__title .cz-hand {
+    font-size: 28px;
+  }
+
+  .cz-press__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(14px, 2vw, 20px);
+  }
+
+  @media (min-width: 720px) {
+    .cz-press__list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .cz-press__item {
+    margin: 0;
+  }
+
+  .cz-press__quote {
+    margin: 0;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.5);
+    border-left: 3px solid var(--cz-marker);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  }
+
+  .cz-press__quote p {
+    margin: 0 0 10px;
+    font-family: var(--cz-sans);
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--cz-ink);
+  }
+
+  .cz-press__attr {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .cz-press__source {
+    font-family: var(--cz-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cz-ink-soft);
+  }
+
+  .cz-press__source:hover {
+    color: var(--cz-marker);
+  }
+
+  .cz-press__date {
+    color: var(--cz-ink-soft);
+  }
+
+  /* MAIL --------------------------------------------------------------- */
+  .cz-mail__form {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(14px, 2vw, 20px);
+  }
+
+  .cz-mail__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(12px, 2vw, 22px);
+  }
+
+  @media (max-width: 480px) {
+    .cz-mail__row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cz-mail__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .cz-mail__lbl {
+    font-family: var(--cz-mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cz-ink-soft);
+  }
+
+  .cz-mail__field input,
+  .cz-mail__field textarea {
+    appearance: none;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--cz-rule);
+    border-radius: 2px;
+    padding: 10px 12px;
+    font-family: var(--cz-mono);
+    font-size: 14px;
+    color: var(--cz-ink);
+    width: 100%;
+    min-height: 44px;
+    transition: border-color 200ms var(--cz-ease);
+  }
+
+  .cz-mail__field textarea {
+    min-height: 112px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  .cz-mail__field input:focus,
+  .cz-mail__field textarea:focus {
+    outline: none;
+    border-color: var(--cz-marker);
+    box-shadow: 0 0 0 2px rgba(196, 48, 43, 0.18);
+  }
+
+  .cz-mail__honey {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .cz-mail__formfoot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .cz-mail__status {
+    margin: 0;
+    flex: 1 1 auto;
+    font-family: var(--cz-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--cz-ink-soft);
+    min-height: 1.4em;
+  }
+
+  .cz-mail__submit {
+    appearance: none;
+    background: var(--cz-ink);
+    color: var(--cz-stock);
+    border: 0;
+    padding: 12px 22px;
+    border-radius: 2px;
+    min-height: 44px;
+    min-width: 140px;
+    cursor: pointer;
+    transition: background-color 200ms var(--cz-ease);
+    box-shadow: 3px 3px 0 var(--cz-marker);
+  }
+
+  .cz-mail__submit .cz-hand {
+    font-size: 26px;
+    color: var(--cz-stock);
+    transform: rotate(-1deg);
+  }
+
+  .cz-mail__submit:hover:not(:disabled) {
+    background: var(--cz-marker);
+    box-shadow: 3px 3px 0 var(--cz-ink);
+  }
+
+  .cz-mail__submit:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  /* COLOPHON ----------------------------------------------------------- */
+  .cz-colo {
+    padding: clamp(20px, 3vw, 28px) clamp(14px, 3vw, 24px);
+  }
+
+  .cz-colo__head {
+    margin: 0 0 14px;
+  }
+
+  .cz-colo__socials {
+    list-style: none;
+    margin: 0 0 clamp(22px, 4vw, 32px);
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .cz-colo__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--cz-rule);
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.4);
+    min-height: 44px;
+    transition:
+      border-color 200ms var(--cz-ease),
+      background-color 200ms var(--cz-ease);
+  }
+
+  .cz-colo__chip:hover {
+    border-color: var(--cz-marker);
+    background: rgba(196, 48, 43, 0.06);
+  }
+
+  .cz-colo__chip-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--cz-marker);
+    border-radius: 50%;
+  }
+
+  .cz-colo__base {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: clamp(14px, 2vw, 20px);
+    border-top: 1px solid var(--cz-rule);
+  }
+
+  .cz-colo__edition {
+    color: var(--cz-ink-soft);
+  }
+
+  @media (max-width: 480px) {
+    .cz-colo__base {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

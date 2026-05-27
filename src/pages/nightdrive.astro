@@ -1,0 +1,48 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import Footer from "../variants/nightdrive/components/Footer.astro";
+import Hero from "../variants/nightdrive/components/Hero.astro";
+import Nav from "../variants/nightdrive/components/Nav.astro";
+import PressMarquee from "../variants/nightdrive/components/PressMarquee.astro";
+import ReleaseList from "../variants/nightdrive/components/ReleaseList.astro";
+import VideoGrid from "../variants/nightdrive/components/VideoGrid.astro";
+import Layout from "../variants/nightdrive/Layout.astro";
+
+const artist = await getEntry("artist", "profile");
+if (!artist) {
+  throw new Error("Missing artist profile entry");
+}
+
+const RECENT_RELEASES_LIMIT = 5;
+
+const releases = (await getCollection("releases"))
+  .sort((a, b) => b.data.releaseDate.valueOf() - a.data.releaseDate.valueOf())
+  .slice(0, RECENT_RELEASES_LIMIT);
+
+const videos = (await getCollection("videos")).sort(
+  (a, b) =>
+    (b.data.releaseDate?.valueOf() ?? 0) - (a.data.releaseDate?.valueOf() ?? 0),
+);
+
+const press = (await getCollection("press")).sort(
+  (a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0),
+);
+---
+
+<Layout
+  title={`${artist.data.name} - ${artist.data.tagline}`}
+  description={artist.data.bio}
+>
+  <Nav name={artist.data.name} />
+  <Hero
+    name={artist.data.name}
+    origin={artist.data.origin}
+    basedIn={artist.data.basedIn}
+  />
+  <main>
+    <ReleaseList releases={releases} />
+    <VideoGrid videos={videos} channelUrl={artist.data.socials.youtube} />
+    <PressMarquee press={press} />
+    <Footer artist={artist} />
+  </main>
+</Layout>

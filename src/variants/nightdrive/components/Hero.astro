@@ -1,0 +1,290 @@
+---
+import { Picture } from "astro:assets";
+import heroImage from "../../../assets/HeroImage.jpg";
+
+interface Props {
+  name: string;
+  origin: string;
+  basedIn: string;
+}
+
+const { name, origin, basedIn } = Astro.props;
+---
+
+<header class="nd-hero" id="top" aria-label={`${name} — late-night broadcast`}>
+  <div class="nd-hero__inner nd-shell">
+    <p class="nd-tag nd-hero__call" aria-hidden="true">
+      <span class="nd-hero__beacon" aria-hidden="true"></span>
+      ON AIR &middot; 102.7 FM &middot; {origin.toUpperCase()}
+    </p>
+
+    <figure class="nd-hero__card" aria-label="Dedication card">
+      <span class="nd-hero__rim" aria-hidden="true"></span>
+      <p class="nd-tag nd-hero__dedication">FOR THE ONES STILL DRIVING</p>
+      <blockquote class="nd-hero__lyric">
+        <span class="nd-hero__line">It&rsquo;s 2 a.m.,</span>
+        <span class="nd-hero__line nd-hero__line--accent"
+          >the city&rsquo;s still warm,</span
+        >
+        <span class="nd-hero__line">and somebody&rsquo;s</span>
+        <span class="nd-hero__line nd-hero__line--soft"
+          >singing your name.</span
+        >
+      </blockquote>
+      <footer class="nd-hero__cardfoot">
+        <span class="nd-tag nd-tag--dim">&mdash; {name}</span>
+        <span class="nd-tag nd-tag--dim">SIDE A / 01</span>
+      </footer>
+    </figure>
+
+    <aside class="nd-hero__inset" aria-hidden="true">
+      <Picture
+        src={heroImage}
+        alt=""
+        widths={[160, 240, 360]}
+        sizes="180px"
+        formats={["avif", "webp"]}
+        quality={78}
+        loading="eager"
+        decoding="async"
+        class="nd-hero__portrait"
+      />
+      <span class="nd-tag nd-tag--dim nd-hero__insetcap">
+        {basedIn.toUpperCase()}
+      </span>
+    </aside>
+
+    <div class="nd-hero__bar" aria-hidden="true">
+      <span class="nd-hero__bar-amber"></span>
+      <span class="nd-hero__bar-text">
+        <span>SLOW SONGS UNTIL SUNRISE</span>
+        <span>STEREO &middot; 16-BIT &middot; 44.1k</span>
+        <span>PRESS RECORD</span>
+      </span>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nd-hero {
+    position: relative;
+    width: 100%;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    padding-block: clamp(96px, 14vh, 160px) clamp(48px, 8vh, 80px);
+    isolation: isolate;
+  }
+
+  .nd-hero__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(28px, 5vw, 56px);
+    position: relative;
+  }
+
+  @media (min-width: 880px) {
+    .nd-hero__inner {
+      grid-template-columns: minmax(0, 1fr) 220px;
+      align-items: end;
+    }
+  }
+
+  .nd-hero__call {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    grid-column: 1 / -1;
+  }
+
+  .nd-hero__beacon {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--nd-amber);
+    box-shadow:
+      0 0 8px var(--nd-amber),
+      0 0 18px rgba(255, 177, 74, 0.55);
+    animation: nd-pulse 2.8s ease-in-out infinite;
+  }
+
+  @keyframes nd-pulse {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.55;
+      transform: scale(0.78);
+    }
+  }
+
+  /* The dedication card is the hero. Oxblood translucent slab with a faint
+     amber rim glow — a lit panel on a dashboard, not paper. */
+  .nd-hero__card {
+    grid-column: 1;
+    position: relative;
+    margin: 0;
+    padding: clamp(28px, 5vw, 56px) clamp(24px, 5vw, 56px);
+    background:
+      linear-gradient(
+        165deg,
+        rgba(58, 13, 18, 0.78) 0%,
+        rgba(29, 7, 9, 0.62) 100%
+      );
+    border: 1px solid var(--nd-rule);
+    box-shadow:
+      0 0 0 1px rgba(255, 177, 74, 0.06),
+      0 30px 80px -30px rgba(0, 0, 0, 0.85),
+      inset 0 1px 0 rgba(255, 214, 153, 0.12);
+    backdrop-filter: blur(2px);
+    overflow: hidden;
+  }
+
+  .nd-hero__rim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      60% 80% at 20% 0%,
+      rgba(255, 177, 74, 0.18) 0%,
+      rgba(255, 177, 74, 0) 60%
+    );
+    mix-blend-mode: screen;
+  }
+
+  .nd-hero__dedication {
+    display: block;
+    margin-bottom: clamp(20px, 3vw, 32px);
+  }
+
+  /* The lyric. Wide-axis Fraunces, italic, big leading, hung quote feel. */
+  .nd-hero__lyric {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2px, 0.6vw, 6px);
+    font-family: var(--nd-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-variation-settings:
+      "SOFT" 100,
+      "opsz" 144,
+      "wght" 400;
+    font-size: clamp(36px, 7.6vw, 96px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    color: var(--nd-cream);
+    text-shadow: 0 0 32px rgba(255, 177, 74, 0.18);
+  }
+
+  .nd-hero__line {
+    display: block;
+    text-wrap: balance;
+  }
+
+  /* The sodium-amber accent line is the only "neon" — earns the glow. */
+  .nd-hero__line--accent {
+    color: var(--nd-amber);
+    text-shadow:
+      0 0 16px rgba(255, 177, 74, 0.55),
+      0 0 36px rgba(255, 177, 74, 0.32);
+    font-variation-settings:
+      "SOFT" 100,
+      "opsz" 144,
+      "wght" 500;
+  }
+
+  .nd-hero__line--soft {
+    color: var(--nd-cream-dim);
+    font-style: italic;
+  }
+
+  .nd-hero__cardfoot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    margin-top: clamp(20px, 3vw, 32px);
+    padding-top: clamp(14px, 2vw, 22px);
+    border-top: 1px solid var(--nd-rule-warm);
+  }
+
+  .nd-hero__inset {
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-self: start;
+    justify-self: start;
+    max-width: 180px;
+  }
+
+  @media (min-width: 880px) {
+    .nd-hero__inset {
+      grid-column: 2;
+      align-self: end;
+      justify-self: end;
+    }
+  }
+
+  .nd-hero__portrait {
+    width: 140px;
+    height: 200px;
+    object-fit: cover;
+    object-position: center 30%;
+    filter: sepia(0.18) saturate(0.85) contrast(1.05) brightness(0.78)
+      hue-rotate(-12deg);
+    border: 1px solid var(--nd-rule);
+    box-shadow:
+      0 18px 40px -18px rgba(0, 0, 0, 0.9),
+      inset 0 0 0 1px rgba(255, 214, 153, 0.08);
+  }
+
+  @media (min-width: 880px) {
+    .nd-hero__portrait {
+      width: 180px;
+      height: 240px;
+    }
+  }
+
+  .nd-hero__insetcap {
+    align-self: flex-end;
+  }
+
+  /* The "broadcast band" footer — like a tape readout. */
+  .nd-hero__bar {
+    grid-column: 1 / -1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-top: clamp(20px, 3vw, 32px);
+    margin-top: clamp(20px, 3vw, 32px);
+    border-top: 1px solid var(--nd-rule);
+  }
+
+  .nd-hero__bar-amber {
+    width: 56px;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      var(--nd-amber) 0%,
+      rgba(255, 177, 74, 0) 100%
+    );
+    box-shadow: 0 0 12px rgba(255, 177, 74, 0.7);
+    flex-shrink: 0;
+  }
+
+  .nd-hero__bar-text {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(12px, 3vw, 28px);
+    font-family: var(--nd-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--nd-cream-faint);
+  }
+</style>

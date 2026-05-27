@@ -1,0 +1,425 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { orderedSocials } from "../../../lib/socials";
+
+interface Props {
+  artist: CollectionEntry<"artist">;
+  press: CollectionEntry<"press">[];
+}
+
+const { artist, press } = Astro.props;
+const socials = orderedSocials(artist.data.socials);
+
+// TODO(steven): Sign up at https://web3forms.com, paste your access key into
+// `.env` as `PUBLIC_WEB3FORMS_ACCESS_KEY`. Until then, the form will POST but
+// Web3Forms will reject it with an "invalid access key" error.
+const WEB3FORMS_ACCESS_KEY =
+  import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY ??
+  "REPLACE_WITH_WEB3FORMS_ACCESS_KEY";
+
+const year = new Date().getFullYear();
+---
+
+{/* Marquee strip of press quotes — built from real press content. */}
+{press.length > 0 && (
+  <aside class="po-marq" aria-label="Press quotes">
+    <div class="po-marq__track">
+      {[...press, ...press].map((p) => (
+        <span class="po-marq__item">
+          <span class="po-marq__quote">"{p.data.quote}"</span>
+          <span class="po-marq__src">— {p.data.source}</span>
+          <span class="po-marq__bullet" aria-hidden="true">★</span>
+        </span>
+      ))}
+    </div>
+  </aside>
+)}
+
+<footer class="po-section po-shell po-foot" id="contact">
+  <header class="po-section__head">
+    <h2 class="po-section__title po-ink2" data-text="Mail">Mail</h2>
+    <span class="po-section__num">No. 04 / Get in Touch</span>
+  </header>
+
+  <p class="po-foot__pitch">
+    Bookings, features, anything else — drop a line.
+  </p>
+
+  <form
+    class="po-foot__form"
+    action="https://api.web3forms.com/submit"
+    method="POST"
+    data-contact-form
+  >
+    <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+    <input
+      type="hidden"
+      name="subject"
+      value={`${artist.data.name} — new contact form message`}
+    />
+    <input
+      type="hidden"
+      name="from_name"
+      value="stevenchristopher.com contact form"
+    />
+    <label class="po-foot__honey" aria-hidden="true">
+      Leave this field empty
+      <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" />
+    </label>
+
+    <div class="po-foot__row">
+      <label class="po-foot__field">
+        <span class="po-foot__lbl">Name</span>
+        <input type="text" name="name" autocomplete="name" required />
+      </label>
+      <label class="po-foot__field">
+        <span class="po-foot__lbl">Email</span>
+        <input type="email" name="email" autocomplete="email" required />
+      </label>
+    </div>
+
+    <label class="po-foot__field">
+      <span class="po-foot__lbl">Message</span>
+      <textarea name="message" rows={4} required></textarea>
+    </label>
+
+    <div class="po-foot__formfoot">
+      <p class="po-foot__status" data-contact-status aria-live="polite"></p>
+      <button class="po-foot__submit" type="submit">
+        Send →
+      </button>
+    </div>
+  </form>
+
+  <div class="po-foot__socials">
+    <p class="po-foot__lbl po-foot__lbl--block">Follow / Stream</p>
+    <ul class="po-foot__chips">
+      {socials.map(({ url, label }) => (
+        <li>
+          <a class="po-foot__chip" href={url} target="_blank" rel="noopener">
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="po-foot__colophon">
+    <p>
+      <span class="po-foot__colophon-mark">★</span>
+      {artist.data.name} ©{year} — All rights reserved.
+    </p>
+    <p>
+      Printed in 2 inks. Hot pink + ink-blue. No registration.
+    </p>
+  </div>
+</footer>
+
+<style>
+  /* Marquee of press quotes — single direction, paused on hover/focus. */
+  .po-marq {
+    position: relative;
+    overflow: hidden;
+    background: var(--po-pink);
+    color: var(--po-paper);
+    border-top: 4px solid var(--po-ink);
+    border-bottom: 4px solid var(--po-ink);
+    margin-top: clamp(40px, 6vw, 84px);
+  }
+
+  .po-marq__track {
+    display: flex;
+    gap: 0;
+    align-items: center;
+    padding-block: clamp(10px, 1.2vw, 14px);
+    animation: po-marq 38s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+
+  .po-marq:hover .po-marq__track,
+  .po-marq:focus-within .po-marq__track {
+    animation-play-state: paused;
+  }
+
+  .po-marq__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding-right: 24px;
+    font-family: var(--po-display);
+    font-weight: 700;
+    font-size: clamp(18px, 2.2vw, 28px);
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
+  }
+
+  .po-marq__quote {
+    font-family: var(--po-display);
+    font-style: italic;
+    font-weight: 700;
+  }
+
+  .po-marq__src {
+    font-family: var(--po-mono);
+    font-size: 0.5em;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    opacity: 0.85;
+  }
+
+  .po-marq__bullet {
+    font-size: 1em;
+    color: var(--po-paper);
+    opacity: 0.8;
+  }
+
+  @keyframes po-marq {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .po-marq__track {
+      animation: none;
+      flex-wrap: wrap;
+      white-space: normal;
+      width: 100%;
+    }
+  }
+
+  /* Contact form — high-contrast, chunky borders, no rounding. */
+  .po-foot__pitch {
+    font-family: var(--po-display);
+    font-weight: 700;
+    font-size: clamp(24px, 3.4vw, 38px);
+    line-height: 1;
+    text-transform: uppercase;
+    margin: 0 0 clamp(20px, 3vw, 28px);
+    color: var(--po-ink);
+  }
+
+  .po-foot__form {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, 2vw, 22px);
+    margin-bottom: clamp(40px, 6vw, 64px);
+    border: 4px solid var(--po-ink);
+    padding: clamp(20px, 3vw, 32px);
+    background: var(--po-paper);
+    box-shadow: -8px 8px 0 var(--po-pink);
+  }
+
+  .po-foot__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(14px, 2vw, 22px);
+  }
+
+  @media (max-width: 560px) {
+    .po-foot__row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .po-foot__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .po-foot__lbl {
+    font-family: var(--po-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--po-pink);
+  }
+
+  .po-foot__lbl--block {
+    color: var(--po-ink);
+    margin: 0 0 12px;
+  }
+
+  .po-foot__field input,
+  .po-foot__field textarea {
+    appearance: none;
+    background: var(--po-paper);
+    border: 3px solid var(--po-ink);
+    border-radius: 0;
+    padding: 12px;
+    font-family: var(--po-mono);
+    font-size: 14px;
+    color: var(--po-ink);
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .po-foot__field textarea {
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  .po-foot__field input:focus,
+  .po-foot__field textarea:focus {
+    outline: none;
+    border-color: var(--po-pink);
+    box-shadow: 4px 4px 0 var(--po-pink);
+  }
+
+  .po-foot__honey {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .po-foot__formfoot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .po-foot__status {
+    margin: 0;
+    flex: 1 1 auto;
+    font-family: var(--po-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--po-ink);
+    min-height: 1.4em;
+  }
+
+  .po-foot__submit {
+    appearance: none;
+    background: var(--po-ink);
+    border: 3px solid var(--po-ink);
+    color: var(--po-paper);
+    padding: 12px 22px;
+    font-family: var(--po-display);
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    min-height: 44px;
+    min-width: 140px;
+    transition: background-color 200ms ease-out, transform 200ms ease-out;
+  }
+
+  .po-foot__submit:hover:not(:disabled),
+  .po-foot__submit:focus-visible:not(:disabled) {
+    background: var(--po-pink);
+    color: var(--po-paper);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--po-ink);
+  }
+
+  .po-foot__submit:disabled {
+    opacity: 0.5;
+    cursor: progress;
+  }
+
+  .po-foot__socials {
+    margin-bottom: clamp(32px, 4vw, 48px);
+  }
+
+  .po-foot__chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .po-foot__chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 16px;
+    border: 3px solid var(--po-ink);
+    font-family: var(--po-display);
+    font-weight: 900;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--po-ink);
+    background: var(--po-paper);
+    line-height: 1;
+    min-height: 44px;
+    transition: background-color 180ms ease-out, color 180ms ease-out;
+  }
+
+  .po-foot__chip:hover,
+  .po-foot__chip:focus-visible {
+    background: var(--po-pink);
+    color: var(--po-paper);
+  }
+
+  .po-foot__colophon {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: clamp(16px, 2vw, 22px);
+    border-top: 2px dashed var(--po-ink);
+    font-family: var(--po-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--po-ink);
+  }
+
+  .po-foot__colophon p {
+    margin: 0;
+  }
+
+  .po-foot__colophon-mark {
+    color: var(--po-pink);
+    margin-right: 8px;
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("[data-contact-form]");
+  const status = form?.querySelector<HTMLElement>("[data-contact-status]");
+  const submit = form?.querySelector<HTMLButtonElement>(
+    "button[type='submit']",
+  );
+
+  const setStatus = (message: string) => {
+    if (status) status.textContent = message;
+  };
+
+  form?.addEventListener("submit", async (event) => {
+    if (!submit) return;
+    event.preventDefault();
+    submit.disabled = true;
+    setStatus("Sending…");
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      });
+
+      if (!response.ok) {
+        setStatus("Something went wrong. Try again.");
+        return;
+      }
+
+      form.reset();
+      setStatus("Thanks — I'll be in touch.");
+    } catch {
+      setStatus("Network error. Try again.");
+    } finally {
+      submit.disabled = false;
+    }
+  });
+</script>

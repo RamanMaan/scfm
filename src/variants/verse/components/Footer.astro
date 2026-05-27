@@ -1,0 +1,144 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { orderedSocials } from "../../../lib/socials";
+
+interface Props {
+  artist: CollectionEntry<"artist">;
+}
+
+const { artist } = Astro.props;
+const socials = orderedSocials(artist.data.socials);
+
+// PLACEHOLDER LYRIC — closing two lines, iv. and the refrain.
+const CLOSING = "And the rest of it — the rest of it";
+const REFRAIN = "is just where I can be reached.";
+
+const year = new Date().getUTCFullYear();
+---
+
+<footer class="vs-section vs-shell" id="contact">
+  <div class="vs-foot__poem">
+    <p class="vs-tag">Verse — iv. a way home</p>
+    <p class="vs-line">{CLOSING}</p>
+    <p class="vs-line vs-foot__refrain">{REFRAIN}</p>
+  </div>
+
+  <ul class="vs-foot__lines">
+    {
+      socials.map(({ url, label }) => (
+        <li class="vs-foot__lineitem">
+          <a class="vs-foot__link" href={url} target="_blank" rel="noopener">
+            <span class="vs-foot__lbl">{label}</span>
+            <span class="vs-foot__rule" aria-hidden="true" />
+            <span class="vs-foot__arrow" aria-hidden="true">
+              &rarr;
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="vs-foot__colophon">
+    <p class="vs-tag">
+      &copy; {year} {artist.data.name}
+    </p>
+    <p class="vs-tag">{artist.data.basedIn}</p>
+  </div>
+</footer>
+
+<style>
+  .vs-foot__poem {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 0 0 clamp(40px, 7vh, 80px);
+  }
+
+  /* The refrain sits slightly indented — visual cue it's the resolve line. */
+  .vs-foot__refrain {
+    padding-left: clamp(20px, 5vw, 56px);
+    color: var(--vs-accent);
+  }
+
+  /* Socials rendered as lined-out contact options — like a hand-written list
+     of addresses at the foot of a poem. Each row is a full-width hairline. */
+  .vs-foot__lines {
+    list-style: none;
+    margin: 0 0 clamp(36px, 6vh, 64px);
+    padding: 0;
+  }
+
+  .vs-foot__lineitem {
+    border-top: 1px solid var(--vs-rule);
+  }
+
+  .vs-foot__lineitem:last-child {
+    border-bottom: 1px solid var(--vs-rule);
+  }
+
+  .vs-foot__link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-block: clamp(14px, 2vh, 22px);
+    min-height: 44px;
+    color: var(--vs-bone);
+  }
+
+  .vs-foot__lbl {
+    font-family: var(--vs-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(20px, 3vw, 28px);
+    letter-spacing: -0.01em;
+    color: var(--vs-bone);
+    transition: color 380ms var(--vs-ease);
+  }
+
+  .vs-foot__rule {
+    flex: 1 1 auto;
+    height: 1px;
+    background: var(--vs-rule);
+    transform-origin: left;
+    transition: background-color 380ms var(--vs-ease);
+  }
+
+  .vs-foot__arrow {
+    color: var(--vs-bone-faint);
+    font-size: 18px;
+    transition:
+      color 380ms var(--vs-ease),
+      transform 380ms var(--vs-ease);
+  }
+
+  .vs-foot__link:hover .vs-foot__lbl {
+    color: var(--vs-accent);
+  }
+
+  .vs-foot__link:hover .vs-foot__rule {
+    background: var(--vs-accent);
+  }
+
+  .vs-foot__link:hover .vs-foot__arrow {
+    color: var(--vs-accent);
+    transform: translateX(4px);
+  }
+
+  .vs-foot__colophon {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding-top: clamp(20px, 3vh, 32px);
+    border-top: 1px solid var(--vs-rule);
+  }
+
+  @media (max-width: 480px) {
+    .vs-foot__colophon {
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+    }
+  }
+</style>

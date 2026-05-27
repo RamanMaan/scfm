@@ -1,0 +1,505 @@
+---
+import type { CollectionEntry } from "astro:content";
+import {
+  getSpotifyEmbedUrl,
+  SPOTIFY_EMBED_HEIGHT,
+  spotifyOpenUrl,
+} from "../../../lib/spotify";
+
+interface Props {
+  releases: CollectionEntry<"releases">[];
+}
+
+const { releases } = Astro.props;
+
+const TUNER_MIN = 87.5;
+const TUNER_MAX = 107.9;
+
+// Distribute releases across an imagined FM band, oldest left, newest right.
+// Stable spread regardless of how many releases ship.
+const span = TUNER_MAX - TUNER_MIN;
+const points = releases.length;
+const freqFor = (idx: number) => {
+  if (points <= 1) return (TUNER_MIN + TUNER_MAX) / 2;
+  // Reverse: idx 0 is newest, so place it at the high end of the dial.
+  const t = (points - 1 - idx) / (points - 1);
+  return TUNER_MIN + span * t;
+};
+
+const formatFreq = (f: number) => f.toFixed(1);
+
+const yearOf = (release: CollectionEntry<"releases">) =>
+  release.data.releaseDate.getUTCFullYear();
+
+const formatType = (release: CollectionEntry<"releases">) =>
+  release.data.type === "single" ? "SINGLE" : release.data.type.toUpperCase();
+---
+
+<section class="nd-section nd-shell" id="music">
+  <header class="nd-section__head">
+    <p class="nd-tag">Catalogue / Presets</p>
+    <h2 class="nd-section__title">Tune in.</h2>
+  </header>
+
+  <div class="nd-tuner" aria-hidden="true">
+    <div class="nd-tuner__dial">
+      <span class="nd-tuner__range">{formatFreq(TUNER_MIN)}</span>
+      <div class="nd-tuner__ticks">
+        {
+          Array.from({ length: 41 }).map((_, i) => (
+            <span
+              class:list={[
+                "nd-tuner__tick",
+                i % 10 === 0 && "nd-tuner__tick--major",
+              ]}
+            />
+          ))
+        }
+      </div>
+      <span class="nd-tuner__range">{formatFreq(TUNER_MAX)}</span>
+    </div>
+  </div>
+
+  <ol class="nd-presets">
+    {
+      releases.map((release, idx) => {
+        const freq = freqFor(idx);
+        const embed = release.data.spotifyId
+          ? getSpotifyEmbedUrl({
+              type: release.data.spotifyType,
+              id: release.data.spotifyId,
+            })
+          : null;
+        const openUrl = release.data.spotifyId
+          ? spotifyOpenUrl(release.data.spotifyType, release.data.spotifyId)
+          : null;
+        const ampUrl = release.data.appleMusicUrl ?? null;
+        const presetNum = String(idx + 1).padStart(2, "0");
+
+        return (
+          <li class="nd-preset">
+            <details class="nd-preset__shell">
+              <summary class="nd-preset__head">
+                <span class="nd-preset__dot" aria-hidden="true" />
+                <span class="nd-preset__num nd-tag">P{presetNum}</span>
+                <span class="nd-preset__freq">
+                  <span class="nd-preset__freq-num">{formatFreq(freq)}</span>
+                  <span class="nd-preset__freq-unit nd-tag">MHz</span>
+                </span>
+                <span class="nd-preset__title-wrap">
+                  <span class="nd-preset__title">{release.data.title}</span>
+                  {release.data.featuring.length > 0 && (
+                    <span class="nd-preset__feat nd-tag nd-tag--dim">
+                      feat. {release.data.featuring.join(", ")}
+                    </span>
+                  )}
+                </span>
+                <span class="nd-preset__meta nd-tag nd-tag--dim">
+                  <span>{formatType(release)}</span>
+                  <span aria-hidden="true">&middot;</span>
+                  <span>{yearOf(release)}</span>
+                </span>
+                <span class="nd-preset__cue" aria-hidden="true">
+                  TUNE
+                </span>
+              </summary>
+
+              <div class="nd-preset__body">
+                {release.data.description && (
+                  <p class="nd-preset__desc">{release.data.description}</p>
+                )}
+
+                {embed ? (
+                  <div class="nd-preset__embed">
+                    <iframe
+                      src={embed}
+                      width="100%"
+                      height={SPOTIFY_EMBED_HEIGHT.compact}
+                      frameborder="0"
+                      loading="lazy"
+                      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                      title={`${release.data.title} — Spotify preview`}
+                    />
+                  </div>
+                ) : (
+                  <p class="nd-preset__pending nd-tag nd-tag--dim">
+                    Signal incoming &middot; streaming link soon
+                  </p>
+                )}
+
+                <div class="nd-preset__links">
+                  {openUrl && (
+                    <a
+                      class="nd-preset__link"
+                      href={openUrl}
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      Open in Spotify
+                      <span aria-hidden="true">&nearr;</span>
+                    </a>
+                  )}
+                  {ampUrl && (
+                    <a
+                      class="nd-preset__link nd-preset__link--ghost"
+                      href={ampUrl}
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      Apple Music
+                      <span aria-hidden="true">&nearr;</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </details>
+          </li>
+        );
+      })
+    }
+  </ol>
+</section>
+
+<style>
+  .nd-tuner {
+    margin-bottom: clamp(32px, 4vw, 48px);
+  }
+
+  .nd-tuner__dial {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border: 1px solid var(--nd-rule);
+    background:
+      linear-gradient(
+        180deg,
+        rgba(58, 13, 18, 0.55) 0%,
+        rgba(29, 7, 9, 0.45) 100%
+      );
+    box-shadow: inset 0 1px 0 rgba(255, 214, 153, 0.06);
+  }
+
+  .nd-tuner__range {
+    font-family: var(--nd-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--nd-cream-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .nd-tuner__ticks {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    height: 22px;
+    flex: 1;
+  }
+
+  .nd-tuner__tick {
+    display: block;
+    width: 1px;
+    height: 8px;
+    background: var(--nd-cream-faint);
+  }
+
+  .nd-tuner__tick--major {
+    height: 18px;
+    background: var(--nd-amber);
+    box-shadow: 0 0 6px rgba(255, 177, 74, 0.6);
+  }
+
+  .nd-presets {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1.4vw, 14px);
+  }
+
+  .nd-preset {
+    margin: 0;
+  }
+
+  .nd-preset__shell {
+    position: relative;
+    background: rgba(29, 7, 9, 0.48);
+    border: 1px solid var(--nd-rule-warm);
+    transition:
+      border-color 360ms var(--nd-ease),
+      background-color 360ms var(--nd-ease),
+      box-shadow 360ms var(--nd-ease);
+  }
+
+  .nd-preset__shell[open] {
+    border-color: var(--nd-rule);
+    background: rgba(29, 7, 9, 0.72);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 214, 153, 0.08),
+      0 20px 60px -30px rgba(0, 0, 0, 0.9);
+  }
+
+  /* Hide native marker. */
+  .nd-preset__head {
+    list-style: none;
+  }
+  .nd-preset__head::-webkit-details-marker {
+    display: none;
+  }
+
+  .nd-preset__head {
+    display: grid;
+    grid-template-columns: auto auto auto 1fr auto auto;
+    align-items: center;
+    gap: clamp(10px, 1.8vw, 20px);
+    padding: clamp(14px, 2vw, 20px) clamp(16px, 2.4vw, 24px);
+    cursor: pointer;
+    min-height: 56px;
+    transition: color 320ms var(--nd-ease);
+  }
+
+  .nd-preset__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--nd-cream-faint);
+    box-shadow: 0 0 0 1px rgba(255, 214, 153, 0.18);
+    transition:
+      background-color 380ms var(--nd-ease),
+      box-shadow 380ms var(--nd-ease),
+      transform 380ms var(--nd-ease);
+    flex-shrink: 0;
+  }
+
+  .nd-preset__shell:hover .nd-preset__dot,
+  .nd-preset__shell:focus-within .nd-preset__dot,
+  .nd-preset__shell[open] .nd-preset__dot {
+    background: var(--nd-amber);
+    box-shadow:
+      0 0 0 1px rgba(255, 177, 74, 0.5),
+      0 0 12px rgba(255, 177, 74, 0.85),
+      0 0 28px rgba(255, 177, 74, 0.45);
+    transform: scale(1.08);
+  }
+
+  .nd-preset__num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .nd-preset__freq {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    min-width: 92px;
+  }
+
+  .nd-preset__freq-num {
+    font-family: var(--nd-mono);
+    font-size: clamp(20px, 2.4vw, 26px);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--nd-amber);
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 0 14px rgba(255, 177, 74, 0.35);
+  }
+
+  .nd-preset__freq-unit {
+    color: var(--nd-amber-soft);
+    opacity: 0.7;
+  }
+
+  .nd-preset__title-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .nd-preset__title {
+    font-family: var(--nd-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-variation-settings:
+      "SOFT" 100,
+      "opsz" 144;
+    font-size: clamp(20px, 2.6vw, 30px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--nd-cream);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .nd-preset__feat {
+    text-transform: none;
+    letter-spacing: 0.04em;
+    font-size: 11px;
+  }
+
+  .nd-preset__meta {
+    display: inline-flex;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .nd-preset__cue {
+    font-family: var(--nd-mono);
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    color: var(--nd-cream-faint);
+    padding: 6px 10px;
+    border: 1px solid var(--nd-rule);
+    transition:
+      color 320ms var(--nd-ease),
+      border-color 320ms var(--nd-ease),
+      background-color 320ms var(--nd-ease);
+  }
+
+  .nd-preset__shell:hover .nd-preset__cue,
+  .nd-preset__shell:focus-within .nd-preset__cue {
+    color: var(--nd-amber);
+    border-color: var(--nd-amber);
+  }
+
+  .nd-preset__shell[open] .nd-preset__cue {
+    color: var(--nd-oxblood-deep);
+    background: var(--nd-amber);
+    border-color: var(--nd-amber);
+  }
+
+  .nd-preset__shell[open] .nd-preset__cue::before {
+    content: "ON ";
+  }
+
+  /* Mobile: collapse the grid to two rows. */
+  @media (max-width: 760px) {
+    .nd-preset__head {
+      grid-template-columns: auto auto 1fr auto;
+      row-gap: 6px;
+    }
+
+    .nd-preset__num {
+      grid-row: 1;
+      grid-column: 1;
+    }
+
+    .nd-preset__dot {
+      grid-row: 1;
+      grid-column: 1;
+      display: none;
+    }
+
+    .nd-preset__freq {
+      grid-row: 1;
+      grid-column: 2;
+      min-width: 0;
+    }
+
+    .nd-preset__title-wrap {
+      grid-row: 2;
+      grid-column: 1 / -1;
+    }
+
+    .nd-preset__meta {
+      grid-row: 1;
+      grid-column: 3;
+      justify-self: end;
+    }
+
+    .nd-preset__cue {
+      grid-row: 1;
+      grid-column: 4;
+    }
+  }
+
+  .nd-preset__body {
+    padding: 8px clamp(16px, 2.4vw, 24px) clamp(18px, 2.4vw, 24px);
+    border-top: 1px solid var(--nd-rule-warm);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .nd-preset__desc {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--nd-cream-dim);
+    max-width: 60ch;
+  }
+
+  .nd-preset__embed {
+    --nd-embed-r: 0;
+    border-radius: 0;
+    overflow: hidden;
+    border: 1px solid var(--nd-rule-warm);
+  }
+
+  .nd-preset__embed iframe {
+    display: block;
+    width: 100%;
+  }
+
+  .nd-preset__pending {
+    margin: 0;
+    padding: 14px 16px;
+    border: 1px dashed var(--nd-rule);
+    color: var(--nd-cream-faint);
+  }
+
+  .nd-preset__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .nd-preset__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    min-height: 44px;
+    font-family: var(--nd-mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--nd-oxblood-deep);
+    background: var(--nd-amber);
+    border: 1px solid var(--nd-amber);
+    transition:
+      background-color 320ms var(--nd-ease),
+      box-shadow 320ms var(--nd-ease);
+  }
+
+  .nd-preset__link:hover,
+  .nd-preset__link:focus-visible {
+    color: var(--nd-oxblood-deep);
+    background: var(--nd-amber-soft);
+    box-shadow: 0 0 0 1px rgba(255, 177, 74, 0.4);
+  }
+
+  .nd-preset__link--ghost {
+    background: transparent;
+    color: var(--nd-amber);
+    border-color: var(--nd-rule);
+  }
+
+  .nd-preset__link--ghost:hover,
+  .nd-preset__link--ghost:focus-visible {
+    background: transparent;
+    color: var(--nd-amber);
+    border-color: var(--nd-amber);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nd-preset__shell,
+    .nd-preset__dot,
+    .nd-preset__cue,
+    .nd-preset__link {
+      transition: none !important;
+    }
+  }
+</style>

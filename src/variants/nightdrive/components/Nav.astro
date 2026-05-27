@@ -1,0 +1,133 @@
+---
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+
+const links = [
+  { label: "Tune", href: "#music" },
+  { label: "Reels", href: "#video" },
+  { label: "Sign-off", href: "#contact" },
+];
+---
+
+<nav class="nd-nav" aria-label="Primary">
+  <div class="nd-nav__inner nd-shell">
+    <a class="nd-nav__mark" href="#top" aria-label={`${name} — home`}>
+      <span class="nd-nav__dot" aria-hidden="true"></span>
+      <span class="nd-nav__call">102.7 / {name.split(" ")[0]}</span>
+    </a>
+    <ul class="nd-nav__list">
+      {
+        links.map((link) => (
+          <li>
+            <a class="nd-nav__link" href={link.href}>
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .nd-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(18, 4, 7, 0.65) 0%,
+      rgba(18, 4, 7, 0) 100%
+    );
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .nd-nav__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding-block: clamp(16px, 2vw, 22px);
+    pointer-events: auto;
+  }
+
+  .nd-nav__mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--nd-mono);
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--nd-cream);
+    min-height: 44px;
+    padding-block: 8px;
+  }
+
+  .nd-nav__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--nd-amber);
+    box-shadow: 0 0 8px var(--nd-amber);
+    animation: nd-nav-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes nd-nav-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.45;
+    }
+  }
+
+  .nd-nav__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: clamp(14px, 2.4vw, 28px);
+  }
+
+  .nd-nav__link {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--nd-mono);
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--nd-cream-dim);
+    min-height: 44px;
+    padding-block: 8px;
+    transition: color 320ms var(--nd-ease);
+  }
+
+  .nd-nav__link:hover,
+  .nd-nav__link:focus-visible {
+    color: var(--nd-amber);
+  }
+
+  @media (max-width: 520px) {
+    .nd-nav__call {
+      display: none;
+    }
+    .nd-nav__list {
+      gap: 14px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nd-nav__dot {
+      animation: none !important;
+    }
+  }
+</style>

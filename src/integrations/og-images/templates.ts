@@ -398,9 +398,20 @@ export const renderDefault = (): Node =>
     ],
   );
 
+import { renderCassette } from "../../variants/cassette/og-template";
+import { renderNightdrive } from "../../variants/nightdrive/og-template";
+import { renderPoster } from "../../variants/poster/og-template";
+import { renderSynesthesia } from "../../variants/synesthesia/og-template";
+import { renderVerse } from "../../variants/verse/og-template";
+
 export const TEMPLATES: Record<string, () => Node> = {
   default: renderDefault,
   brutalist: renderBrutalist,
   studio: renderStudio,
   parallax: renderParallax,
+  nightdrive: renderNightdrive,
+  cassette: renderCassette,
+  verse: renderVerse,
+  synesthesia: renderSynesthesia,
+  poster: renderPoster,
 };

@@ -1,0 +1,408 @@
+---
+import { formatYear } from "../../../lib/formatDate";
+
+interface Props {
+  name: string;
+  tagline: string;
+  origin: string;
+  basedIn: string;
+  /** Catalog/edition tag printed on the cassette label */
+  catalogNumber?: string;
+  /** Year printed on the cassette body */
+  year?: number;
+}
+
+const {
+  name,
+  tagline,
+  origin,
+  basedIn,
+  catalogNumber = "SC-001",
+  year = new Date().getFullYear(),
+} = Astro.props;
+
+const [first, ...rest] = name.split(" ");
+const last = rest.join(" ");
+---
+
+<header class="cz-hero cz-panel" id="top" aria-label={`${name} — cassette`}>
+  <div class="cz-hero__regplate" aria-hidden="true"></div>
+
+  <p class="cz-mono cz-hero__edition" aria-hidden="true">
+    Edition / {formatYear(new Date(`${year}-01-01`))} — Cassette J-Card
+  </p>
+
+  <div class="cz-cassette" role="img" aria-label={`Cassette body printed with ${name}`}>
+    <div class="cz-cassette__shell">
+      <div class="cz-cassette__label">
+        <div class="cz-cassette__label-head">
+          <span class="cz-mono">{catalogNumber}</span>
+          <span class="cz-mono">TYPE II</span>
+        </div>
+
+        <div class="cz-cassette__name">
+          <span class="cz-cassette__name-first">{first}</span>
+          <span class="cz-cassette__name-last">{last}</span>
+        </div>
+
+        <p class="cz-cassette__tagline">{tagline}</p>
+
+        <div class="cz-cassette__reels" aria-hidden="true">
+          <span class="cz-reel cz-reel--a">
+            <span class="cz-reel__hub">
+              <span class="cz-reel__tooth"></span>
+              <span class="cz-reel__tooth"></span>
+              <span class="cz-reel__tooth"></span>
+              <span class="cz-reel__tooth"></span>
+              <span class="cz-reel__tooth"></span>
+              <span class="cz-reel__tooth"></span>
+            </span>
+          </span>
+          <span class="cz-cassette__window">
+            <span class="cz-cassette__tape"></span>
+          </span>
+          <span class="cz-reel cz-reel--b">
+            <span class="cz-reel__hub">
+              <span class="cz-reel__tooth"></span>
+              <span class="cz-reel__tooth"></span>
+              <span class="cz-reel__tooth"></span>
+              <span class="cz-reel__tooth"></span>
+              <span class="cz-reel__tooth"></span>
+              <span class="cz-reel__tooth"></span>
+            </span>
+          </span>
+        </div>
+
+        <div class="cz-cassette__label-foot">
+          <span class="cz-mono">{origin} → {basedIn}</span>
+          <span class="cz-mono">Side A / Side B</span>
+        </div>
+      </div>
+
+      <div class="cz-cassette__notch cz-cassette__notch--l" aria-hidden="true"></div>
+      <div class="cz-cassette__notch cz-cassette__notch--r" aria-hidden="true"></div>
+    </div>
+
+    <span class="cz-hand cz-hero__scribble" aria-hidden="true">play me.</span>
+  </div>
+
+  <p class="cz-mono cz-hero__scroll" aria-hidden="true">
+    <span class="cz-hero__rule"></span>
+    Unfold
+  </p>
+</header>
+
+<style>
+  .cz-hero {
+    margin-top: clamp(12px, 3vw, 24px);
+    padding: clamp(20px, 5vw, 40px) clamp(14px, 4vw, 32px)
+      clamp(28px, 5vw, 44px);
+  }
+
+  /* Off-register magenta block: prints behind the title */
+  .cz-hero__regplate {
+    position: absolute;
+    inset: 12px 16px auto auto;
+    width: clamp(80px, 18vw, 140px);
+    height: clamp(80px, 18vw, 140px);
+    background: var(--cz-reg-magenta);
+    mix-blend-mode: multiply;
+    transform: translate(6px, -4px);
+    pointer-events: none;
+    border-radius: 2px;
+  }
+
+  .cz-hero__edition {
+    display: block;
+    margin: 0 0 clamp(18px, 3vw, 28px);
+  }
+
+  /* CASSETTE BODY ------------------------------------------------------ */
+  .cz-cassette {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    aspect-ratio: 1.6 / 1;
+    perspective: 800px;
+  }
+
+  .cz-cassette__shell {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background:
+      /* slight top sheen */
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.06) 0%,
+        rgba(0, 0, 0, 0) 14%
+      ),
+      /* body */
+      linear-gradient(180deg, var(--cz-tape-2) 0%, var(--cz-tape) 60%);
+    border-radius: 6px;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.08) inset,
+      0 -1px 0 rgba(0, 0, 0, 0.4) inset,
+      0 22px 36px -18px rgba(22, 17, 11, 0.5),
+      0 4px 8px -2px rgba(22, 17, 11, 0.3);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Tape body texture — faint vertical grooves */
+  .cz-cassette__shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.02) 0 1px,
+      transparent 1px 5px
+    );
+    pointer-events: none;
+  }
+
+  .cz-cassette__label {
+    position: absolute;
+    inset: clamp(14px, 3.5%, 22px) clamp(14px, 3.5%, 22px)
+      clamp(22px, 6%, 36px);
+    background:
+      /* faint scan lines on the printed sticker */
+      repeating-linear-gradient(
+        0deg,
+        rgba(22, 17, 11, 0.014) 0 1px,
+        transparent 1px 3px
+      ),
+      var(--cz-stock);
+    border: 1px solid rgba(22, 17, 11, 0.25);
+    border-radius: 3px;
+    padding: clamp(10px, 2.4vw, 18px) clamp(12px, 3vw, 22px);
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto;
+    gap: clamp(6px, 1.2vw, 12px);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.5) inset,
+      0 6px 14px -8px rgba(22, 17, 11, 0.5);
+  }
+
+  .cz-cassette__label-head,
+  .cz-cassette__label-foot {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .cz-cassette__name {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--cz-hand);
+    color: var(--cz-marker);
+    line-height: 0.92;
+    text-shadow: 0 0 1px rgba(196, 48, 43, 0.25);
+  }
+
+  .cz-cassette__name-first,
+  .cz-cassette__name-last {
+    display: block;
+    font-size: clamp(34px, 8.5vw, 76px);
+    letter-spacing: -0.01em;
+  }
+
+  .cz-cassette__name-first {
+    transform: rotate(-2deg);
+    transform-origin: left center;
+  }
+
+  .cz-cassette__name-last {
+    padding-left: clamp(12px, 4vw, 36px);
+    transform: rotate(-1deg);
+    transform-origin: left center;
+  }
+
+  .cz-cassette__tagline {
+    margin: 0;
+    font-family: var(--cz-mono);
+    font-size: clamp(10px, 2.4vw, 12px);
+    line-height: 1.5;
+    color: var(--cz-ink-soft);
+    max-width: 36ch;
+  }
+
+  /* Reels + tape window ------------------------------------------------ */
+  .cz-cassette__reels {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: clamp(8px, 2vw, 16px);
+    padding: clamp(2px, 0.6vw, 6px) 0;
+  }
+
+  .cz-reel {
+    position: relative;
+    width: clamp(56px, 14vw, 96px);
+    height: clamp(56px, 14vw, 96px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+      radial-gradient(
+        circle at 50% 50%,
+        var(--cz-window) 0%,
+        var(--cz-window) 28%,
+        var(--cz-tape) 30%,
+        var(--cz-tape-2) 100%
+      );
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.06) inset,
+      0 0 0 1px rgba(22, 17, 11, 0.4) inset,
+      0 4px 8px -4px rgba(22, 17, 11, 0.4);
+    justify-self: center;
+  }
+
+  .cz-reel--a {
+    justify-self: end;
+  }
+
+  .cz-reel--b {
+    justify-self: start;
+  }
+
+  .cz-reel__hub {
+    position: absolute;
+    inset: 30%;
+    border-radius: 50%;
+    background: var(--cz-tape-2);
+    box-shadow:
+      0 0 0 2px rgba(22, 17, 11, 0.5) inset,
+      0 0 0 1px rgba(255, 255, 255, 0.04);
+    display: grid;
+    place-items: center;
+    transform-origin: 50% 50%;
+    animation: cz-spin 8s linear infinite;
+  }
+
+  /* Six teeth radiating from hub */
+  .cz-reel__tooth {
+    position: absolute;
+    width: 2px;
+    height: 40%;
+    background: rgba(239, 231, 210, 0.12);
+    top: 50%;
+    left: 50%;
+    transform-origin: 50% 0;
+  }
+
+  .cz-reel__tooth:nth-child(1) {
+    transform: translate(-50%, 0) rotate(0deg);
+  }
+  .cz-reel__tooth:nth-child(2) {
+    transform: translate(-50%, 0) rotate(60deg);
+  }
+  .cz-reel__tooth:nth-child(3) {
+    transform: translate(-50%, 0) rotate(120deg);
+  }
+  .cz-reel__tooth:nth-child(4) {
+    transform: translate(-50%, 0) rotate(180deg);
+  }
+  .cz-reel__tooth:nth-child(5) {
+    transform: translate(-50%, 0) rotate(240deg);
+  }
+  .cz-reel__tooth:nth-child(6) {
+    transform: translate(-50%, 0) rotate(300deg);
+  }
+
+  /* Opposite-direction spool to feel mechanically linked */
+  .cz-reel--b .cz-reel__hub {
+    animation-duration: 8.4s;
+    animation-direction: reverse;
+  }
+
+  .cz-cassette__window {
+    width: clamp(70px, 18vw, 140px);
+    height: clamp(28px, 7vw, 44px);
+    background:
+      linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.6) 0%,
+        rgba(0, 0, 0, 0.45) 100%
+      );
+    border: 1px solid rgba(22, 17, 11, 0.6);
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.08),
+      0 -1px 0 rgba(255, 255, 255, 0.04) inset;
+  }
+
+  .cz-cassette__tape {
+    position: absolute;
+    inset: 35% 0;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(120, 90, 50, 0) 0%,
+        rgba(160, 120, 70, 0.6) 50%,
+        rgba(120, 90, 50, 0) 100%
+      );
+  }
+
+  /* Reel notches at the bottom of the body */
+  .cz-cassette__notch {
+    position: absolute;
+    bottom: 8px;
+    width: clamp(10px, 2vw, 16px);
+    height: clamp(10px, 2vw, 16px);
+    background: var(--cz-stock);
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(22, 17, 11, 0.4) inset;
+  }
+
+  .cz-cassette__notch--l {
+    left: clamp(16px, 5vw, 32px);
+  }
+
+  .cz-cassette__notch--r {
+    right: clamp(16px, 5vw, 32px);
+  }
+
+  /* "play me" scribble bottom-right */
+  .cz-hero__scribble {
+    position: absolute;
+    right: 4%;
+    bottom: -14px;
+    font-size: clamp(28px, 6vw, 44px);
+    line-height: 1;
+    transform: rotate(-6deg);
+  }
+
+  /* Unfold indicator */
+  .cz-hero__scroll {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: clamp(28px, 5vw, 44px) 0 0;
+    color: var(--cz-ink-soft);
+  }
+
+  .cz-hero__rule {
+    display: inline-block;
+    width: clamp(28px, 5vw, 48px);
+    height: 1px;
+    background: currentColor;
+    opacity: 0.5;
+  }
+
+  @keyframes cz-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cz-reel__hub {
+      animation: none !important;
+    }
+  }
+</style>

@@ -1,0 +1,344 @@
+---
+/**
+ * Tour dates — the spine of the poster.
+ *
+ * IMPORTANT: these are PLACEHOLDER dates. The repo has no `tours` content
+ * collection (intentional — see scaffolding contract; agents must not add
+ * schema fields). When a real tour collection is wired up these can be
+ * replaced. The dates are flagged with `placeholder: true` here for grep.
+ */
+
+interface TourDate {
+  placeholder: true;
+  date: Date;
+  city: string;
+  venue: string;
+  status: "on-sale" | "sold-out" | "low-tix";
+  ticketUrl?: string;
+}
+
+const PLACEHOLDER_DATES: TourDate[] = [
+  {
+    placeholder: true,
+    date: new Date("2026-03-14"),
+    city: "Memphis, TN",
+    venue: "Hi Tone Cafe",
+    status: "low-tix",
+    ticketUrl: undefined,
+  },
+  {
+    placeholder: true,
+    date: new Date("2026-03-21"),
+    city: "Nashville, TN",
+    venue: "The Basement East",
+    status: "on-sale",
+    ticketUrl: undefined,
+  },
+  {
+    placeholder: true,
+    date: new Date("2026-04-02"),
+    city: "Atlanta, GA",
+    venue: "Aisle 5",
+    status: "on-sale",
+    ticketUrl: undefined,
+  },
+  {
+    placeholder: true,
+    date: new Date("2026-04-11"),
+    city: "Brooklyn, NY",
+    venue: "Baby's All Right",
+    status: "sold-out",
+    ticketUrl: undefined,
+  },
+  {
+    placeholder: true,
+    date: new Date("2026-04-18"),
+    city: "Chicago, IL",
+    venue: "Sleeping Village",
+    status: "on-sale",
+    ticketUrl: undefined,
+  },
+  {
+    placeholder: true,
+    date: new Date("2026-05-02"),
+    city: "Austin, TX",
+    venue: "Mohawk (Inside)",
+    status: "on-sale",
+    ticketUrl: undefined,
+  },
+  {
+    placeholder: true,
+    date: new Date("2026-05-15"),
+    city: "Los Angeles, CA",
+    venue: "The Echo",
+    status: "low-tix",
+    ticketUrl: undefined,
+  },
+];
+
+const DAY = new Intl.DateTimeFormat("en-US", { day: "2-digit" });
+const MONTH = new Intl.DateTimeFormat("en-US", { month: "short" });
+const WEEKDAY = new Intl.DateTimeFormat("en-US", { weekday: "short" });
+
+const STATUS_COPY: Record<TourDate["status"], string> = {
+  "on-sale": "On Sale",
+  "low-tix": "Low Tix",
+  "sold-out": "Sold Out",
+};
+---
+
+<section class="po-section po-shell" id="tour">
+  <header class="po-section__head">
+    <h2 class="po-section__title po-ink2" data-text="Tour">Tour</h2>
+    <span class="po-section__num">No. 01 / Spring '26</span>
+  </header>
+
+  <p class="po-tour__disclaimer">
+    Placeholder routing — dates subject to change. Sign up for the mailing
+    list for confirmations.
+  </p>
+
+  <ol class="po-tour">
+    {
+      PLACEHOLDER_DATES.map((d, idx) => {
+        const sold = d.status === "sold-out";
+        const RowTag = d.ticketUrl && !sold ? "a" : "div";
+        return (
+          <li class="po-tour__item">
+            <RowTag
+              class:list={[
+                "po-tour__row",
+                sold && "po-tour__row--sold",
+              ]}
+              {...(d.ticketUrl && !sold
+                ? { href: d.ticketUrl, target: "_blank", rel: "noopener" }
+                : {})}
+            >
+              <span class="po-tour__date">
+                <span class="po-tour__weekday">
+                  {WEEKDAY.format(d.date).toUpperCase()}
+                </span>
+                <span
+                  class="po-tour__day po-ink2"
+                  data-text={DAY.format(d.date)}
+                >
+                  {DAY.format(d.date)}
+                </span>
+                <span class="po-tour__month">
+                  {MONTH.format(d.date).toUpperCase()}
+                </span>
+              </span>
+
+              <span class="po-tour__where">
+                <span class="po-tour__city">{d.city}</span>
+                <span class="po-tour__venue">{d.venue}</span>
+              </span>
+
+              <span class="po-tour__action">
+                <span
+                  class:list={[
+                    "po-tag",
+                    d.status === "low-tix" && "po-tag--pink",
+                    d.status === "sold-out" && "po-tour__sold",
+                  ]}
+                >
+                  {STATUS_COPY[d.status]}
+                </span>
+                {!sold && (
+                  <span class="po-tour__arrow" aria-hidden="true">
+                    →
+                  </span>
+                )}
+              </span>
+
+              <span class="po-tour__index po-meta" aria-hidden="true">
+                {String(idx + 1).padStart(2, "0")}
+              </span>
+            </RowTag>
+          </li>
+        );
+      })
+    }
+  </ol>
+</section>
+
+<style>
+  .po-tour__disclaimer {
+    font-family: var(--po-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--po-pink);
+    margin: 0 0 clamp(20px, 3vw, 28px);
+  }
+
+  .po-tour {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 3px solid var(--po-ink);
+  }
+
+  .po-tour__item {
+    border-bottom: 3px solid var(--po-ink);
+    position: relative;
+  }
+
+  /* Every other row gets a pink wash on its background. Multiply-friendly. */
+  .po-tour__item:nth-child(even) {
+    background:
+      linear-gradient(
+        to right,
+        rgba(255, 51, 102, 0.12),
+        rgba(255, 51, 102, 0.04)
+      );
+  }
+
+  .po-tour__row {
+    display: grid;
+    grid-template-columns: minmax(120px, 160px) 1fr auto 40px;
+    grid-template-areas: "date where action idx";
+    gap: clamp(12px, 2vw, 28px);
+    align-items: center;
+    padding: clamp(14px, 2vw, 24px) clamp(8px, 1.6vw, 16px);
+    color: var(--po-ink);
+    min-height: 80px;
+    transition: background-color 200ms ease-out, transform 200ms ease-out;
+  }
+
+  .po-tour__row:hover:not(.po-tour__row--sold) {
+    background: rgba(10, 31, 74, 0.06);
+    transform: translateX(2px);
+  }
+
+  .po-tour__row--sold {
+    opacity: 0.6;
+    cursor: default;
+  }
+
+  .po-tour__date {
+    grid-area: date;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    column-gap: 10px;
+    align-items: baseline;
+  }
+
+  .po-tour__weekday {
+    grid-row: 1;
+    grid-column: 1;
+    font-family: var(--po-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--po-pink);
+    text-transform: uppercase;
+  }
+
+  .po-tour__day {
+    grid-row: 1 / 3;
+    grid-column: 2;
+    font-family: var(--po-display);
+    font-weight: 900;
+    font-size: clamp(44px, 7vw, 80px);
+    line-height: 0.85;
+    color: var(--po-ink);
+  }
+
+  .po-tour__month {
+    grid-row: 2;
+    grid-column: 1;
+    font-family: var(--po-display);
+    font-weight: 900;
+    font-size: clamp(14px, 2vw, 22px);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .po-tour__where {
+    grid-area: where;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .po-tour__city {
+    font-family: var(--po-display);
+    font-weight: 900;
+    font-size: clamp(20px, 2.6vw, 32px);
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+  }
+
+  .po-tour__venue {
+    font-family: var(--po-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--po-ink);
+    opacity: 0.78;
+  }
+
+  .po-tour__action {
+    grid-area: action;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .po-tour__arrow {
+    font-family: var(--po-display);
+    font-weight: 900;
+    font-size: 22px;
+    color: var(--po-pink);
+    transition: transform 200ms ease-out;
+  }
+
+  .po-tour__row:hover .po-tour__arrow {
+    transform: translateX(4px);
+  }
+
+  .po-tour__sold {
+    color: var(--po-ink);
+    background: var(--po-paper);
+    text-decoration: line-through;
+    text-decoration-thickness: 3px;
+    text-decoration-color: var(--po-pink);
+  }
+
+  .po-tour__index {
+    grid-area: idx;
+    font-family: var(--po-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--po-ink);
+    opacity: 0.4;
+    text-align: right;
+  }
+
+  @media (max-width: 720px) {
+    .po-tour__row {
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        "date    idx"
+        "where   where"
+        "action  action";
+      gap: 10px 12px;
+      padding-block: 18px;
+    }
+
+    .po-tour__action {
+      justify-self: start;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .po-tour__day {
+      font-size: 56px;
+    }
+  }
+</style>

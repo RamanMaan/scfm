@@ -1,0 +1,284 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  videos: CollectionEntry<"videos">[];
+  channelUrl: string;
+}
+
+const { videos, channelUrl } = Astro.props;
+
+const watchUrl = (video: CollectionEntry<"videos">): string => {
+  if (video.data.youtubeUrl) return video.data.youtubeUrl;
+  if (video.data.youtubeId) {
+    return `https://www.youtube.com/watch?v=${video.data.youtubeId}`;
+  }
+  return channelUrl;
+};
+
+const thumbHi = (id: string) => `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
+const thumbLo = (id: string) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+
+const THUMB_SIZES = "(min-width: 720px) 50vw, 100vw";
+const THUMB_WIDTHS = [320, 640, 960];
+---
+
+<section class="cz-section">
+  <div class="cz-videos cz-panel">
+    <header class="cz-runner">
+      <span class="cz-runner__title">Bonus footage</span>
+      <span class="cz-runner__meta">
+        Insert &middot; {String(videos.length).padStart(2, "0")} reels
+      </span>
+    </header>
+
+    {
+      videos.length > 0 ? (
+        <ul class="cz-videos__grid">
+          {videos.map((video) => {
+            const id = video.data.youtubeId;
+            return (
+              <li class="cz-video">
+                <a
+                  class="cz-video__card"
+                  href={watchUrl(video)}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <span class="cz-video__sprocket" aria-hidden="true">
+                    <span class="cz-video__hole" />
+                    <span class="cz-video__hole" />
+                    <span class="cz-video__hole" />
+                    <span class="cz-video__hole" />
+                  </span>
+                  <span class="cz-video__media" aria-hidden="true">
+                    {id ? (
+                      <Image
+                        src={thumbHi(id)}
+                        data-fallback={thumbLo(id)}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        width={1280}
+                        height={720}
+                        widths={THUMB_WIDTHS}
+                        sizes={THUMB_SIZES}
+                      />
+                    ) : (
+                      <span class="cz-video__placeholder" />
+                    )}
+                    <span class="cz-video__scrim" />
+                  </span>
+                  <span class="cz-video__body">
+                    <span class="cz-mono cz-video__tag">VHS</span>
+                    <span class="cz-video__title">{video.data.title}</span>
+                    <span class="cz-video__arrow" aria-hidden="true">▸</span>
+                  </span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p class="cz-empty">
+          <a
+            class="cz-empty__link"
+            href={channelUrl}
+            target="_blank"
+            rel="noopener"
+          >
+            <span class="cz-empty__title">Open the channel</span>
+            <span class="cz-empty__arrow" aria-hidden="true">▸</span>
+          </a>
+        </p>
+      )
+    }
+  </div>
+</section>
+
+<script>
+  const imgs = document.querySelectorAll<HTMLImageElement>(
+    ".cz-video__media img[data-fallback]",
+  );
+  imgs.forEach((img) => {
+    const handleError = () => {
+      const fallback = img.dataset.fallback;
+      if (!fallback || img.src === fallback) return;
+      img.removeAttribute("srcset");
+      img.src = fallback;
+    };
+    img.addEventListener("error", handleError, { once: true });
+  });
+</script>
+
+<style>
+  .cz-videos__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(14px, 2.4vw, 22px);
+  }
+
+  @media (min-width: 720px) {
+    .cz-videos__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .cz-video {
+    margin: 0;
+  }
+
+  .cz-video__card {
+    position: relative;
+    display: block;
+    background: var(--cz-stock-2);
+    border: 1px solid var(--cz-rule);
+    border-radius: 2px;
+    overflow: hidden;
+    color: var(--cz-ink);
+    isolation: isolate;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.5) inset,
+      0 8px 16px -10px rgba(22, 17, 11, 0.35);
+  }
+
+  /* Sprocket holes across the top — film-strip header */
+  .cz-video__sprocket {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 8px;
+    background: var(--cz-tape);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  }
+
+  .cz-video__hole {
+    width: 14px;
+    height: 6px;
+    background: var(--cz-stock);
+    border-radius: 1px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25) inset;
+  }
+
+  .cz-video__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    background: rgba(22, 17, 11, 0.08);
+    overflow: hidden;
+  }
+
+  .cz-video__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.78) contrast(1.05) sepia(0.18);
+    transition: filter 480ms var(--cz-ease), transform 480ms var(--cz-ease);
+    transform: scale(1.02);
+  }
+
+  .cz-video__placeholder {
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        45deg,
+        rgba(22, 17, 11, 0.08) 0 8px,
+        rgba(22, 17, 11, 0.04) 8px 16px
+      );
+  }
+
+  .cz-video__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(22, 17, 11, 0) 50%,
+      rgba(22, 17, 11, 0.2) 100%
+    );
+    pointer-events: none;
+  }
+
+  .cz-video__body {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--cz-stock);
+    border-top: 1px dashed var(--cz-rule);
+  }
+
+  .cz-video__tag {
+    background: var(--cz-marker);
+    color: var(--cz-stock);
+    padding: 3px 6px;
+    border-radius: 1px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    font-weight: 700;
+  }
+
+  .cz-video__title {
+    font-family: var(--cz-sans);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--cz-ink);
+    text-wrap: balance;
+  }
+
+  .cz-video__arrow {
+    color: var(--cz-ink-soft);
+    font-size: 14px;
+    transition: color 200ms var(--cz-ease), transform 200ms var(--cz-ease);
+  }
+
+  .cz-video__card:hover .cz-video__media img {
+    filter: saturate(0.92) contrast(1.08) sepia(0.08);
+    transform: scale(1.05);
+  }
+
+  .cz-video__card:hover .cz-video__arrow {
+    color: var(--cz-marker);
+    transform: translateX(3px);
+  }
+
+  .cz-video__card:hover .cz-video__title {
+    color: var(--cz-marker);
+  }
+
+  .cz-empty {
+    margin: 0;
+  }
+
+  .cz-empty__link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 10px 0;
+    min-height: 44px;
+  }
+
+  .cz-empty__title {
+    font-family: var(--cz-sans);
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .cz-empty__arrow {
+    color: var(--cz-marker);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cz-video__media img {
+      transition: none;
+    }
+  }
+</style>

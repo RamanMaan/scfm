@@ -1,0 +1,148 @@
+---
+interface Props {
+  name: string;
+  catalogNumber?: string;
+}
+
+const { name, catalogNumber = "SC-001" } = Astro.props;
+
+const links = [
+  { label: "Side A", href: "#side-a" },
+  { label: "Side B", href: "#side-b" },
+  { label: "Liner", href: "#liner" },
+  { label: "Mail", href: "#mail" },
+];
+---
+
+<nav class="cz-spine" aria-label="Primary">
+  <div class="cz-spine__inner">
+    <a class="cz-spine__mark" href="#top" aria-label={`${name} — home`}>
+      <span class="cz-spine__bullet" aria-hidden="true"></span>
+      <span class="cz-spine__name">{name}</span>
+      <span class="cz-spine__cat" aria-hidden="true">{catalogNumber}</span>
+    </a>
+    <ul class="cz-spine__list">
+      {
+        links.map((link) => (
+          <li>
+            <a class="cz-spine__link" href={link.href}>
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</nav>
+
+<style>
+  /* The spine reads vertically on desktop (true cassette spine) and lays
+     horizontally on narrow screens so 375px works. */
+  .cz-spine {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(22, 17, 11, 0.98) 0%,
+        rgba(22, 17, 11, 0.94) 100%
+      );
+    color: var(--cz-stock);
+    border-bottom: 1px solid rgba(255, 235, 195, 0.18);
+    box-shadow: 0 6px 14px -10px rgba(0, 0, 0, 0.6);
+  }
+
+  .cz-spine::before {
+    /* Print registration crosshair */
+    content: "+";
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-family: var(--cz-mono);
+    font-size: 10px;
+    color: var(--cz-marker);
+    letter-spacing: 0;
+    opacity: 0.85;
+    pointer-events: none;
+  }
+
+  .cz-spine__inner {
+    max-width: 880px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 12px clamp(12px, 3vw, 24px);
+    min-height: 44px;
+  }
+
+  .cz-spine__mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--cz-stock);
+  }
+
+  .cz-spine__bullet {
+    width: 8px;
+    height: 8px;
+    background: var(--cz-marker);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px rgba(196, 48, 43, 0.18);
+  }
+
+  .cz-spine__name {
+    font-family: var(--cz-mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .cz-spine__cat {
+    font-family: var(--cz-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: rgba(239, 231, 210, 0.6);
+  }
+
+  .cz-spine__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: clamp(10px, 2vw, 22px);
+  }
+
+  .cz-spine__link {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 4px;
+    min-height: 44px;
+    color: rgba(239, 231, 210, 0.78);
+    font-family: var(--cz-mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    transition: color 200ms var(--cz-ease);
+  }
+
+  .cz-spine__link:hover {
+    color: var(--cz-marker);
+  }
+
+  @media (max-width: 480px) {
+    .cz-spine__cat {
+      display: none;
+    }
+    .cz-spine__list {
+      gap: 10px;
+    }
+    .cz-spine__link {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+    }
+  }
+</style>

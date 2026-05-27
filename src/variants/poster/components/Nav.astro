@@ -1,0 +1,140 @@
+---
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+
+const links = [
+  { label: "Tour", href: "#tour" },
+  { label: "Music", href: "#music" },
+  { label: "Video", href: "#video" },
+  { label: "Mail", href: "#contact" },
+];
+---
+
+<nav class="po-nav" aria-label="Primary">
+  <div class="po-nav__strip">
+    <a class="po-nav__brand" href="#top">
+      <span class="po-nav__brand-dot" aria-hidden="true"></span>
+      <span class="po-nav__brand-name">{name}</span>
+    </a>
+    <ul class="po-nav__list">
+      {
+        links.map((link) => (
+          <li>
+            <a class="po-nav__link" href={link.href}>
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <div class="po-nav__rule" aria-hidden="true"></div>
+</nav>
+
+<style>
+  .po-nav {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: var(--po-paper);
+  }
+
+  /* Ticket-stub strip: short, hard edges, two-tone. */
+  .po-nav__strip {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px clamp(16px, 4vw, 40px);
+    background: var(--po-ink);
+    color: var(--po-paper);
+    min-height: 44px;
+  }
+
+  .po-nav__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--po-display);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: clamp(14px, 1.8vw, 18px);
+    line-height: 1;
+    color: currentColor;
+    min-height: 44px;
+  }
+
+  .po-nav__brand-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--po-pink);
+    border-radius: 50%;
+    /* Offset registration */
+    box-shadow: 2px -2px 0 var(--po-paper);
+  }
+
+  .po-nav__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: clamp(10px, 2vw, 22px);
+  }
+
+  .po-nav__link {
+    font-family: var(--po-mono);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: currentColor;
+    padding: 12px 4px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .po-nav__link::after {
+    content: "";
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    bottom: 8px;
+    height: 2px;
+    background: var(--po-pink);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 200ms ease-out;
+  }
+
+  .po-nav__link:hover::after,
+  .po-nav__link:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  /* Off-register pink rule beneath the strip. */
+  .po-nav__rule {
+    height: 4px;
+    background: var(--po-pink);
+    margin-left: var(--po-shift-x);
+    margin-right: calc(var(--po-shift-x) * -1);
+    mix-blend-mode: multiply;
+  }
+
+  @media (max-width: 420px) {
+    .po-nav__list {
+      gap: 8px;
+    }
+    .po-nav__link {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+    }
+  }
+</style>

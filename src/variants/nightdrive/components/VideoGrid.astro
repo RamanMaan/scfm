@@ -1,0 +1,325 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  videos: CollectionEntry<"videos">[];
+  channelUrl: string;
+}
+
+const { videos, channelUrl } = Astro.props;
+
+const watchUrl = (video: CollectionEntry<"videos">): string => {
+  if (video.data.youtubeUrl) return video.data.youtubeUrl;
+  if (video.data.youtubeId) {
+    return `https://www.youtube.com/watch?v=${video.data.youtubeId}`;
+  }
+  return channelUrl;
+};
+
+const thumbHi = (id: string) => `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
+const thumbLo = (id: string) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+
+const yearOf = (video: CollectionEntry<"videos">) =>
+  video.data.releaseDate?.getUTCFullYear() ?? null;
+
+const THUMB_SIZES = "(min-width: 880px) 50vw, 100vw";
+const THUMB_WIDTHS = [480, 720, 1080];
+---
+
+<section class="nd-section nd-shell" id="video">
+  <header class="nd-section__head">
+    <p class="nd-tag">Reels / Late Broadcast</p>
+    <h2 class="nd-section__title">After hours, on tape.</h2>
+  </header>
+
+  {
+    videos.length > 0 ? (
+      <ol class="nd-vids">
+        {videos.map((video, idx) => {
+          const id = video.data.youtubeId;
+          const year = yearOf(video);
+          return (
+            <li class="nd-vid">
+              <a
+                class="nd-vid__card"
+                href={watchUrl(video)}
+                target="_blank"
+                rel="noopener"
+                aria-label={`Watch ${video.data.title} on YouTube`}
+              >
+                <span class="nd-vid__frame" aria-hidden="true">
+                  {id ? (
+                    <Image
+                      src={thumbHi(id)}
+                      data-fallback={thumbLo(id)}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      width={1280}
+                      height={720}
+                      widths={THUMB_WIDTHS}
+                      sizes={THUMB_SIZES}
+                      class="nd-vid__img"
+                    />
+                  ) : (
+                    <span class="nd-vid__placeholder" />
+                  )}
+                  <span class="nd-vid__scanlines" />
+                  <span class="nd-vid__tint" />
+                </span>
+
+                <span class="nd-vid__hud">
+                  <span class="nd-vid__hud-l nd-tag">
+                    <span class="nd-vid__rec" aria-hidden="true" />
+                    REC &middot; CH {String(idx + 1).padStart(2, "0")}
+                  </span>
+                  <span class="nd-vid__hud-r nd-tag nd-tag--dim">
+                    {year ?? "—"}
+                  </span>
+                </span>
+
+                <span class="nd-vid__body">
+                  <span class="nd-vid__title">{video.data.title}</span>
+                  <span class="nd-vid__cta nd-tag">
+                    Watch <span aria-hidden="true">&nearr;</span>
+                  </span>
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+    ) : (
+      <p class="nd-vid-empty">
+        <a class="nd-vid-empty__link" href={channelUrl} target="_blank" rel="noopener">
+          <span class="nd-vid-empty__title">Visit the channel</span>
+          <span class="nd-tag">YouTube &nearr;</span>
+        </a>
+      </p>
+    )
+  }
+</section>
+
+<script>
+  const imgs = document.querySelectorAll<HTMLImageElement>(
+    ".nd-vid__frame img[data-fallback]",
+  );
+  imgs.forEach((img) => {
+    const handleError = () => {
+      const fallback = img.dataset.fallback;
+      if (!fallback || img.src === fallback) return;
+      img.removeAttribute("srcset");
+      img.src = fallback;
+    };
+    img.addEventListener("error", handleError, { once: true });
+  });
+</script>
+
+<style>
+  .nd-vids {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(20px, 3vw, 32px);
+  }
+
+  @media (min-width: 880px) {
+    .nd-vids {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .nd-vid {
+    margin: 0;
+  }
+
+  .nd-vid__card {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    color: var(--nd-cream);
+    background: var(--nd-oxblood-deep);
+    border: 1px solid var(--nd-rule);
+    box-shadow:
+      0 30px 60px -30px rgba(0, 0, 0, 0.9),
+      inset 0 0 0 1px rgba(255, 214, 153, 0.04);
+    isolation: isolate;
+  }
+
+  .nd-vid__frame {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .nd-vid__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.7) contrast(1.08) brightness(0.78) hue-rotate(-8deg)
+      sepia(0.18);
+    transform: scale(1.02);
+    transition:
+      filter 720ms var(--nd-ease),
+      transform 720ms var(--nd-ease);
+  }
+
+  .nd-vid__placeholder {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        80% 60% at 30% 30%,
+        rgba(255, 177, 74, 0.18),
+        rgba(255, 177, 74, 0) 70%
+      ),
+      linear-gradient(140deg, var(--nd-oxblood) 0%, var(--nd-cobalt) 100%);
+  }
+
+  /* CRT scanlines + warm tint to push the late-night TV feeling. */
+  .nd-vid__scanlines {
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.18) 0px,
+      rgba(0, 0, 0, 0.18) 1px,
+      rgba(0, 0, 0, 0) 1px,
+      rgba(0, 0, 0, 0) 3px
+    );
+    mix-blend-mode: multiply;
+    opacity: 0.55;
+  }
+
+  .nd-vid__tint {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(58, 13, 18, 0.28) 0%,
+      rgba(0, 0, 0, 0) 30%,
+      rgba(0, 0, 0, 0.4) 70%,
+      rgba(0, 0, 0, 0.78) 100%
+    );
+  }
+
+  .nd-vid__hud {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: clamp(12px, 2vw, 18px);
+    pointer-events: none;
+  }
+
+  .nd-vid__hud-l {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--nd-amber);
+  }
+
+  .nd-vid__rec {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--nd-amber);
+    box-shadow: 0 0 8px rgba(255, 177, 74, 0.8);
+    animation: nd-rec 1.8s ease-in-out infinite;
+  }
+
+  @keyframes nd-rec {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  .nd-vid__body {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    padding: clamp(16px, 2.4vw, 24px);
+  }
+
+  .nd-vid__title {
+    font-family: var(--nd-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-variation-settings:
+      "SOFT" 100,
+      "opsz" 144;
+    font-size: clamp(22px, 3.6vw, 36px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: var(--nd-cream);
+    text-wrap: balance;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.6);
+    transition: color 320ms var(--nd-ease);
+  }
+
+  .nd-vid__cta {
+    flex-shrink: 0;
+    transition: color 320ms var(--nd-ease);
+  }
+
+  .nd-vid__card:hover .nd-vid__img,
+  .nd-vid__card:focus-visible .nd-vid__img {
+    filter: saturate(0.95) contrast(1.04) brightness(0.92) hue-rotate(-4deg)
+      sepia(0.1);
+    transform: scale(1.05);
+  }
+
+  .nd-vid__card:hover .nd-vid__title,
+  .nd-vid__card:focus-visible .nd-vid__title {
+    color: var(--nd-amber);
+  }
+
+  .nd-vid-empty {
+    margin: 0;
+  }
+
+  .nd-vid-empty__link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .nd-vid-empty__title {
+    font-family: var(--nd-serif);
+    font-style: italic;
+    font-size: clamp(22px, 3vw, 32px);
+    color: var(--nd-cream);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nd-vid__img,
+    .nd-vid__title,
+    .nd-vid__cta {
+      transition: none !important;
+    }
+    .nd-vid__rec {
+      animation: none !important;
+      opacity: 1;
+    }
+    .nd-vid__card:hover .nd-vid__img {
+      transform: scale(1.02);
+    }
+  }
+</style>

@@ -1,0 +1,519 @@
+---
+interface Props {
+  name: string;
+  tagline: string;
+}
+
+const { name, tagline } = Astro.props;
+
+// Split the name into stacked lines so the variable weight axis reads at
+// monumental scale on every line, mobile-first.
+const parts = name.split(/\s+/);
+---
+
+<header class="sy-hero sy-shell" id="top" aria-label={`${name} — listening`}>
+  <p class="sy-eyebrow sy-hero__eyebrow">Side A / live signal</p>
+
+  <h1 class="sy-hero__name" aria-label={name}>
+    {
+      parts.map((part) => (
+        <span class="sy-hero__word" data-letters>
+          {part.split("").map((ch) => (
+            <span class="sy-hero__letter" aria-hidden="true">
+              {ch}
+            </span>
+          ))}
+        </span>
+      ))
+    }
+  </h1>
+
+  <p class="sy-hero__tagline">{tagline}</p>
+
+  <div class="sy-hero__controls">
+    <button
+      type="button"
+      class="sy-play"
+      data-sy-play
+      aria-pressed="false"
+      aria-label="Play preview"
+    >
+      <span class="sy-play__icon" aria-hidden="true">
+        <svg
+          class="sy-play__icon-play"
+          width="18"
+          height="18"
+          viewBox="0 0 18 18"
+          fill="currentColor"
+        >
+          <path d="M3 1.5 16 9 3 16.5Z"></path>
+        </svg>
+        <svg
+          class="sy-play__icon-pause"
+          width="18"
+          height="18"
+          viewBox="0 0 18 18"
+          fill="currentColor"
+        >
+          <rect x="3" y="2" width="4" height="14"></rect>
+          <rect x="11" y="2" width="4" height="14"></rect>
+        </svg>
+      </span>
+      <span class="sy-play__label" data-sy-play-label>Press play</span>
+      <span class="sy-play__hint" data-sy-play-hint>
+        the page listens
+      </span>
+    </button>
+
+    <p class="sy-hero__status" data-sy-status aria-live="polite"></p>
+  </div>
+
+  {/* The audio element is hidden — we control it entirely through the button.
+      The file is intentionally absent from the repo for now; Steven will drop
+      a real MP3 at /preview.mp3. The page must still feel intentional silent. */}
+  <audio
+    data-sy-audio
+    src="/preview.mp3"
+    preload="none"
+    crossorigin="anonymous"
+    aria-hidden="true"
+  ></audio>
+</header>
+
+<style>
+  .sy-hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100dvh;
+    padding-block: clamp(48px, 10vw, 96px);
+    gap: clamp(24px, 4vw, 40px);
+  }
+
+  .sy-hero__eyebrow {
+    margin: 0;
+  }
+
+  /* The monumental face. Variable font axes are mutated live by JS via the
+     element's inline `font-variation-settings` style for accuracy; we only
+     read --sy-weight/--sy-opsz as the *initial* state and for reduced-motion
+     fallback. */
+  .sy-hero__name {
+    margin: 0;
+    font-family: var(--sy-serif);
+    font-size: clamp(72px, 22vw, 240px);
+    line-height: 0.86;
+    letter-spacing: -0.04em;
+    color: var(--sy-ink);
+    font-variation-settings:
+      "wght" var(--sy-weight),
+      "opsz" var(--sy-opsz),
+      "SOFT" 50,
+      "WONK" 1;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    display: flex;
+    flex-direction: column;
+    gap: 0.04em;
+    will-change: font-variation-settings;
+    transition: text-shadow 600ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    text-shadow:
+      0 0 calc(var(--sy-energy, 0) * 64px)
+        hsl(var(--sy-hue) 95% 70% / calc(var(--sy-energy, 0) * 0.55));
+  }
+
+  .sy-hero__word {
+    display: block;
+  }
+
+  .sy-hero__letter {
+    display: inline-block;
+    transform-origin: 50% 100%;
+    /* Each letter receives its own slot in the analyser band array via JS.
+       Initial state — a tiny stagger so the silent page never reads flat. */
+    transform: translateY(calc(var(--sy-l, 0) * -0.06em));
+  }
+
+  .sy-hero__tagline {
+    margin: 0;
+    max-width: 38ch;
+    font-family: var(--sy-serif);
+    font-size: clamp(18px, 2.4vw, 22px);
+    font-weight: 400;
+    font-variation-settings:
+      "wght" 360,
+      "opsz" 14;
+    line-height: 1.35;
+    color: var(--sy-ink-dim);
+    font-style: italic;
+    letter-spacing: 0.005em;
+  }
+
+  .sy-hero__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .sy-play {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--sy-ink);
+    color: var(--sy-ink);
+    padding: 14px 22px 14px 18px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    min-height: 52px;
+    font-family: var(--sy-sans);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition:
+      background-color 360ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      color 360ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      border-color 360ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      transform 360ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sy-play::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at 22% 50%,
+      hsl(var(--sy-hue) 95% 60% / calc(var(--sy-energy, 0) * 0.9)) 0%,
+      transparent 60%
+    );
+    opacity: 0.9;
+    pointer-events: none;
+    transition: opacity 320ms;
+  }
+
+  .sy-play:hover {
+    background: var(--sy-ink);
+    color: #0a0710;
+  }
+
+  .sy-play[aria-pressed="true"] {
+    background: var(--sy-ink);
+    color: #0a0710;
+    border-color: var(--sy-ink);
+  }
+
+  .sy-play__icon {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .sy-play__icon-play,
+  .sy-play__icon-pause {
+    position: absolute;
+    inset: 0;
+    transition: opacity 240ms;
+  }
+
+  .sy-play__icon-pause {
+    opacity: 0;
+  }
+
+  .sy-play[aria-pressed="true"] .sy-play__icon-play {
+    opacity: 0;
+  }
+
+  .sy-play[aria-pressed="true"] .sy-play__icon-pause {
+    opacity: 1;
+  }
+
+  .sy-play__label {
+    position: relative;
+  }
+
+  .sy-play__hint {
+    position: relative;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--sy-ink-faint);
+    border-left: 1px solid currentColor;
+    padding-left: 12px;
+    opacity: 0.7;
+  }
+
+  .sy-play:hover .sy-play__hint,
+  .sy-play[aria-pressed="true"] .sy-play__hint {
+    color: rgba(10, 7, 16, 0.55);
+    opacity: 0.85;
+  }
+
+  @media (max-width: 480px) {
+    .sy-play__hint {
+      display: none;
+    }
+  }
+
+  .sy-hero__status {
+    margin: 0;
+    font-family: var(--sy-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--sy-ink-faint);
+    font-variant-numeric: tabular-nums;
+    min-height: 1.2em;
+  }
+
+  /* Reduced motion: snapshot. Weight + opsz frozen at a "loud" moment, soft
+     glow constant. No JS reactivity is wired up (see script). */
+  @media (prefers-reduced-motion: reduce) {
+    .sy-hero__name {
+      font-variation-settings:
+        "wght" 620,
+        "opsz" 144,
+        "SOFT" 80,
+        "WONK" 1;
+      text-shadow: 0 0 48px hsl(312 90% 68% / 0.35);
+      transition: none;
+    }
+
+    .sy-hero__letter {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Synesthesia engine.
+   *
+   * Pipeline: <audio> -> MediaElementSource -> AnalyserNode -> destination.
+   * A single rAF loop reads getByteFrequencyData, throttled to ~30fps.
+   * Every paintable value is written to a CSS custom property on <body>;
+   * nothing in the DOM tree mutates, so we never thrash layout.
+   *
+   * Tear-down on `pagehide` to be a good Safari citizen (BFCache.)
+   */
+  (() => {
+    const body = document.body;
+    const button = document.querySelector<HTMLButtonElement>("[data-sy-play]");
+    const audio = document.querySelector<HTMLAudioElement>("[data-sy-audio]");
+    const status = document.querySelector<HTMLElement>("[data-sy-status]");
+    const label = document.querySelector<HTMLElement>("[data-sy-play-label]");
+    const heroName = document.querySelector<HTMLElement>(".sy-hero__name");
+    const letters = Array.from(
+      document.querySelectorAll<HTMLElement>(".sy-hero__letter"),
+    );
+
+    if (!button || !audio || !heroName) return;
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    // Seed each letter with a static phase so the silent state has subtle
+    // variance instead of a flat baseline.
+    letters.forEach((el, i) => {
+      el.style.setProperty("--sy-l", String(Math.sin(i * 1.7) * 0.4));
+    });
+
+    let ctx: AudioContext | null = null;
+    let analyser: AnalyserNode | null = null;
+    let source: MediaElementAudioSourceNode | null = null;
+    let bins: Uint8Array<ArrayBuffer> | null = null;
+    let rafId = 0;
+    let lastTick = 0;
+    let hueLerp = 268;
+    let energyLerp = 0;
+    let running = false;
+    let teardownDone = false;
+
+    const FRAME_MS = 1000 / 30; // ~30fps throttle
+
+    const setStatus = (text: string) => {
+      if (status) status.textContent = text;
+    };
+
+    const setPressed = (pressed: boolean) => {
+      button.setAttribute("aria-pressed", pressed ? "true" : "false");
+      if (label) label.textContent = pressed ? "Listening" : "Press play";
+    };
+
+    const updateLive = (live: boolean) => {
+      body.classList.toggle("sy--live", live);
+    };
+
+    const buildGraph = () => {
+      // Lazy: first user gesture. AudioContext starts suspended on Safari.
+      const AC =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext })
+          .webkitAudioContext;
+      ctx = new AC();
+      source = ctx.createMediaElementSource(audio);
+      analyser = ctx.createAnalyser();
+      analyser.fftSize = 256; // 128 useful bins, cheap on mobile
+      analyser.smoothingTimeConstant = 0.82;
+      source.connect(analyser);
+      analyser.connect(ctx.destination);
+      // Allocate over a fresh ArrayBuffer (not ArrayBufferLike) so the typed
+      // array matches `getByteFrequencyData`'s overload in TS 5.7+.
+      bins = new Uint8Array(new ArrayBuffer(analyser.frequencyBinCount));
+    };
+
+    const tick = (now: number) => {
+      if (!running || !analyser || !bins) return;
+      if (now - lastTick < FRAME_MS) {
+        rafId = requestAnimationFrame(tick);
+        return;
+      }
+      lastTick = now;
+
+      analyser.getByteFrequencyData(bins);
+
+      // Aggregate bands: low / mid / high — three slices of the spectrum.
+      const len = bins.length;
+      const third = Math.floor(len / 3);
+      let lo = 0;
+      let mi = 0;
+      let hi = 0;
+      for (let i = 0; i < third; i++) lo += bins[i];
+      for (let i = third; i < third * 2; i++) mi += bins[i];
+      for (let i = third * 2; i < len; i++) hi += bins[i];
+      lo /= third * 255;
+      mi /= third * 255;
+      hi /= (len - third * 2) * 255;
+
+      const energy = Math.min(1, lo * 0.55 + mi * 0.3 + hi * 0.25);
+
+      // Slow follow on color — hue drifts based on mid energy.
+      const targetHue = ((mi * 360 + hi * 220 + 200) % 360) | 0;
+      // Shortest-path angular lerp.
+      const delta = ((targetHue - hueLerp + 540) % 360) - 180;
+      hueLerp = (hueLerp + delta * 0.04 + 360) % 360;
+      energyLerp += (energy - energyLerp) * 0.18;
+
+      // CSS vars: one write per frame, batched.
+      body.style.setProperty("--sy-hue", hueLerp.toFixed(1));
+      body.style.setProperty("--sy-energy", energyLerp.toFixed(3));
+
+      // Variable font: weight follows low end (kick), opsz follows mid.
+      const wght = 180 + lo * 720; // 180..900
+      const opsz = 9 + mi * 135; // 9..144
+      heroName.style.fontVariationSettings = `"wght" ${wght.toFixed(0)}, "opsz" ${opsz.toFixed(0)}, "SOFT" ${(30 + hi * 70).toFixed(0)}, "WONK" 1`;
+
+      // Grain density rises with high end. Clamp so it never washes the page.
+      body.style.setProperty(
+        "--sy-grain",
+        (0.18 + hi * 0.45).toFixed(3),
+      );
+
+      // Per-letter band: drive Y offset from a unique bin. No transform on
+      // letters under reduced-motion; this loop won't run there.
+      const lettersLen = letters.length;
+      for (let i = 0; i < lettersLen; i++) {
+        const binIdx = Math.floor((i / lettersLen) * (len - 1));
+        const v = bins[binIdx] / 255;
+        letters[i].style.setProperty("--sy-l", v.toFixed(3));
+      }
+
+      rafId = requestAnimationFrame(tick);
+    };
+
+    const start = async () => {
+      try {
+        if (!ctx) buildGraph();
+        if (!ctx) return;
+        if (ctx.state === "suspended") await ctx.resume();
+        await audio.play();
+        running = true;
+        updateLive(true);
+        setPressed(true);
+        setStatus("");
+        lastTick = 0;
+        rafId = requestAnimationFrame(tick);
+      } catch (err) {
+        const message =
+          err instanceof Error && err.name === "NotSupportedError"
+            ? "Preview file not yet uploaded."
+            : "Couldn't start audio. Tap once more.";
+        setStatus(message);
+        // Stop pretending to be live.
+        running = false;
+        updateLive(false);
+        setPressed(false);
+      }
+    };
+
+    const pause = () => {
+      audio.pause();
+      running = false;
+      cancelAnimationFrame(rafId);
+      updateLive(false);
+      setPressed(false);
+      setStatus("");
+    };
+
+    const teardown = () => {
+      if (teardownDone) return;
+      teardownDone = true;
+      cancelAnimationFrame(rafId);
+      running = false;
+      try {
+        if (source) source.disconnect();
+        if (analyser) analyser.disconnect();
+        if (ctx) void ctx.close();
+      } catch {
+        /* noop */
+      }
+    };
+
+    button.addEventListener("click", () => {
+      if (reduceMotion) {
+        // Still let audio play (the user explicitly asked) but skip rAF.
+        if (audio.paused) {
+          audio.play().then(() => setPressed(true)).catch(() => {
+            setStatus("Preview file not yet uploaded.");
+          });
+        } else {
+          audio.pause();
+          setPressed(false);
+        }
+        return;
+      }
+      if (running) pause();
+      else void start();
+    });
+
+    audio.addEventListener("ended", () => {
+      running = false;
+      cancelAnimationFrame(rafId);
+      updateLive(false);
+      setPressed(false);
+    });
+
+    audio.addEventListener("error", () => {
+      setStatus("Preview file not yet uploaded.");
+      running = false;
+      updateLive(false);
+      setPressed(false);
+    });
+
+    window.addEventListener("pagehide", teardown);
+    // Safari BFCache restores the page — re-arm by clearing the flag.
+    window.addEventListener("pageshow", () => {
+      teardownDone = false;
+    });
+  })();
+</script>

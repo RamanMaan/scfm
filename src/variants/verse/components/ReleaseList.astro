@@ -1,0 +1,255 @@
+---
+import type { CollectionEntry } from "astro:content";
+import {
+  getSpotifyEmbedUrl,
+  SPOTIFY_EMBED_HEIGHT,
+  spotifyOpenUrl,
+} from "../../../lib/spotify";
+
+interface Props {
+  releases: CollectionEntry<"releases">[];
+}
+
+const { releases } = Astro.props;
+
+// PLACEHOLDER LYRIC — line ii. of the verse, used as the section header.
+const LINE = "And the songs come back like smoke,";
+
+const formatLabel = (release: CollectionEntry<"releases">): string =>
+  release.data.type === "single" ? "Single" : release.data.type.toUpperCase();
+
+const year = (release: CollectionEntry<"releases">) =>
+  release.data.releaseDate.getUTCFullYear();
+---
+
+<section class="vs-section vs-shell" id="music">
+  <header class="vs-section__head">
+    <p class="vs-tag">Verse — ii. the work</p>
+    <h2 class="vs-line">{LINE}</h2>
+  </header>
+
+  <ol class="vs-rel">
+    {
+      releases.map((release, idx) => {
+        const id = release.data.spotifyId;
+        const openHref = id
+          ? spotifyOpenUrl(release.data.spotifyType, id)
+          : (release.data.appleMusicUrl ?? null);
+        const num = String(idx + 1).padStart(2, "0");
+
+        return (
+          <li class="vs-rel__item">
+            <details class="vs-rel__det" name="vs-rel">
+              <summary class="vs-rel__sum">
+                <span class="vs-rel__num vs-tag">{num}</span>
+                <span class="vs-rel__title">
+                  <span class="vs-rel__name">{release.data.title}</span>
+                  {release.data.featuring.length > 0 && (
+                    <span class="vs-rel__feat">
+                      {" with "}
+                      {release.data.featuring.join(", ")}
+                    </span>
+                  )}
+                </span>
+                <span class="vs-rel__meta">
+                  <span class="vs-tag">{formatLabel(release)}</span>
+                  <span class="vs-tag">{year(release)}</span>
+                </span>
+                <span class="vs-rel__caret" aria-hidden="true">+</span>
+              </summary>
+
+              <div class="vs-rel__body">
+                {release.data.description && (
+                  <p class="vs-rel__desc">{release.data.description}</p>
+                )}
+
+                {id ? (
+                  <div class="vs-rel__embed">
+                    <iframe
+                      title={`${release.data.title} on Spotify`}
+                      src={getSpotifyEmbedUrl({
+                        type: release.data.spotifyType,
+                        id,
+                      })}
+                      width="100%"
+                      height={SPOTIFY_EMBED_HEIGHT.compact}
+                      loading="lazy"
+                      frameborder="0"
+                      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    />
+                  </div>
+                ) : openHref ? (
+                  <p class="vs-rel__fallback">
+                    <a href={openHref} target="_blank" rel="noopener">
+                      Listen <span aria-hidden="true">&rarr;</span>
+                    </a>
+                  </p>
+                ) : null}
+              </div>
+            </details>
+          </li>
+        );
+      })
+    }
+  </ol>
+</section>
+
+<style>
+  .vs-section {
+    padding-block: clamp(56px, 10vh, 120px);
+    border-top: 1px solid var(--vs-rule);
+  }
+
+  .vs-section__head {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 0 0 clamp(28px, 5vh, 56px);
+  }
+
+  .vs-rel {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .vs-rel__item {
+    border-top: 1px solid var(--vs-rule);
+  }
+
+  .vs-rel__item:last-child {
+    border-bottom: 1px solid var(--vs-rule);
+  }
+
+  .vs-rel__det {
+    /* no native marker */
+  }
+
+  .vs-rel__det summary {
+    list-style: none;
+  }
+
+  .vs-rel__det summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .vs-rel__sum {
+    display: grid;
+    grid-template-columns: 32px 1fr auto 20px;
+    align-items: baseline;
+    gap: clamp(10px, 2.4vw, 24px);
+    padding-block: clamp(16px, 2.2vh, 24px);
+    cursor: pointer;
+    min-height: 44px;
+    transition: color 380ms var(--vs-ease);
+  }
+
+  .vs-rel__num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .vs-rel__title {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 8px;
+  }
+
+  .vs-rel__name {
+    font-family: var(--vs-serif);
+    font-weight: 500;
+    font-style: normal;
+    font-size: clamp(20px, 3.4vw, 28px);
+    letter-spacing: -0.015em;
+    color: var(--vs-bone);
+    transition: color 380ms var(--vs-ease);
+  }
+
+  .vs-rel__feat {
+    font-family: var(--vs-serif);
+    font-style: italic;
+    font-size: clamp(14px, 1.6vw, 16px);
+    color: var(--vs-bone-dim);
+  }
+
+  .vs-rel__meta {
+    display: inline-flex;
+    gap: clamp(8px, 1.6vw, 16px);
+    white-space: nowrap;
+  }
+
+  .vs-rel__caret {
+    font-family: var(--vs-serif);
+    font-size: 22px;
+    line-height: 1;
+    color: var(--vs-bone-dim);
+    text-align: right;
+    transition:
+      transform 380ms var(--vs-ease),
+      color 380ms var(--vs-ease);
+  }
+
+  .vs-rel__det[open] .vs-rel__caret {
+    transform: rotate(45deg);
+    color: var(--vs-accent);
+  }
+
+  .vs-rel__sum:hover .vs-rel__name,
+  .vs-rel__sum:hover .vs-rel__caret {
+    color: var(--vs-accent);
+  }
+
+  .vs-rel__body {
+    padding: 0 0 clamp(20px, 3vh, 32px);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .vs-rel__desc {
+    margin: 0;
+    font-family: var(--vs-serif);
+    font-style: italic;
+    font-size: clamp(15px, 1.8vw, 17px);
+    line-height: 1.6;
+    color: var(--vs-bone-dim);
+    max-width: 56ch;
+  }
+
+  .vs-rel__embed {
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--vs-ink-soft);
+  }
+
+  .vs-rel__embed iframe {
+    display: block;
+    width: 100%;
+    border: 0;
+    background: transparent;
+  }
+
+  .vs-rel__fallback {
+    margin: 0;
+    font-family: var(--vs-serif);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--vs-bone-dim);
+  }
+
+  @media (max-width: 560px) {
+    .vs-rel__sum {
+      grid-template-columns: 28px 1fr 18px;
+      row-gap: 4px;
+    }
+    .vs-rel__meta {
+      grid-column: 2;
+      grid-row: 2;
+    }
+    .vs-rel__caret {
+      grid-column: 3;
+      grid-row: 1 / span 2;
+      align-self: center;
+    }
+  }
+</style>
