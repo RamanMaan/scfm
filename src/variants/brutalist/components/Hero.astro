@@ -19,7 +19,7 @@ const fileSlug = `${segments[0]}.${(segments[1] ?? "PROFILE").slice(0, 3)}`;
 ---
 
 <header class="br-hero" id="top">
-  <nav class="br-bar" aria-label="Primary">
+  <nav class="br-bar br-bar--sticky" aria-label="Primary">
     <span>FILE: ARTIST/{fileSlug}</span>
     <ul class="br-bar__nav">
       <li><a href="#music">MUSIC</a></li>
@@ -28,6 +28,10 @@ const fileSlug = `${segments[0]}.${(segments[1] ?? "PROFILE").slice(0, 3)}`;
     </ul>
     <span class="br-bar__edition">EDITION 01 / {today}</span>
   </nav>
+
+  <h1 class="br-hero__title" aria-label={name}>
+    {segments.map((segment) => <span class="br-hero__word">{segment}</span>)}
+  </h1>
 
   <figure class="br-hero__figure" aria-label={`${name} — studio portrait`}>
     <Picture
@@ -43,15 +47,18 @@ const fileSlug = `${segments[0]}.${(segments[1] ?? "PROFILE").slice(0, 3)}`;
       decoding="async"
     />
   </figure>
-
-  <h1 class="br-hero__title" aria-label={name}>
-    {segments.map((segment) => <span class="br-hero__word">{segment}</span>)}
-  </h1>
 </header>
 
 <style>
   .br-hero {
     border-bottom: var(--br-rule) solid var(--br-ink);
+  }
+
+  .br-bar--sticky {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--br-bg);
   }
 
   .br-bar__nav {
@@ -74,7 +81,7 @@ const fileSlug = `${segments[0]}.${(segments[1] ?? "PROFILE").slice(0, 3)}`;
 
   .br-hero__figure {
     margin: 0;
-    border-bottom: var(--br-rule) solid var(--br-ink);
+    border-top: var(--br-rule) solid var(--br-ink);
     background: var(--br-bg);
     overflow: hidden;
   }
@@ -85,7 +92,6 @@ const fileSlug = `${segments[0]}.${(segments[1] ?? "PROFILE").slice(0, 3)}`;
     height: clamp(60vh, 78vw, 88vh);
     max-height: 880px;
     object-fit: cover;
-    filter: grayscale(1) contrast(1.08);
   }
 
   .br-hero__title {
