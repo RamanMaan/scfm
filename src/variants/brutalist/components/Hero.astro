@@ -96,15 +96,17 @@ const fileSlug = `${segments[0]}.${(segments[1] ?? "PROFILE").slice(0, 3)}`;
 
   .br-hero__title {
     display: block;
-    padding: 16px;
-    font-size: clamp(56px, 16vw, 220px);
+    padding: 8px 16px 20px;
+    font-size: clamp(40px, 13vw, 200px);
     line-height: 0.85;
+    letter-spacing: -0.03em;
     margin: 0;
-    word-break: break-word;
+    overflow: hidden;
   }
 
   .br-hero__word {
     display: block;
+    white-space: nowrap;
   }
 
   .br-hero__word:nth-child(even) {

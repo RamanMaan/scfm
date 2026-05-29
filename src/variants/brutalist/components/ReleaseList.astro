@@ -14,7 +14,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 <section class="br-section" id="music">
   <p class="br-eyebrow">[02] Catalogue / Audio</p>
-  <h2 class="br-rel__title">RELEASES &mdash; SELECTED WORKS</h2>
+  <h2 class="br-rel__title">MUSIC &mdash; SELECTED WORKS</h2>
 
   {
     featured && (
@@ -52,9 +52,6 @@ const pad = (n: number) => String(n).padStart(2, "0");
               </p>
             )}
           </div>
-        )}
-        {featured.data.description && (
-          <p class="br-feat__desc">{featured.data.description}</p>
         )}
       </article>
     )
@@ -140,13 +137,6 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
   .br-feat__placeholder p {
     margin: 4px 0;
-  }
-
-  .br-feat__desc {
-    margin: 16px 0 0;
-    border-top: 1px solid var(--br-ink);
-    padding-top: 16px;
-    font-size: 14px;
   }
 
   .br-table {
