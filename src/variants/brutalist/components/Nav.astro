@@ -1,0 +1,57 @@
+---
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+
+const today = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+}).format(new Date());
+
+const [first, second] = name.toUpperCase().split(" ");
+const fileSlug = `${first}.${(second ?? "PROFILE").slice(0, 3)}`;
+---
+
+<nav class="br-bar br-nav" aria-label="Primary">
+  <a class="br-nav__file" href="#top">FILE: ARTIST/{fileSlug}</a>
+  <ul class="br-nav__links">
+    <li><a href="#music">MUSIC</a></li>
+    <li><a href="#video">VIDEO</a></li>
+    <li><a href="#contact">CONTACT</a></li>
+  </ul>
+  <span class="br-nav__edition">EDITION 01 / {today}</span>
+</nav>
+
+<style>
+  .br-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--br-bg);
+  }
+
+  .br-nav__file {
+    text-decoration: none;
+  }
+
+  .br-nav__links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 16px;
+  }
+
+  .br-nav__edition {
+    display: none;
+  }
+
+  @media (min-width: 720px) {
+    .br-nav__edition {
+      display: inline;
+    }
+  }
+</style>

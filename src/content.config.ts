@@ -19,6 +19,7 @@ const artist = defineCollection({
         appleMusic: z.string().url(),
         youtube: z.string().url(),
         instagram: z.string().url(),
+        facebook: z.string().url().optional(),
         threads: z.string().url().optional(),
         linktree: z.string().url().optional(),
       }),

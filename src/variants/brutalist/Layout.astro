@@ -24,6 +24,17 @@ const { title, description } = Astro.props;
 </BaseHtml>
 
 <style is:global>
+  html:has(body.brut) {
+    scroll-behavior: smooth;
+    scroll-padding-top: 56px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html:has(body.brut) {
+      scroll-behavior: auto;
+    }
+  }
+
   .brut {
     --br-bg: #ffffff;
     --br-ink: #000000;

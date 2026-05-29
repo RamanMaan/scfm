@@ -2,6 +2,7 @@
 import { getCollection, getEntry } from "astro:content";
 import Footer from "../variants/brutalist/components/Footer.astro";
 import Hero from "../variants/brutalist/components/Hero.astro";
+import Nav from "../variants/brutalist/components/Nav.astro";
 import ReleaseList from "../variants/brutalist/components/ReleaseList.astro";
 import VideoGrid from "../variants/brutalist/components/VideoGrid.astro";
 import Layout from "../variants/brutalist/Layout.astro";
@@ -31,6 +32,7 @@ const press = (await getCollection("press")).sort(
   title={`${artist.data.name} - ${artist.data.tagline}`}
   description={artist.data.bio}
 >
+  <Nav name={artist.data.name} />
   <Hero name={artist.data.name} />
   <ReleaseList featured={featured} rest={rest} />
   <VideoGrid videos={videos} channelUrl={artist.data.socials.youtube} />

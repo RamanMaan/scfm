@@ -7,28 +7,10 @@ interface Props {
 }
 
 const { name } = Astro.props;
-
-const today = new Intl.DateTimeFormat("en-US", {
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-}).format(new Date());
-
 const segments = name.toUpperCase().split(" ");
-const fileSlug = `${segments[0]}.${(segments[1] ?? "PROFILE").slice(0, 3)}`;
 ---
 
 <header class="br-hero" id="top">
-  <nav class="br-bar br-bar--sticky" aria-label="Primary">
-    <span>FILE: ARTIST/{fileSlug}</span>
-    <ul class="br-bar__nav">
-      <li><a href="#music">MUSIC</a></li>
-      <li><a href="#video">VIDEO</a></li>
-      <li><a href="#contact">CONTACT</a></li>
-    </ul>
-    <span class="br-bar__edition">EDITION 01 / {today}</span>
-  </nav>
-
   <h1 class="br-hero__title" aria-label={name}>
     {segments.map((segment) => <span class="br-hero__word">{segment}</span>)}
   </h1>
@@ -52,31 +34,6 @@ const fileSlug = `${segments[0]}.${(segments[1] ?? "PROFILE").slice(0, 3)}`;
 <style>
   .br-hero {
     border-bottom: var(--br-rule) solid var(--br-ink);
-  }
-
-  .br-bar--sticky {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: var(--br-bg);
-  }
-
-  .br-bar__nav {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 16px;
-  }
-
-  .br-bar__edition {
-    display: none;
-  }
-
-  @media (min-width: 720px) {
-    .br-bar__edition {
-      display: inline;
-    }
   }
 
   .br-hero__figure {

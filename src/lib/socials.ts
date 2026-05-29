@@ -3,6 +3,7 @@ export type SocialPlatform =
   | "appleMusic"
   | "youtube"
   | "instagram"
+  | "facebook"
   | "threads"
   | "linktree";
 
@@ -11,6 +12,7 @@ export const SOCIAL_LABEL: Record<SocialPlatform, string> = {
   appleMusic: "Apple Music",
   youtube: "YouTube",
   instagram: "Instagram",
+  facebook: "Facebook",
   threads: "Threads",
   linktree: "Linktree",
 };
@@ -20,6 +22,7 @@ export const PLATFORM_ORDER: SocialPlatform[] = [
   "appleMusic",
   "youtube",
   "instagram",
+  "facebook",
   "threads",
   "linktree",
 ];
