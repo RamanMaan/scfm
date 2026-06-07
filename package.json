@@ -16,9 +16,7 @@
   "dependencies": {
     "@astrojs/check": "^0.9.9",
     "@astrojs/vercel": "^10.0.7",
-    "@fontsource/jetbrains-mono": "^5.2.8",
     "@resvg/resvg-js": "^2.6.2",
-    "@vercel/analytics": "^2.0.1",
     "astro": "^6.3.3",
     "satori": "^0.26.0",
     "sharp": "^0.34.5",
