@@ -34,9 +34,11 @@ const press = (await getCollection("press")).sort(
   description={artist.data.bio}
 >
   <Nav name={artist.data.name} />
-  <Hero name={artist.data.name} />
-  <Dispatch />
-  <ReleaseList featured={featured} rest={rest} />
-  <VideoGrid videos={videos} channelUrl={artist.data.socials.youtube} />
+  <main id="main-content">
+    <Hero name={artist.data.name} />
+    <Dispatch />
+    <ReleaseList featured={featured} rest={rest} />
+    <VideoGrid videos={videos} channelUrl={artist.data.socials.youtube} />
+  </main>
   <Footer artist={artist} press={press} />
 </Layout>
