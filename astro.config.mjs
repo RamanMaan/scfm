@@ -1,8 +1,6 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 
-import tailwindcss from "@tailwindcss/vite";
-
 import ogImages from "./src/integrations/og-images";
 
 import vercel from "@astrojs/vercel";
@@ -35,10 +33,6 @@ export default defineConfig({
 
   image: {
     domains: ["i.ytimg.com"],
-  },
-
-  vite: {
-    plugins: [tailwindcss()],
   },
 
   adapter: vercel({

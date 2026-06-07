@@ -20,38 +20,25 @@ const pad = (n: number) => String(n).padStart(2, "0");
     featured && (
       <article class="br-feat">
         <header class="br-feat__head">
-          <span class="br-eyebrow">Featured Single</span>
+          <span class="br-eyebrow">FEATURED SINGLE</span>
         </header>
-        <h3 class="br-feat__name">
-          {featured.data.title}
-          {featured.data.featuring.length > 0 && (
-            <small> w/ {featured.data.featuring.join(", ")}</small>
-          )}
-        </h3>
         {featured.data.spotifyId ? (
           <iframe
+            class="br-feat__embed"
             src={getSpotifyEmbedUrl({
               type: featured.data.spotifyType,
               id: featured.data.spotifyId,
-              theme: 1,
+              theme: 0,
             })}
             width="100%"
             height={SPOTIFY_EMBED_HEIGHT.full}
             loading="lazy"
+            allowfullscreen
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
             title={`Spotify player: ${featured.data.title}`}
           />
         ) : (
-          <div class="br-feat__placeholder">
-            <p>[ SPOTIFY EMBED PENDING -- AWAITING TRACK ID ]</p>
-            {featured.data.appleMusicUrl && (
-              <p>
-                <a href={featured.data.appleMusicUrl}>
-                  &gt; LISTEN ON APPLE MUSIC
-                </a>
-              </p>
-            )}
-          </div>
+          null
         )}
       </article>
     )
@@ -94,86 +81,3 @@ const pad = (n: number) => String(n).padStart(2, "0");
     </tbody>
   </table>
 </section>
-
-<style>
-  .br-rel__title {
-    font-size: clamp(28px, 4vw, 48px);
-    margin-bottom: 24px;
-  }
-
-  .br-feat {
-    border: var(--br-rule) solid var(--br-ink);
-    padding: 16px;
-    margin-bottom: 32px;
-  }
-
-  .br-feat__head {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--br-ink);
-    padding-bottom: 8px;
-    margin-bottom: 16px;
-  }
-
-  .br-feat__name {
-    font-size: clamp(28px, 4vw, 56px);
-    margin-bottom: 16px;
-  }
-
-  .br-feat__name small {
-    font-size: 14px;
-    font-weight: 400;
-    display: block;
-    margin-top: 4px;
-    text-transform: none;
-    letter-spacing: 0;
-  }
-
-  .br-feat__placeholder {
-    border: 1px dashed var(--br-ink);
-    padding: 32px;
-    text-align: center;
-  }
-
-  .br-feat__placeholder p {
-    margin: 4px 0;
-  }
-
-  .br-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
-
-  .br-table th,
-  .br-table td {
-    text-align: left;
-    padding: 8px 12px;
-    border-bottom: 1px solid var(--br-ink);
-    vertical-align: top;
-  }
-
-  .br-table th {
-    border-top: var(--br-rule) solid var(--br-ink);
-    border-bottom: var(--br-rule) solid var(--br-ink);
-    background: var(--br-ink);
-    color: var(--br-bg);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: 11px;
-  }
-
-  .br-table__num {
-    width: 48px;
-    color: var(--br-muted);
-  }
-
-  .br-table__title {
-    font-weight: 700;
-  }
-
-  .br-table__feat {
-    font-weight: 400;
-    color: var(--br-muted);
-  }
-</style>

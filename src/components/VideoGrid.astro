@@ -27,7 +27,7 @@ const THUMB_WIDTHS = [320, 640, 1280];
 
 <section class="br-section" id="video">
   <p class="br-eyebrow">[04] Catalogue / Visual</p>
-  <h2 class="br-vid__title">VIDEOS &mdash; MOVING IMAGE</h2>
+  <h2 class="br-vid__title">VIDEOS</h2>
 
   {
     videos.length > 0 ? (
@@ -96,81 +96,3 @@ const THUMB_WIDTHS = [320, 640, 1280];
     img.addEventListener("error", handleError, { once: true });
   });
 </script>
-
-<style>
-  .br-vid__title {
-    font-size: clamp(28px, 4vw, 48px);
-    margin-bottom: 24px;
-  }
-
-  .br-vid__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
-    gap: 24px;
-  }
-
-  .br-vid {
-    border: var(--br-rule) solid var(--br-ink);
-  }
-
-  .br-vid__head {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 12px;
-    border-bottom: 1px solid var(--br-ink);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    background: var(--br-ink);
-    color: var(--br-bg);
-  }
-
-  .br-vid__link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .br-vid__media {
-    position: relative;
-    display: block;
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
-    background: var(--br-ink);
-  }
-
-  .br-vid__media img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .br-vid__play {
-    position: absolute;
-    inset: auto 0 0 0;
-    padding: 10px 12px;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    background: var(--br-ink);
-    color: var(--br-bg);
-    border-top: 1px solid var(--br-ink);
-    text-align: center;
-  }
-
-  .br-vid__link:focus-visible {
-    outline: 2px solid var(--br-ink);
-    outline-offset: 2px;
-  }
-
-  .br-vid__placeholder {
-    display: flex;
-    aspect-ratio: 16 / 9;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    text-align: center;
-  }
-</style>

@@ -10,7 +10,7 @@ export interface SpotifyEmbedArgs {
 }
 
 export const SPOTIFY_EMBED_HEIGHT = {
-  full: 252,
+  full: 232,
   compact: 152,
 } as const;
 
