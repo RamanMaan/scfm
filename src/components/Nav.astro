@@ -5,12 +5,6 @@ interface Props {
 
 const { name } = Astro.props;
 
-const today = new Intl.DateTimeFormat("en-US", {
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-}).format(new Date());
-
 const [first, second] = name.toUpperCase().split(" ");
 const fileSlug = `${first}.${(second ?? "PROFILE").slice(0, 3)}`;
 ---
@@ -22,7 +16,6 @@ const fileSlug = `${first}.${(second ?? "PROFILE").slice(0, 3)}`;
     <li><a href="#video">VIDEO</a></li>
     <li><a href="#contact">CONTACT</a></li>
   </ul>
-  <span class="br-nav__edition">EDITION 01 / {today}</span>
 </nav>
 
 <style>
@@ -43,15 +36,5 @@ const fileSlug = `${first}.${(second ?? "PROFILE").slice(0, 3)}`;
     padding: 0;
     display: flex;
     gap: 16px;
-  }
-
-  .br-nav__edition {
-    display: none;
-  }
-
-  @media (min-width: 720px) {
-    .br-nav__edition {
-      display: inline;
-    }
   }
 </style>

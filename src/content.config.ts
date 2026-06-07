@@ -21,7 +21,7 @@ const artist = defineCollection({
         instagram: z.string().url(),
         facebook: z.string().url().optional(),
         threads: z.string().url().optional(),
-        linktree: z.string().url().optional(),
+        tiktok: z.string().url().optional(),
       }),
     }),
 });

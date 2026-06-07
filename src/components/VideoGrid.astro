@@ -146,8 +146,6 @@ const THUMB_WIDTHS = [320, 640, 1280];
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: grayscale(1) contrast(1.08);
-    transition: filter 200ms ease;
   }
 
   .br-vid__play {
@@ -162,11 +160,6 @@ const THUMB_WIDTHS = [320, 640, 1280];
     text-align: center;
   }
 
-  .br-vid__link:hover .br-vid__media img,
-  .br-vid__link:focus-visible .br-vid__media img {
-    filter: grayscale(0) contrast(1);
-  }
-
   .br-vid__link:focus-visible {
     outline: 2px solid var(--br-ink);
     outline-offset: 2px;
@@ -179,11 +172,5 @@ const THUMB_WIDTHS = [320, 640, 1280];
     justify-content: center;
     padding: 16px;
     text-align: center;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .br-vid__media img {
-      transition: none;
-    }
   }
 </style>

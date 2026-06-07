@@ -1,0 +1,54 @@
+---
+import { SOCIAL_ICON_PATH } from "../lib/social-icons";
+import { orderedSocials, type SocialPlatform } from "../lib/socials";
+
+interface Props {
+  socials: Partial<Record<SocialPlatform, string | undefined>>;
+}
+
+const { socials } = Astro.props;
+const links = orderedSocials(socials);
+---
+
+<nav class="br-connect" aria-label="Social links">
+  <ul class="br-connect__icons">
+    {
+      links.map(({ platform, url, label }) => (
+        <li>
+          <a href={url} target="_blank" rel="noopener" aria-label={label}>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d={SOCIAL_ICON_PATH[platform]} />
+            </svg>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .br-connect__icons {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 8px;
+  }
+
+  .br-connect__icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    text-decoration: none;
+  }
+
+  .br-connect__icons svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+  }
+</style>

@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { orderedSocials } from "../lib/socials";
+import ConnectSocials from "./ConnectSocials.astro";
 
 interface Props {
   artist: CollectionEntry<"artist">;
@@ -8,7 +8,6 @@ interface Props {
 }
 
 const { artist, press } = Astro.props;
-const socials = orderedSocials(artist.data.socials);
 const pad = (n: number) => String(n).padStart(2, "0");
 ---
 
@@ -36,24 +35,9 @@ const pad = (n: number) => String(n).padStart(2, "0");
   }
 
   <div class="br-end" id="connect">
-    <div>
-      <p class="br-eyebrow">[06] Connect</p>
-      <ul class="br-socials">
-        {
-          socials.map(({ url, label }, index) => (
-            <li>
-              <span class="br-socials__num">{pad(index + 1)}</span>
-              <a href={url} target="_blank" rel="noopener">
-                {label.toUpperCase()}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
+    <ConnectSocials socials={artist.data.socials} />
     <div class="br-end__colophon">
       <p>&copy; {new Date().getFullYear()} {artist.data.name.toUpperCase()}.</p>
-      <p>SET IN MONOSPACE. PRINTED FROM THE WEB.</p>
     </div>
   </div>
 </footer>
@@ -102,35 +86,13 @@ const pad = (n: number) => String(n).padStart(2, "0");
     display: grid;
     grid-template-columns: 1fr;
     gap: 32px;
-    border-top: var(--br-rule) solid var(--br-ink);
-    padding-top: 24px;
   }
 
   @media (min-width: 720px) {
     .br-end {
       grid-template-columns: 1fr 1fr;
+      align-items: end;
     }
-  }
-
-  .br-socials {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 8px;
-  }
-
-  .br-socials li {
-    display: flex;
-    gap: 12px;
-    align-items: baseline;
-    border-bottom: 1px dashed var(--br-ink);
-    padding-bottom: 4px;
-  }
-
-  .br-socials__num {
-    font-weight: 700;
-    color: var(--br-muted);
   }
 
   .br-end__colophon {

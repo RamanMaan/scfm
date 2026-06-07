@@ -5,205 +5,55 @@ const web3AccessKey = typeof accessKey === "string" ? accessKey : "";
 
 <section class="br-section br-disp" id="contact">
   <p class="br-eyebrow">[02] Correspondence / Subscribe</p>
-  <div class="br-disp__stack">
-    <article class="br-card br-card--dispatch">
-      <header class="br-card__head">
-        <span>01 / Current</span>
-        <span>Plain Dispatch</span>
-      </header>
-      <div class="br-card--dispatch__grid">
-        <aside class="br-disp__intro">
-          <p class="br-disp__lede">
-            BE IN THE KNOW. NEW WORK, TOUR DATES, AND THE OCCASIONAL POSTCARD
-            FROM THE STUDIO &mdash; FILED ONLY WHEN THERE IS SOMETHING TO
-            REPORT.
-          </p>
-          <p class="br-disp__fine">
-            NO RESALE. NO TRACKING. UNSUBSCRIBE BY REPLYING <em>STOP</em>.
-          </p>
-        </aside>
-
-        <form class="br-form br-form--plain" data-w3f novalidate>
-          <input type="hidden" name="access_key" value={web3AccessKey} />
-          <input
-            type="hidden"
-            name="subject"
-            value="Plain dispatch signup — stevenchristopher.fm"
-          />
-          <input
-            type="hidden"
-            name="from_name"
-            value="Steven Christopher Site"
-          />
-          <input
-            type="checkbox"
-            name="botcheck"
-            class="br-form__bot"
-            tabindex="-1"
-            autocomplete="off"
-            aria-hidden="true"
-          />
-
-          <div class="br-form__row">
-            <label class="br-form__field">
-              <span class="br-form__label">
-                Name <em class="br-form__opt">opt.</em>
-              </span>
-              <input
-                type="text"
-                name="name"
-                autocomplete="name"
-                maxlength="80"
-              />
-            </label>
-            <label class="br-form__field">
-              <span class="br-form__label">
-                Email <em class="br-form__req">req.</em>
-              </span>
-              <input
-                type="email"
-                name="email"
-                autocomplete="email"
-                inputmode="email"
-                required
-                maxlength="120"
-              />
-            </label>
-          </div>
-
-          <label class="br-form__field br-form__field--note">
-            <span class="br-form__label">
-              Note <em class="br-form__opt">opt.</em>
-            </span>
-            <textarea
-              name="message"
-              rows="3"
-              maxlength="800"
-              placeholder="show requests, sync inquiries, or nothing at all"
-            ></textarea>
-          </label>
-
-          <div class="br-form__actions">
-            <button class="br-form__submit" type="submit">
-              <span>FILE DISPATCH</span>
-              <span class="br-form__caret" aria-hidden="true">&gt;&gt;</span>
-            </button>
-            <p
-              class="br-form__status"
-              data-status
-              role="status"
-              aria-live="polite"
-            >
-            </p>
-          </div>
-        </form>
+  <article class="br-card br-card--signal">
+    <div class="br-signal">
+      <div class="br-signal__copy">
+        <p class="br-signal__kicker">Mailing list</p>
+        <h3>GET IT FIRST.</h3>
+        <p>
+          Music before it hits the feeds. Show dates. Nothing promotional.
+        </p>
       </div>
-    </article>
-
-    <article class="br-card br-card--signal">
-      <header class="br-card__head">
-        <span>02 / Cool</span>
-        <span>Signal Lock</span>
-      </header>
-      <div class="br-signal">
-        <div class="br-signal__copy">
-          <p class="br-signal__kicker">Frequency found</p>
-          <h3>LOCK INTO THE FEED.</h3>
-          <p>
-            Studio transmissions, release drops, and hidden listening-room
-            notes. No algorithm. Direct line.
-          </p>
-        </div>
-        <form class="br-form br-form--signal" data-w3f novalidate>
-          <input type="hidden" name="access_key" value={web3AccessKey} />
+      <form class="br-form br-form--signal" data-w3f novalidate>
+        <input type="hidden" name="access_key" value={web3AccessKey} />
+        <input
+          type="hidden"
+          name="subject"
+          value="Mailing list signup — stevenchristopher.fm"
+        />
+        <input
+          type="hidden"
+          name="from_name"
+          value="Steven Christopher Site"
+        />
+        <input
+          type="checkbox"
+          name="botcheck"
+          class="br-form__bot"
+          tabindex="-1"
+          autocomplete="off"
+          aria-hidden="true"
+        />
+        <label class="br-signal__email">
+          <span>Email Address</span>
           <input
-            type="hidden"
-            name="subject"
-            value="Signal Lock signup — stevenchristopher.fm"
+            type="email"
+            name="email"
+            autocomplete="email"
+            inputmode="email"
+            placeholder="you@domain.com"
+            required
+            maxlength="120"
           />
-          <input
-            type="hidden"
-            name="from_name"
-            value="Steven Christopher Site"
-          />
-          <input
-            type="checkbox"
-            name="botcheck"
-            class="br-form__bot"
-            tabindex="-1"
-            autocomplete="off"
-            aria-hidden="true"
-          />
-          <label class="br-signal__email">
-            <span>Email input</span>
-            <input
-              type="email"
-              name="email"
-              autocomplete="email"
-              inputmode="email"
-              placeholder="you@domain.com"
-              required
-              maxlength="120"
-            />
-          </label>
-          <button class="br-form__submit br-signal__submit" type="submit">
-            Receive Signal
-          </button>
-          <p class="br-form__status" data-status role="status" aria-live="polite">
-          </p>
-        </form>
-      </div>
-    </article>
-
-    <article class="br-card br-card--simple">
-      <header class="br-card__head">
-        <span>03 / Simple</span>
-        <span>Straight Signup</span>
-      </header>
-      <div class="br-simple">
-        <div class="br-simple__copy">
-          <h3>GET THE EMAIL.</h3>
-          <p>New music and show notes. Nothing else.</p>
-        </div>
-        <form class="br-form br-form--simple" data-w3f novalidate>
-          <input type="hidden" name="access_key" value={web3AccessKey} />
-          <input
-            type="hidden"
-            name="subject"
-            value="Straight signup — stevenchristopher.fm"
-          />
-          <input
-            type="hidden"
-            name="from_name"
-            value="Steven Christopher Site"
-          />
-          <input
-            type="checkbox"
-            name="botcheck"
-            class="br-form__bot"
-            tabindex="-1"
-            autocomplete="off"
-            aria-hidden="true"
-          />
-          <label>
-            <span>Email</span>
-            <input
-              type="email"
-              name="email"
-              autocomplete="email"
-              inputmode="email"
-              placeholder="you@example.com"
-              required
-              maxlength="120"
-            />
-          </label>
-          <button class="br-form__submit" type="submit">Sign Up</button>
-          <p class="br-form__status" data-status role="status" aria-live="polite">
-          </p>
-        </form>
-      </div>
-    </article>
-  </div>
+        </label>
+        <button class="br-form__submit br-signal__submit" type="submit">
+          Sign up
+        </button>
+        <p class="br-form__status" data-status role="status" aria-live="polite">
+        </p>
+      </form>
+    </div>
+  </article>
 </section>
 
 <script is:inline>
@@ -262,146 +112,12 @@ const web3AccessKey = typeof accessKey === "string" ? accessKey : "";
 </script>
 
 <style>
-  .br-disp__grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-
-  @media (min-width: 720px) {
-    .br-disp__grid {
-      grid-template-columns: 5fr 7fr;
-      gap: 48px;
-      align-items: start;
-    }
-  }
-
-  .br-disp__intro {
-    border-top: var(--br-rule) solid var(--br-ink);
-    padding-top: 12px;
-  }
-
-  .br-disp__lede {
-    font-size: 13px;
-    line-height: 1.55;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin: 0 0 16px;
-  }
-
-  .br-disp__fine {
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--br-muted);
-    margin: 0;
-  }
-
-  .br-disp__placeholder {
-    border: 1px dashed var(--br-ink);
-    padding: 32px;
-    text-align: center;
-  }
-
-  .br-disp__placeholder p {
-    margin: 4px 0;
-  }
-
-  .br-disp__placeholder-hint {
-    font-size: 11px;
-    color: var(--br-muted);
-  }
-
-  .br-disp__placeholder code {
-    font-family: var(--br-mono);
-    background: var(--br-ink);
-    color: var(--br-bg);
-    padding: 1px 6px;
-  }
-
   .br-form {
     display: grid;
     gap: 24px;
     border: var(--br-rule) solid var(--br-ink);
     padding: 20px;
     background: var(--br-bg);
-  }
-
-  .br-form__row {
-    display: grid;
-    gap: 24px;
-    grid-template-columns: 1fr;
-  }
-
-  @media (min-width: 520px) {
-    .br-form__row {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  .br-form__field {
-    display: grid;
-    gap: 6px;
-    border-bottom: 2px solid var(--br-ink);
-    padding-bottom: 6px;
-    transition: border-bottom-width 120ms ease;
-  }
-
-  .br-form__field:focus-within {
-    border-bottom-width: 4px;
-    padding-bottom: 4px;
-  }
-
-  .br-form__label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    color: var(--br-muted);
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 8px;
-  }
-
-  .br-form__opt,
-  .br-form__req {
-    font-style: normal;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-  }
-
-  .br-form__req {
-    color: var(--br-accent);
-  }
-
-  .br-form__field input,
-  .br-form__field textarea {
-    appearance: none;
-    background: transparent;
-    border: 0;
-    font: inherit;
-    font-size: 16px;
-    line-height: 1.4;
-    color: var(--br-ink);
-    padding: 6px 0;
-    width: 100%;
-    min-height: 32px;
-    resize: vertical;
-  }
-
-  .br-form__field input::placeholder,
-  .br-form__field textarea::placeholder {
-    color: var(--br-muted);
-    opacity: 0.7;
-  }
-
-  .br-form__field input:focus,
-  .br-form__field textarea:focus {
-    outline: none;
-  }
-
-  .br-form__field--note textarea {
-    min-height: 96px;
   }
 
   .br-form__bot {
@@ -411,15 +127,6 @@ const web3AccessKey = typeof accessKey === "string" ? accessKey : "";
     height: 1px;
     opacity: 0;
     pointer-events: none;
-  }
-
-  .br-form__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px 20px;
-    align-items: center;
-    border-top: 1px solid var(--br-ink);
-    padding-top: 16px;
   }
 
   .br-form__submit {
@@ -459,10 +166,6 @@ const web3AccessKey = typeof accessKey === "string" ? accessKey : "";
     opacity: 0.6;
   }
 
-  .br-form__caret {
-    font-weight: 700;
-  }
-
   .br-form__status {
     margin: 0;
     font-size: 11px;
@@ -482,48 +185,9 @@ const web3AccessKey = typeof accessKey === "string" ? accessKey : "";
     font-weight: 700;
   }
 
-  .br-disp__stack {
-    display: grid;
-    gap: 24px;
-  }
-
   .br-card {
     border: var(--br-rule) solid var(--br-ink);
     background: var(--br-bg);
-  }
-
-  .br-card__head {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 8px 16px;
-    padding: 8px 12px;
-    border-bottom: var(--br-rule) solid var(--br-ink);
-    background: var(--br-ink);
-    color: var(--br-bg);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .br-card--dispatch {
-    padding: 0;
-  }
-
-  .br-card--dispatch__grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 32px;
-    padding: 20px;
-  }
-
-  @media (min-width: 720px) {
-    .br-card--dispatch__grid {
-      grid-template-columns: 5fr 7fr;
-      gap: 48px;
-      align-items: start;
-    }
   }
 
   .br-form input[type="email"],
@@ -549,12 +213,6 @@ const web3AccessKey = typeof accessKey === "string" ? accessKey : "";
         0 0 / 18px 18px,
       var(--br-ink);
     color: var(--br-bg);
-  }
-
-  .br-card--signal .br-card__head {
-    border-color: var(--br-bg);
-    background: var(--br-bg);
-    color: var(--br-ink);
   }
 
   .br-signal {
@@ -632,76 +290,5 @@ const web3AccessKey = typeof accessKey === "string" ? accessKey : "";
   .br-signal__submit:focus-visible:not(:disabled) {
     background: var(--br-ink);
     color: var(--br-bg);
-  }
-
-  .br-simple {
-    display: grid;
-    gap: 20px;
-    padding: 20px;
-  }
-
-  @media (min-width: 720px) {
-    .br-simple {
-      grid-template-columns: 1fr 1.2fr;
-      align-items: center;
-    }
-  }
-
-  .br-simple__copy h3 {
-    font-size: clamp(32px, 6vw, 72px);
-    line-height: 0.9;
-    letter-spacing: -0.06em;
-    margin-bottom: 8px;
-  }
-
-  .br-simple__copy p {
-    margin: 0;
-    color: var(--br-muted);
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .br-form--simple {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    border-width: 1px;
-    padding: 14px;
-  }
-
-  @media (min-width: 560px) {
-    .br-form--simple {
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: end;
-    }
-  }
-
-  .br-form--simple label {
-    display: grid;
-    gap: 8px;
-  }
-
-  .br-form--simple label span {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  .br-form--simple input {
-    min-height: 48px;
-    border: var(--br-rule) solid var(--br-ink);
-    padding: 10px 12px;
-    font-size: 16px;
-  }
-
-  .br-form--simple .br-form__submit {
-    min-height: 48px;
-    justify-content: center;
-    white-space: nowrap;
-  }
-
-  .br-form--simple .br-form__status {
-    grid-column: 1 / -1;
   }
 </style>
