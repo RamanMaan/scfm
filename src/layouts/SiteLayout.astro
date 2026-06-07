@@ -2,8 +2,7 @@
 import "@fontsource/jetbrains-mono/400.css";
 import "@fontsource/jetbrains-mono/700.css";
 
-import BaseHtml from "../../layouts/BaseHtml.astro";
-import meta from "./meta";
+import BaseHtml from "./BaseHtml.astro";
 
 interface Props {
   title: string;
@@ -11,13 +10,17 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+
+const ogImage = "/og/default.png";
+const ogImageAlt =
+  "Steven Christopher — paper-bright monospace layout with a single focal frame.";
 ---
 
 <BaseHtml
   title={title}
   description={description}
-  ogImage={meta.ogImage}
-  ogImageAlt={meta.ogImageAlt}
+  ogImage={ogImage}
+  ogImageAlt={ogImageAlt}
   bodyClass="brut"
 >
   <slot />
@@ -39,7 +42,7 @@ const { title, description } = Astro.props;
     --br-bg: #ffffff;
     --br-ink: #000000;
     /* Deep muted red. Reserved for selection + focus only — never for
-       headline color. See docs/variant-roadmap.md (brutalist accent test). */
+       headline color. */
     --br-accent: #6a1a14;
     --br-muted: #6b6b6b;
     --br-rule: 2px;

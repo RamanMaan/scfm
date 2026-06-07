@@ -4,7 +4,6 @@ import type { AstroIntegration } from "astro";
 import { Resvg } from "@resvg/resvg-js";
 import satori from "satori";
 
-import { VARIANTS } from "../../variants/_registry";
 import { loadFonts } from "./fonts";
 import { TEMPLATES } from "./templates";
 
@@ -12,10 +11,9 @@ const WIDTH = 1200;
 const HEIGHT = 630;
 
 /**
- * Astro integration that generates one PNG per variant (plus a `default`
- * fallback) under `dist/og/<id>.png` during `astro build`. The PNGs are real
- * 1200x630 raster images so iMessage / Slack / Twitter / Facebook / LinkedIn /
- * WhatsApp all render link previews.
+ * Astro integration that generates the site OG card as `dist/og/default.png`
+ * during `astro build`. The PNG is a real 1200x630 raster image so iMessage /
+ * Slack / Twitter / Facebook / LinkedIn / WhatsApp all render link previews.
  *
  * @example
  * ```ts
@@ -30,7 +28,7 @@ export default function ogImages(): AstroIntegration {
     hooks: {
       "astro:build:done": async ({ dir, logger }) => {
         const fonts = await loadFonts();
-        const cardIds = ["default", ...VARIANTS.map((v) => v.id)];
+        const cardIds = ["default"];
 
         const ogDir = new URL("og/", dir);
         await mkdir(ogDir, { recursive: true });

@@ -1,8 +1,6 @@
 # Agent Guide
 
-This repo is a prototyping ground for Steven Christopher's website. Multiple
-design variants share one content layer; pick a variant at `/`, view it at
-`/<variant-id>`.
+Steven Christopher's website — brutalist paper-bright layout at `/`.
 
 ## Source of truth
 
@@ -18,57 +16,34 @@ design variants share one content layer; pick a variant at `/`, view it at
 ```
 src/
   content.config.ts        Zod schemas
-  content/                 Shared by every variant
+  content/                 Shared content layer
   lib/                     Tiny utilities (spotify, dates, socials) - no UI
-  layouts/BaseHtml.astro   Minimal HTML shell; takes title/description/ogImage
-  variants/
-    _types.ts              VariantMeta contract
-    _registry.ts           VARIANTS array consumed by the showcase
-    <id>/                  Self-contained: Layout.astro, meta.ts, components/
+  layouts/
+    BaseHtml.astro         Minimal HTML shell; takes title/description/ogImage
+    SiteLayout.astro       Site chrome, tokens, fonts
+  components/              Page sections (Hero, ReleaseList, etc.)
   pages/
-    index.astro            Showcase grid
-    <id>.astro             Thin wrapper per variant
+    index.astro            Home page
 public/og/                 OG images (referenced by absolute path)
 ```
 
 ## Guardrails
 
-1. **No shared UI across variants.** The whole point is design exploration.
-   Each variant rolls its own Hero, ReleaseList, etc. Only the content layer
-   and `src/lib/` utilities are shared.
-2. **Spotify is the canonical embed.** Apple Music gets a text link, never an
+1. **Spotify is the canonical embed.** Apple Music gets a text link, never an
    iframe.
-3. **Variant slugs are descriptive vibes**, not numbers (`/brutalist`, not
-   `/variant-1`).
-4. **Schema changes affect every variant** - add new fields as `optional()`
-   whenever possible.
-5. **Images** belong in `src/assets/` (so Astro optimizes them), referenced via
+2. **Schema changes** - add new fields as `optional()` whenever possible.
+3. **Images** belong in `src/assets/` (so Astro optimizes them), referenced via
    `image()` in the schema. The only exception is OG images: those are
-   generated at build time as 1200x630 PNGs into `dist/og/<id>.png` by the
-   [`ogImages`](src/integrations/og-images/) integration. To change a card,
+   generated at build time as 1200x630 PNGs into `dist/og/default.png` by the
+   [`ogImages`](src/integrations/og-images/) integration. To change the card,
    edit [`src/integrations/og-images/templates.ts`](src/integrations/og-images/templates.ts).
-6. **Mobile-first, always.** ~99% of traffic is mobile. Design every layout at
+4. **Mobile-first, always.** ~99% of traffic is mobile. Design every layout at
    ~375px first; desktop is the upscale. Touch is the primary input — tap
    targets ≥ 44×44px, and never put critical info, state, or actions behind
    `:hover` only. Hover is enhancement, not the interaction.
 
 See [`.cursor/rules/brand.mdc`](.cursor/rules/brand.mdc) for the full UI vibe
-rules (color, type, motion, mobile, content) — read it before touching any
-variant.
-
-## Adding a new variant
-
-1. Create `src/variants/<id>/` with `Layout.astro`, `meta.ts`, and
-   `components/`.
-2. Create `src/pages/<id>.astro` - a thin wrapper that queries the shared
-   collections and composes the variant's components.
-3. Register the meta in
-   [`src/variants/_registry.ts`](src/variants/_registry.ts) so it appears on
-   the showcase.
-4. Add a card template for the new id in
-   [`src/integrations/og-images/templates.ts`](src/integrations/og-images/templates.ts)
-   and set `ogImage: "/og/<id>.png"` + `ogImageAlt` in `meta.ts`. The PNG is
-   generated automatically on `pnpm build`.
+rules (color, type, motion, mobile, content).
 
 ## Pending content (TODOs for the user, not for agents)
 
@@ -125,5 +100,5 @@ Avoid generic AI-generated aesthetics:
 - Predictable layouts and component patterns
 - Cookie-cutter design that lacks context-specific character
 
-Interpret creatively and make unexpected choices that feel genuinely designed for the context. Vary between light and dark themes, different fonts, different aesthetics. You still tend to converge on common choices (Space Grotesk, for example) across generations. Avoid this: it is critical that you think outside the box!
+Interpret creatively and make unexpected choices that feel genuinely designed for the context.
 </frontend_aesthetics>

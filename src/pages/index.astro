@@ -1,228 +1,42 @@
 ---
-import { getEntry } from "astro:content";
-import BaseHtml from "../layouts/BaseHtml.astro";
-import { VARIANTS } from "../variants/_registry";
+import { getCollection, getEntry } from "astro:content";
+import Dispatch from "../components/Dispatch.astro";
+import Footer from "../components/Footer.astro";
+import Hero from "../components/Hero.astro";
+import Nav from "../components/Nav.astro";
+import ReleaseList from "../components/ReleaseList.astro";
+import VideoGrid from "../components/VideoGrid.astro";
+import Layout from "../layouts/SiteLayout.astro";
 
 const artist = await getEntry("artist", "profile");
-const title = `${artist?.data.name ?? "SCFM"} - Design Previews`;
+if (!artist) {
+  throw new Error("Missing artist profile entry");
+}
+
+const releases = (await getCollection("releases")).sort(
+  (a, b) => b.data.releaseDate.valueOf() - a.data.releaseDate.valueOf(),
+);
+const featured = releases.find((release) => release.data.isFeatured);
+const rest = releases.filter((release) => release.id !== featured?.id);
+
+const videos = (await getCollection("videos")).sort(
+  (a, b) =>
+    (b.data.releaseDate?.valueOf() ?? 0) - (a.data.releaseDate?.valueOf() ?? 0),
+);
+
+const press = (await getCollection("press")).sort(
+  (a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0),
+);
 ---
 
-<BaseHtml
-  title={title}
-  description="Internal design previews for Steven Christopher's website. Pick a variant to preview."
-  bodyClass="showcase"
+<Layout
+  title={`${artist.data.name} - ${artist.data.tagline}`}
+  description={artist.data.bio}
 >
-  <main class="sh-main">
-    <header class="sh-hero">
-      <p class="sh-eyebrow">Internal Prototyping &mdash; Not the live site</p>
-      <h1 class="sh-title">{artist?.data.name ?? "Steven Christopher"}</h1>
-      <p class="sh-subtitle">
-        Design previews. Each variant uses the same source content.
-      </p>
-    </header>
-
-    <ul class="sh-grid">
-      {
-        VARIANTS.map((variant) => (
-          <li class="sh-card">
-            <a class="sh-card__link" href={`/${variant.id}`}>
-              <div class="sh-card__thumb" aria-hidden="true">
-                <span class="sh-card__index">{variant.id}</span>
-              </div>
-              <div class="sh-card__body">
-                <h2 class="sh-card__name">{variant.name}</h2>
-                <p class="sh-card__tag">{variant.tagline}</p>
-                <ul class="sh-card__chips">
-                  {variant.vibeTags.map((tag) => (
-                    <li class="sh-chip">{tag}</li>
-                  ))}
-                </ul>
-                <span class="sh-card__cta">Preview &rarr;</span>
-              </div>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-
-    <footer class="sh-foot">
-      <p>
-        Variants live in <code>src/variants/&lt;id&gt;/</code>. Content lives in
-        <code>src/content/</code>. To add a variant, scaffold a new folder with
-        <code>meta.ts</code>, a <code>Layout.astro</code>, components, and a
-        thin page at <code>src/pages/&lt;id&gt;.astro</code>; then register it
-        in
-        <code>src/variants/_registry.ts</code>.
-      </p>
-    </footer>
-  </main>
-</BaseHtml>
-
-<style is:global>
-  .showcase {
-    --sh-bg: #f4f3ef;
-    --sh-ink: #111;
-    --sh-muted: #6b6b6b;
-    --sh-rule: #e2e0d9;
-    --sh-card: #ffffff;
-
-    background: var(--sh-bg);
-    color: var(--sh-ink);
-    font-family:
-      "Inter",
-      system-ui,
-      -apple-system,
-      "Segoe UI",
-      "Helvetica Neue",
-      sans-serif;
-    font-feature-settings: "ss01";
-  }
-</style>
-
-<style>
-  .sh-main {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: clamp(48px, 8vw, 96px) clamp(20px, 5vw, 48px) 96px;
-  }
-
-  .sh-hero {
-    margin-bottom: clamp(48px, 8vw, 80px);
-  }
-
-  .sh-eyebrow {
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--sh-muted);
-    margin: 0 0 16px;
-  }
-
-  .sh-title {
-    font-size: clamp(36px, 6vw, 64px);
-    line-height: 1;
-    letter-spacing: -0.03em;
-    font-weight: 500;
-    margin: 0 0 12px;
-  }
-
-  .sh-subtitle {
-    font-size: clamp(16px, 1.6vw, 18px);
-    color: var(--sh-muted);
-    margin: 0;
-    max-width: 52ch;
-  }
-
-  .sh-grid {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
-    gap: 24px;
-  }
-
-  .sh-card {
-    background: var(--sh-card);
-    border-radius: 16px;
-    overflow: hidden;
-    transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease;
-    box-shadow: 0 1px 0 var(--sh-rule);
-  }
-
-  .sh-card:hover {
-    transform: translateY(-2px);
-    box-shadow:
-      0 1px 0 var(--sh-rule),
-      0 24px 48px -24px rgba(17, 17, 17, 0.18);
-  }
-
-  .sh-card__link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .sh-card__thumb {
-    aspect-ratio: 16 / 9;
-    background:
-      radial-gradient(
-        ellipse 70% 60% at 30% 30%,
-        rgba(255, 255, 255, 0.18),
-        transparent 60%
-      ),
-      linear-gradient(135deg, #1c1b1a 0%, #2a2724 50%, #1c1b1a 100%);
-    display: flex;
-    align-items: flex-end;
-    padding: 20px;
-    color: rgba(255, 255, 255, 0.6);
-  }
-
-  .sh-card__index {
-    font-size: 11px;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-  }
-
-  .sh-card__body {
-    padding: 24px;
-  }
-
-  .sh-card__name {
-    font-size: 24px;
-    line-height: 1.1;
-    font-weight: 500;
-    margin: 0 0 8px;
-  }
-
-  .sh-card__tag {
-    color: var(--sh-muted);
-    font-size: 14px;
-    line-height: 1.5;
-    margin: 0 0 16px;
-    min-height: 42px;
-  }
-
-  .sh-card__chips {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 20px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .sh-chip {
-    font-size: 11px;
-    letter-spacing: 0.05em;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: var(--sh-bg);
-    color: var(--sh-muted);
-  }
-
-  .sh-card__cta {
-    font-size: 13px;
-    color: var(--sh-ink);
-    font-weight: 500;
-  }
-
-  .sh-foot {
-    margin-top: 80px;
-    padding-top: 32px;
-    border-top: 1px solid var(--sh-rule);
-    font-size: 13px;
-    color: var(--sh-muted);
-    line-height: 1.6;
-  }
-
-  .sh-foot code {
-    background: var(--sh-card);
-    border-radius: 4px;
-    padding: 1px 6px;
-    font-size: 12px;
-    color: var(--sh-ink);
-  }
-</style>
+  <Nav name={artist.data.name} />
+  <Hero name={artist.data.name} />
+  <Dispatch />
+  <ReleaseList featured={featured} rest={rest} />
+  <VideoGrid videos={videos} channelUrl={artist.data.socials.youtube} />
+  <Footer artist={artist} press={press} />
+</Layout>
