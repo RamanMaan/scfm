@@ -1,5 +1,6 @@
 ---
 import { getCollection, getEntry } from "astro:content";
+import Dispatch from "../variants/brutalist/components/Dispatch.astro";
 import Footer from "../variants/brutalist/components/Footer.astro";
 import Hero from "../variants/brutalist/components/Hero.astro";
 import Nav from "../variants/brutalist/components/Nav.astro";
@@ -34,6 +35,7 @@ const press = (await getCollection("press")).sort(
 >
   <Nav name={artist.data.name} />
   <Hero name={artist.data.name} />
+  <Dispatch />
   <ReleaseList featured={featured} rest={rest} />
   <VideoGrid videos={videos} channelUrl={artist.data.socials.youtube} />
   <Footer artist={artist} press={press} />

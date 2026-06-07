@@ -12,11 +12,11 @@ const socials = orderedSocials(artist.data.socials);
 const pad = (n: number) => String(n).padStart(2, "0");
 ---
 
-<footer class="br-section" id="contact">
+<footer class="br-section" id="press">
   {
     press.length > 0 && (
       <div class="br-press">
-        <p class="br-eyebrow">[04] Press / Cited</p>
+        <p class="br-eyebrow">[05] Press / Cited</p>
         <ol class="br-press__list">
           {press.map((quote, index) => (
             <li class="br-press__item">
@@ -35,9 +35,9 @@ const pad = (n: number) => String(n).padStart(2, "0");
     )
   }
 
-  <div class="br-end">
+  <div class="br-end" id="connect">
     <div>
-      <p class="br-eyebrow">[05] Connect</p>
+      <p class="br-eyebrow">[06] Connect</p>
       <ul class="br-socials">
         {
           socials.map(({ url, label }, index) => (
