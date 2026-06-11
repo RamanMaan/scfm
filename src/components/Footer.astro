@@ -1,6 +1,8 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import ConnectSocials from "./ConnectSocials.astro";
+import { SOCIAL_ICON_PATH } from "../lib/social-icons";
+import { orderedSocials, type SocialPlatform } from "../lib/socials";
+
 
 interface Props {
   artist: CollectionEntry<"artist">;
@@ -9,6 +11,8 @@ interface Props {
 
 const { artist, press } = Astro.props;
 const pad = (n: number) => String(n).padStart(2, "0");
+
+const links = orderedSocials(artist.data.socials);
 ---
 
 <footer class="br-section" id="press">
@@ -35,7 +39,21 @@ const pad = (n: number) => String(n).padStart(2, "0");
   }
 
   <div class="br-end" id="connect">
-    <ConnectSocials socials={artist.data.socials} />
+    <nav class="br-connect" aria-label="Social links">
+      <ul class="br-connect__icons">
+        {
+          links.map(({ platform, url, label }) => (
+            <li>
+              <a href={url} target="_blank" rel="noopener" aria-label={label}>
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d={SOCIAL_ICON_PATH[platform]} />
+                </svg>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
     <div class="br-end__colophon">
       <p>&copy; {new Date().getFullYear()} {artist.data.name.toUpperCase()}.</p>
     </div>

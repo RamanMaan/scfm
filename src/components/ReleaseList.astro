@@ -1,6 +1,10 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { SPOTIFY_EMBED_HEIGHT, getSpotifyEmbedUrl } from "../lib/spotify";
+import {
+  SPOTIFY_EMBED_HEIGHT,
+  getSpotifyEmbedUrl,
+  spotifyOpenUrl,
+} from "../lib/spotify";
 
 interface Props {
   featured?: CollectionEntry<"releases">;
@@ -50,33 +54,47 @@ const pad = (n: number) => String(n).padStart(2, "0");
         <th scope="col">No.</th>
         <th scope="col">Title</th>
         <th scope="col">Type</th>
-        <th scope="col">Link</th>
+        <th scope="col">Links</th>
       </tr>
     </thead>
     <tbody>
       {
-        all.map((release, index) => (
-          <tr>
-            <td class="br-table__num">{pad(index + 1)}</td>
-            <td class="br-table__title">
-              {release.data.title.toUpperCase()}
-              {release.data.featuring.length > 0 && (
-                <span class="br-table__feat">
-                  {" "}
-                  / {release.data.featuring.join(" / ")}
-                </span>
-              )}
-            </td>
-            <td>{release.data.type.toUpperCase()}</td>
-            <td>
-              {release.data.appleMusicUrl ? (
-                <a href={release.data.appleMusicUrl}>APPLE</a>
-              ) : (
-                "--"
-              )}
-            </td>
-          </tr>
-        ))
+        all.map((release, index) => {
+          const spotifyHref = release.data.spotifyId
+            ? spotifyOpenUrl(release.data.spotifyType, release.data.spotifyId)
+            : null;
+          const appleHref = release.data.appleMusicUrl ?? null;
+          const hasLinks = spotifyHref || appleHref;
+
+          return (
+            <tr>
+              <td class="br-table__num">{pad(index + 1)}</td>
+              <td class="br-table__title">
+                {release.data.title.toUpperCase()}
+                {release.data.featuring.length > 0 && (
+                  <span class="br-table__feat">
+                    {" "}
+                    / {release.data.featuring.join(" / ")}
+                  </span>
+                )}
+              </td>
+              <td>{release.data.type.toUpperCase()}</td>
+              <td class="br-table__links">
+                {hasLinks ? (
+                  <>
+                    {spotifyHref && <a href={spotifyHref}>SPOTIFY</a>}
+                    {spotifyHref && appleHref && (
+                      <span class="br-table__links-sep" aria-hidden="true">/</span>
+                    )}
+                    {appleHref && <a href={appleHref}>APPLE MUSIC</a>}
+                  </>
+                ) : (
+                  "--"
+                )}
+              </td>
+            </tr>
+          );
+        })
       }
     </tbody>
   </table>

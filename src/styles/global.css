@@ -461,6 +461,15 @@ button {
   color: var(--br-muted);
 }
 
+.br-table__links {
+  white-space: nowrap;
+}
+
+.br-table__links-sep {
+  margin: 0 0.25em;
+  color: var(--br-muted);
+}
+
 /* Videos */
 .br-vid__title {
   font-size: clamp(28px, 4vw, 48px);
@@ -579,13 +588,14 @@ button {
 }
 
 .br-end {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
 .br-end__colophon {
-  text-align: right;
+  text-align: center;
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -603,6 +613,7 @@ button {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 4px 8px;
 }
 
@@ -619,13 +630,6 @@ button {
   width: 20px;
   height: 20px;
   fill: currentColor;
-}
-
-@media (min-width: 720px) {
-  .br-end {
-    grid-template-columns: 1fr 1fr;
-    align-items: end;
-  }
 }
 
 @media (min-width: 820px) {
